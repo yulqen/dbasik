@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 
 def index(request):
@@ -17,6 +18,9 @@ def register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('index')
+        else:
+            if form.errors['username']:
+                messages.add_message(request, messages.WARNING, form.errors['username'])
     else:
         form = UserCreationForm()
 
