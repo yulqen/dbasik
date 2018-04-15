@@ -1,0 +1,22 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+django = "*"
+"psycopg2" = "*"
+
+
+[dev-packages]
+
+neovim = "*"
+ptpython = "*"
+pdbpp = "*"
+"flake8" = "*"
+httpie = "*"
+yapf = "*"
+django-extensions = "*"
