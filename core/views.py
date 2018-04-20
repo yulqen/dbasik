@@ -19,8 +19,9 @@ def register(request):
             login(request, user)
             return redirect('index')
         else:
-            if form.errors['username']:
-                messages.add_message(request, messages.WARNING, form.errors['username'])
+            if form.errors:
+                k_lst = list(form.errors.keys())[0]
+                messages.add_message(request, messages.WARNING, form.errors[k_lst])
     else:
         form = UserCreationForm()
 
