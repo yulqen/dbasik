@@ -8,9 +8,13 @@
     <body>
         <h1>Datamaps</h1>
         <ul>
-            {% for datamap in object_list %}
-            <li>{{ datamap.name }}</li>
-            {% endfor %}
+            {% if object_list %}
+                {% for datamap in object_list %}
+                <li>{{ datamap.name }}</li>
+                {% endfor %}
+            {% else %}
+                <p>There are no datamaps.</p>
+            {% endif %}
         </ul>
     </body>
 </html>
