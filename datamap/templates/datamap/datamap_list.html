@@ -6,6 +6,11 @@
         <title>Datamap_list</title>
     </head>
     <body>
-        body
+        <h1>Datamaps</h1>
+        <ul>
+            {% for datamap in object_list %}
+            <li>{{ datamap.name }}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>

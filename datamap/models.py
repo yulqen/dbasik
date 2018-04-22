@@ -9,6 +9,7 @@ class Datamap(models.Model):
         'PortfolioFamily',
         on_delete=models.CASCADE
     )
+    active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
