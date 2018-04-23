@@ -21,3 +21,6 @@ httpie = "*"
 yapf = "*"
 django-extensions = "*"
 pgcli = "*"
+python-language-server = {extras = ["all"]}
+pyls-mypy = "*"
+pyls-isort = "*"
