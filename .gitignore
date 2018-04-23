@@ -3,3 +3,4 @@ secrets.json
 .pdb-pyhist
 .idea
 .mypy_cache/
+.pytest_cache/

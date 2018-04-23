@@ -24,3 +24,5 @@ pgcli = "*"
 python-language-server = {extras = ["all"]}
 pyls-mypy = "*"
 pyls-isort = "*"
+pytest = "*"
+pytest-django = "*"
