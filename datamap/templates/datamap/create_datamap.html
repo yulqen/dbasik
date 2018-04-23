@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Create datamap</title>
+    </head>
+    <body>
+        <form action="/createdatamap/" method="post" accept-charset="utf-8">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>
+        </form>
+    </body>
+</html>
