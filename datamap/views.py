@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
-from .models import Datamap, DatamapLine
+from .models import Datamap, DatamapLine, PortfolioFamily
 from .forms import CreateDatamapForm
 
 
@@ -11,7 +11,7 @@ class DatamapList(ListView):
 
 def datamap_view(request, dm_pk):
     dm_lines = DatamapLine.objects.filter(datamap_id=dm_pk).order_by('id')
-    context = {'dm_lines': dm_lines, 'dm_pk': dm_pk}
+    context = {'dm_lines': dm_lines}
     return render(request, 'datamap/datamap.html', context)
 
 
@@ -22,6 +22,9 @@ def create_datamap(request):
             print(f"We received {form.cleaned_data}")
             name = form.cleaned_data['name']
             portfolio_family = form.cleaned_data['portfolio_family']
+            pf_obj = PortfolioFamily.objects.get(pk=portfolio_family)
+            new_dm = Datamap(name=name, portfolio_family=pf_obj)
+            new_dm.save()
             return HttpResponseRedirect('/admin')
     else:
         form = CreateDatamapForm()
