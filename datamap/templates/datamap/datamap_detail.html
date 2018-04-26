@@ -6,8 +6,19 @@
         <title>Datamap Detail</title>
     </head>
     <body>
-        {% for line in dm_lines %}
-        <p>{{ line }}</p>
-        {% endfor %}
+        <table>
+            <tr>
+                <td>Key</td>
+                <td>Sheet</td>
+                <td>Cell Reference</td>
+            </tr>
+            {% for line in dm_lines %}
+            <tr>
+                <td>{{ line.key }}</td>
+                <td>{{ line.sheet }}</td>
+                <td>{{ line.cell_ref }}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>

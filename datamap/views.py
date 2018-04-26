@@ -16,7 +16,7 @@ class DatamapDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        dm_lines = DatamapLine.objects.filter(datamap_id=2)
+        dm_lines = DatamapLine.objects.filter(datamap_id=2).order_by('id')
         context['dm_lines'] = dm_lines
         return context
 
