@@ -1,0 +1,57 @@
+- name: update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Install system packages
+  vars:
+    system_packages:
+      - postgresql
+      - libpq-dev # Required for Ansible to interact with postgres
+      - python-psycopg2 # Required for Ansible to interact with postgres
+      - build-essential
+      - git
+      - python3-dev
+      - python-setuptools
+      - python3-pip
+      - python3-virtualenv
+  become: yes
+  apt: name={{ item }} state=present
+  with_items: "{{ system_packages }}"
+
+  #- name: Install Python packages
+  #  vars:
+  #    python_packages:
+  #      - pip
+  #      - virtualenv
+  #      - python3-dev
+  #      - python-dev
+  #      - python3-setuptools
+  #  become: yes
+  #  easy_install: name={{ item }}
+  #  with_items: "{{ python_packages }}"
+
+- name: Set up dbasik virtualenv
+  vars:
+    project_path: /vagrant/code/dbasik_dftgovernance
+    project_name: dbasik
+    virtualenv_root: /vagrant/virtualenvs
+  become: yes
+  become_user: vagrant
+  pip:
+      requirements: "{{ project_path }}/requirements.txt"
+      virtualenv: /vagrant/virtualenvs/dbasik_dftgovernance
+      virtualenv_python: python3.4
+
+- name: ensure database user is created
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: vagrant
+    password: vagrant
+    role_attr_flags: CREATEDB,SUPERUSER
+
+- name: create database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: dbasik_dftgovernance
