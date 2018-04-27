@@ -4,3 +4,4 @@ secrets.json
 .idea
 .mypy_cache/
 .pytest_cache/
+.vagrant/
