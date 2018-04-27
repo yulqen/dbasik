@@ -18,28 +18,34 @@
   apt: name={{ item }} state=present
   with_items: "{{ system_packages }}"
 
-  #- name: Install Python packages
-  #  vars:
-  #    python_packages:
-  #      - pip
-  #      - virtualenv
-  #      - python3-dev
-  #      - python-dev
-  #      - python3-setuptools
-  #  become: yes
-  #  easy_install: name={{ item }}
-  #  with_items: "{{ python_packages }}"
+- name: Install Python packages
+  vars:
+    python_packages:
+      - pip
+      - virtualenv
+  become: yes
+  easy_install: name={{ item }}
+  with_items: "{{ python_packages }}"
+
+- name: Create virtualenv directory
+  become: yes
+  file:
+      group: vagrant
+      owner: vagrant
+      mode: 0755
+      state: directory
+      path: /vagrant/virtualenvs
 
 - name: Set up dbasik virtualenv
   vars:
     project_path: /vagrant/code/dbasik_dftgovernance
     project_name: dbasik
     virtualenv_root: /vagrant/virtualenvs
-  become: yes
-  become_user: vagrant
+# become: yes
+# become_user: vagrant
   pip:
       requirements: "{{ project_path }}/requirements.txt"
-      virtualenv: /vagrant/virtualenvs/dbasik_dftgovernance
+      virtualenv: /vagrant/virtualenvs/dbasik
       virtualenv_python: python3.4
 
 - name: ensure database user is created
