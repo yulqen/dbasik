@@ -61,3 +61,10 @@
   become_user: postgres
   postgresql_db:
     name: dbasik_dftgovernance
+
+- name: migrate database
+  django_manage:
+    command: migrate
+    app_path: /vagrant/code/dbasik_dftgovernance
+    settings: 'config.settings.local'
+    virtualenv: /vagrant/virtualenvs/dbasik
