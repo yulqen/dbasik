@@ -1,4 +1,6 @@
 - hosts: host1
   roles:
-      - setup
-      - deploy
+    - setup
+    - deploy
+  vars_files:
+    - setup/vars/main.yml
