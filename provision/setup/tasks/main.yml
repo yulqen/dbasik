@@ -67,6 +67,6 @@
 - name: migrate database
   django_manage:
     command: migrate
-    app_path: /vagrant/code/dbasik_dftgovernance
+    app_path: "{{ project_path }}"
     settings: 'config.settings.local'
-    virtualenv: /vagrant/virtualenvs/dbasik
+    virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
