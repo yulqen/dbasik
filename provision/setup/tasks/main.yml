@@ -13,7 +13,7 @@
     group: vagrant
     owner: vagrant
     state: directory
-    path: /home/vagrant/python3.6.5
+    path: "{{ installed_python_path }}"
 
 - name: Create a Download directory
   become: yes
@@ -21,17 +21,17 @@
     group: vagrant
     owner: vagrant
     state: directory
-    path: /home/vagrant/Downloads
+    path: "{{ downloads_dir }}"
 
 - name: Test for downloaded Python tarball
   stat:
 #   path: /home/vagrant/.Python3.6.5/bin/python3.6
-    path: /home/vagrant/Downloads/Python-3.6.5.tar.xz
+    path: "{{ downloads_dir }}/Python-{{ required_python_version }}.tar.xz"
   register: py
 
 - name: Test for newly-installed Python installation
   stat:
-    path: /home/vagrant/.Python3.6.5/bin/python3.6
+    path: "{{ installed_python_path }}/bin/python3.6"
   register: pybin
 
 - name: Debug!
@@ -42,35 +42,35 @@
 - name: Download Python installation files
   get_url:
     url: https://www.python.org/ftp/python/{{ required_python_version }}/Python-{{ required_python_version }}.tar.xz
-    dest: /home/vagrant/Downloads
+    dest: "{{ downloads_dir }}"
   when: not py.stat.exists
 
 - name: Unpack Python installation files
   unarchive:
-    src: /home/vagrant/Downloads/Python-3.6.5.tar.xz
-    dest: /home/vagrant/Downloads
+    src: "{{ downloads_dir }}/Python-{{ required_python_version }}.tar.xz"
+    dest: "{{ downloads_dir }}"
     remote_src: yes
   when: not pybin.stat.exists
 
 - name: Configure Python source files
-  command: ./configure --prefix="/home/vagrant/python3.6.5"
+  command: ./configure --prefix="{{ installed_python_path }}"
   args:
-    chdir: /home/vagrant/Downloads/Python-3.6.5
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
 
 - name: Make Python source files
   command: make
   args:
-    chdir: /home/vagrant/Downloads/Python-3.6.5
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
 
 - name: Make install Python source files
   command: make install
   args:
-    chdir: /home/vagrant/Downloads/Python-3.6.5
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
 
-- name: Install Python packages
+- name: Install base Python packages (for system use)
   become: yes
   easy_install: name={{ item }}
   with_items: "{{ python_packages }}"

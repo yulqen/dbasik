@@ -29,8 +29,10 @@ python_packages:
 
 project_path: /vagrant/code/dbasik_dftgovernance
 project_name: dbasik
+downloads_dir: /home/vagrant/Downloads
 virtualenv_root: /vagrant/virtualenvs
 requirements_files:
   - "{{ project_path }}/requirements.txt"
   - "{{ project_path }}/requirements_dev.txt"
 required_python_version: 3.6.5
+installed_python_path: /home/vagrant/python{{ required_python_version }}
