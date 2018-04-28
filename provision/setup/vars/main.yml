@@ -22,6 +22,7 @@ system_packages:
   - libncurses5-dev
   - xz-utils
   - tk-dev
+  - libpython3-dev
 
 python_packages:
   - pip
@@ -34,5 +35,6 @@ virtualenv_root: /vagrant/virtualenvs
 requirements_files:
   - "{{ project_path }}/requirements.txt"
   - "{{ project_path }}/requirements_dev.txt"
+  - "{{ project_path }}/requirements_deploy.txt"
 required_python_version: 3.6.5
 installed_python_path: /home/vagrant/python{{ required_python_version }}

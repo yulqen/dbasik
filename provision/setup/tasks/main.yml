@@ -53,7 +53,7 @@
   when: not pybin.stat.exists
 
 - name: Configure Python source files
-  command: ./configure --prefix="{{ installed_python_path }}"
+  command: ./configure --prefix="{{ installed_python_path }}" --enable-shared
   args:
     chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
@@ -69,6 +69,13 @@
   args:
     chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
+
+- name: Copy libpython3.6m.so.1.0 to /usr/lib/x86_64-linux-gnu
+  become: yes
+  copy:
+    remote_src: yes
+    src: "{{ installed_python_path }}/lib/libpython3.6m.so.1.0"
+    dest: /usr/lib/x86_64-linux-gnu/  
 
 - name: Install base Python packages (for system use)
   become: yes
@@ -117,5 +124,5 @@
   django_manage:
     command: migrate
     app_path: "{{ project_path }}"
-    settings: 'config.settings.local'
+    settings: 'config.settings.deploy'
     virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
