@@ -7,13 +7,13 @@
   apt: name={{ item }} state=present
   with_items: "{{ system_packages }}"
 
-- name: Create python build directories
+- name: Create python binary directories
   become: yes
   file:
     group: vagrant
     owner: vagrant
     state: directory
-    path: /vagrant/.python3.6.4
+    path: /home/vagrant/python3.6.5
 
 - name: Create a Download directory
   become: yes
@@ -29,10 +29,15 @@
     path: /home/vagrant/Downloads/Python-3.6.5.tar.xz
   register: py
 
+- name: Test for newly-installed Python installation
+  stat:
+    path: /home/vagrant/.Python3.6.5/bin/python3.6
+  register: pybin
+
 - name: Debug!
   debug:
     msg: "Python binary exists"
-  when: py.stat.exists
+  when: pybin.stat.exists
 
 - name: Download Python installation files
   get_url:
@@ -40,11 +45,30 @@
     dest: /home/vagrant/Downloads
   when: not py.stat.exists
 
+- name: Unpack Python installation files
+  unarchive:
+    src: /home/vagrant/Downloads/Python-3.6.5.tar.xz
+    dest: /home/vagrant/Downloads
+    remote_src: yes
+  when: not pybin.stat.exists
 
-    #- name: Install python 
-    #  become: yes
-    #  become_user: vagrant
-    #  script: /home/lemon/scripts/compile_python_debian_no_apt_update.sh 3.6.5
+- name: Configure Python source files
+  command: ./configure --prefix="/home/vagrant/python3.6.5"
+  args:
+    chdir: /home/vagrant/Downloads/Python-3.6.5
+  when: not pybin.stat.exists
+
+- name: Make Python source files
+  command: make
+  args:
+    chdir: /home/vagrant/Downloads/Python-3.6.5
+  when: not pybin.stat.exists
+
+- name: Make install Python source files
+  command: make install
+  args:
+    chdir: /home/vagrant/Downloads/Python-3.6.5
+  when: not pybin.stat.exists
 
 - name: Install Python packages
   become: yes
