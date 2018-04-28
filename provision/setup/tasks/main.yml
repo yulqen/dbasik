@@ -5,6 +5,7 @@
 - name: Install system packages
   vars:
     system_packages:
+      - acl # fix privilege issue: https://stackoverflow.com/questions/36646880/ansible-2-1-0-using-become-become-user-fails-to-set-permissions-on-temp-file
       - postgresql
       - libpq-dev # Required for Ansible to interact with postgres
       - python-psycopg2 # Required for Ansible to interact with postgres
@@ -14,9 +15,45 @@
       - python-setuptools
       - python3-pip
       - python3-virtualenv
+      - make
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncurses5-dev
+      - xz-utils
+      - tk-dev
+    
   become: yes
   apt: name={{ item }} state=present
   with_items: "{{ system_packages }}"
+
+- name: Create a python build directories
+  become: yes
+  file:
+    group: vagrant
+    owner: vagrant
+    state: directory
+    path: /vagrant/.python3.6.4
+
+- name: Create a Download directory
+  become: yes
+  file:
+    group: vagrant
+    owner: vagrant
+    state: directory
+    path: /vagrant/Downloads
+
+
+    #- name: Install python 
+    #  become: yes
+    #  become_user: vagrant
+    #  script: /home/lemon/scripts/compile_python_debian_no_apt_update.sh 3.6.5
 
 - name: Install Python packages
   vars:
@@ -41,12 +78,14 @@
     project_path: /vagrant/code/dbasik_dftgovernance
     project_name: dbasik
     virtualenv_root: /vagrant/virtualenvs
-# become: yes
-# become_user: vagrant
+    requirements_files:
+      - "{{ project_path }}/requirements.txt"
+      - "{{ project_path }}/requirements_dev.txt"
   pip:
-      requirements: "{{ project_path }}/requirements.txt"
+      requirements: "{{ item }}"
       virtualenv: /vagrant/virtualenvs/dbasik
-      virtualenv_python: python3.4
+      virtualenv_python: python3
+  loop: "{{ requirements_files }}"
 
 - name: ensure database user is created
   become: yes

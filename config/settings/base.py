@@ -28,7 +28,7 @@ def get_secret(setting, secrets=secrets):
     try:
         return secrets[setting]
     except KeyError:
-        error_msg = f"Set the {setting} environment variable."
+        error_msg = "Set the {0} environment variable.".format(setting)
         raise ImproperlyConfigured(error_msg)
 
 
