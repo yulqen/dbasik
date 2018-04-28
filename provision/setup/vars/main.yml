@@ -23,6 +23,8 @@ system_packages:
   - xz-utils
   - tk-dev
   - libpython3-dev
+  - apache2
+  - apache2-dev
 
 python_packages:
   - pip

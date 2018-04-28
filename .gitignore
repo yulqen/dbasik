@@ -5,3 +5,4 @@ secrets.json
 .mypy_cache/
 .pytest_cache/
 .vagrant/
+static/
