@@ -21,7 +21,24 @@
     group: vagrant
     owner: vagrant
     state: directory
-    path: /vagrant/Downloads
+    path: /home/vagrant/Downloads
+
+- name: Test for downloaded Python tarball
+  stat:
+#   path: /home/vagrant/.Python3.6.5/bin/python3.6
+    path: /home/vagrant/Downloads/Python-3.6.5.tar.xz
+  register: py
+
+- name: Debug!
+  debug:
+    msg: "Python binary exists"
+  when: py.stat.exists
+
+- name: Download Python installation files
+  get_url:
+    url: https://www.python.org/ftp/python/{{ required_python_version }}/Python-{{ required_python_version }}.tar.xz
+    dest: /home/vagrant/Downloads
+  when: not py.stat.exists
 
 
     #- name: Install python 
@@ -41,7 +58,7 @@
       owner: vagrant
       mode: 0755
       state: directory
-      path: /vagrant/virtualenvs
+      path: "{{ virtualenv_root }}"
 
 - name: Set up dbasik virtualenv
   pip:
