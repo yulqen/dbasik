@@ -19,7 +19,7 @@ def create_datamap(request):
     if request.method == 'POST':
         form = CreateDatamapForm(request.POST)
         if form.is_valid():
-            print("We received {0}".format(form.cleaned_data))
+            print(f"We received {form.cleaned_data}")
             name = form.cleaned_data['name']
             portfolio_family = form.cleaned_data['portfolio_family']
             pf_obj = PortfolioFamily.objects.get(pk=portfolio_family)

@@ -21,7 +21,7 @@ class DatamapLine(models.Model):
     cell_ref = models.CharField(max_length=10)
 
     def __str__(self):
-        return "{0} for {1}".format(self.key, self.datamap)
+        return f"{self.key} for {self.datamap}"
 
 
 class PortfolioFamily(models.Model):

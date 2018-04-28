@@ -15,8 +15,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
         'NAME': 'dbasik_dftgovernance',
-        'USER': 'lemon',
+        'USER': 'vagrant',
         'PORT': '5432',
-        'PASSWORD': 'lemon'
+        'PASSWORD': 'vagrant'
     }
 }

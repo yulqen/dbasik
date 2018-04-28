@@ -76,7 +76,6 @@
   with_items: "{{ python_packages }}"
 
 - name: Create virtualenv directory
-  become: yes
   file:
       group: vagrant
       owner: vagrant
@@ -84,12 +83,21 @@
       state: directory
       path: "{{ virtualenv_root }}"
 
-- name: Set up dbasik virtualenv
+- name: Set up dbasik virtualenv using installed python (will skip if not present)
+  pip:
+      requirements: "{{ item }}"
+      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
+      virtualenv_python: "{{ installed_python_path }}/bin/python3.6"
+  loop: "{{ requirements_files }}"
+  when: pybin.stat.exists
+
+- name: Set up dbasik virtualenv with system python
   pip:
       requirements: "{{ item }}"
       virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
       virtualenv_python: python3
   loop: "{{ requirements_files }}"
+  when: not pybin.stat.exists
 
 - name: ensure database user is created
   become: yes
