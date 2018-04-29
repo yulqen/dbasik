@@ -11,7 +11,7 @@ DEBUG = True
 INSTALLED_APPS.append('django_extensions')
 INSTALLED_APPS.append('mod_wsgi.server')
 
-STATIC_ROOT = "/vagrant/code/dbasik_dftgovernance/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DATABASES = {
     'default': {
