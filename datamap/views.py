@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from .models import Datamap, DatamapLine, PortfolioFamily
@@ -37,6 +38,12 @@ def upload_datamap(request):
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
             print(request.FILES['uploaded_file'])
+            f = request.FILES['uploaded_file']
+            print(type(f))
+        elif form.errors:
+            for _, v in form.errors.items():
+                messages.add_message(request, messages.INFO, f'No! {v}')
+
     else:
         form = UploadDatamap()
 
