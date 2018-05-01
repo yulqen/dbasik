@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from .models import Datamap, DatamapLine, PortfolioFamily
-from .forms import CreateDatamapForm
+from .forms import CreateDatamapForm, UploadDatamap
 
 
 class DatamapList(ListView):
@@ -30,3 +30,14 @@ def create_datamap(request):
         form = CreateDatamapForm()
 
     return render(request, 'datamap/create_datamap.html', {'form': form})
+
+
+def upload_datamap(request):
+    if request.method == 'POST':
+        form = UploadDatamap(request.POST, request.FILES)
+        if form.is_valid():
+            print(request.FILES['uploaded_file'])
+    else:
+        form = UploadDatamap()
+
+    return render(request, 'datamap/upload_datamap.html', {'form': form})

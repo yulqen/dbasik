@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Upload datamap</title>
+    </head>
+    <body>
+        <form action="/uploaddatamap/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form.file_name }}</p>
+            <p>{{ form.uploaded_file }}</p>
+            <input type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>
+        </form>
+    </body>
+</html>
