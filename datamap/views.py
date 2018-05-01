@@ -41,8 +41,8 @@ def upload_datamap(request):
             f = request.FILES['uploaded_file']
             print(type(f))
         elif form.errors:
-            for _, v in form.errors.items():
-                messages.add_message(request, messages.INFO, f'No! {v}')
+            for v in form.errors.values():
+                messages.add_message(request, messages.INFO, v)
 
     else:
         form = UploadDatamap()
