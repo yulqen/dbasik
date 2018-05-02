@@ -42,5 +42,3 @@ def test_illegal_file_upload(uploaded_csv_file):
     uf.content_type = 'illegal-type'
     with pytest.raises(IllegalFileUpload):
         handler = UploadedFileHandler(uf)
-
-

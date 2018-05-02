@@ -1,9 +1,12 @@
-from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, DetailView
-from .models import Datamap, DatamapLine, PortfolioFamily
+from django.shortcuts import render
+from django.views.generic import ListView
+
 from .forms import CreateDatamapForm, UploadDatamap
+from .models import Datamap, DatamapLine, PortfolioFamily
+from exceptions import IllegalFileUpload
+from helpers import UploadedFileHandler
 
 
 class DatamapList(ListView):
@@ -41,6 +44,14 @@ def upload_datamap(request):
             f = request.FILES['uploaded_file']
             print(type(f))
             # pass to the file handler
+            try:
+                handler = UploadedFileHandler(f)
+                handler.pass_on() # send to processor depending on type
+            except IllegalFileUpload:
+                # should behave as though illegal
+                # not sure how this should occur but leaving it as a check
+                messages.add_message(request, messages.INFO, 'Illegal file type')
+
         elif form.errors:
             for v in form.errors.values():
                 messages.add_message(request, messages.INFO, v)
