@@ -1,0 +1,2 @@
+class IllegalFileUpload(Exception):
+    pass
