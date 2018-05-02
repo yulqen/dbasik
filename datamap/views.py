@@ -40,6 +40,7 @@ def upload_datamap(request):
             print(request.FILES['uploaded_file'])
             f = request.FILES['uploaded_file']
             print(type(f))
+            # pass to the file handler
         elif form.errors:
             for v in form.errors.values():
                 messages.add_message(request, messages.INFO, v)

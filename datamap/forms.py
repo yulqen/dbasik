@@ -2,12 +2,13 @@ from django import forms
 from django.core.validators import FileExtensionValidator
 from .models import PortfolioFamily
 
-csv_validator = FileExtensionValidator(allowed_extensions=['csv'], message='Needs to be a CSV')
+file_validator = FileExtensionValidator(
+    allowed_extensions=['csv', 'xlsx', 'xlsm'], message='Needs to be a CSV or Excel file.')
 
 
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
-    uploaded_file = forms.FileField(validators=[csv_validator])
+    uploaded_file = forms.FileField(validators=[file_validator])
 
 
 class CreateDatamapForm(forms.Form):
