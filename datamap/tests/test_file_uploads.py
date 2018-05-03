@@ -1,7 +1,7 @@
 import csv
 import pytest
 
-from helpers import UploadedFileHandler
+from helpers import CleanUploadedFile
 from exceptions import IllegalFileUpload
 
 from django.core.files.uploadedfile import UploadedFile
@@ -31,7 +31,7 @@ def test_our_file_class_detects_filetype(uploaded_csv_file):
     test_file = open(uploaded_csv_file)
     uf = UploadedFile(test_file)
     uf.content_type = 'text/csv'
-    handler = UploadedFileHandler(uf)
+    handler = CleanUploadedFile(uf)
     assert handler.type_being_processed == 'text/csv'
 
 
@@ -40,4 +40,4 @@ def test_illegal_file_upload(uploaded_csv_file):
     uf = UploadedFile(test_file)
     uf.content_type = 'illegal-type'
     with pytest.raises(IllegalFileUpload):
-        handler = UploadedFileHandler(uf)
+        handler = CleanUploadedFile(uf)

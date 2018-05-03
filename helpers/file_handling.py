@@ -4,7 +4,7 @@ from .generic import splat_listed_dict_values
 from exceptions import IllegalFileUpload
 
 
-class UploadedFileHandler:
+class CleanUploadedFile:
 
     """Once a file has been uploaded, this handler is called
     to sort out it's file type and pass on to the appropriate
@@ -41,13 +41,13 @@ class UploadedFileHandler:
                 raise IllegalFileUpload
 
 
-    def pass_on(self):
-        """TODO: Docstring for pass_on.
+    def process(self):
+        """TODO: Docstring for process.
         This function creates a processor object depending on the
         filetype of the uploaded file, e.g. a bcompiler process or
         adding the datamap data to the database.
 
         :returns: TODO
         """
-        print(f"We are now in the UploadedFileHandler.pass_on() method "
+        print(f"We are now in the UploadedFileHandler.process() method "
               f"with {self._f} which is a {self._type}")
