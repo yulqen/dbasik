@@ -4,7 +4,7 @@ from .models import PortfolioFamily
 from helpers import CleanUploadedFile
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=CleanUploadedFile.acceptible_types,
+    allowed_extensions=CleanUploadedFile.acceptable_types,
     message='Needs to be a CSV or Excel file.')
 
 
