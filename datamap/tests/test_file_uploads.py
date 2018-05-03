@@ -4,7 +4,6 @@ import pytest
 from helpers import UploadedFileHandler
 from exceptions import IllegalFileUpload
 
-from django.test import TestCase
 from django.core.files.uploadedfile import UploadedFile
 
 
