@@ -79,5 +79,6 @@ class CleanUploadedFile:
         #   (.e.g key, content-type, content-type-alternate)
         #   get rid of the splatting function and use regex to accept case
         #   insensitive matches when testing the filetype.
+        # FOR THE CSV HANDLING, WE USE FORMS AS SET OUT IN p164 of TWO SCOOPS
         print(f"We are now in the UploadedFileHandler.process() method "
               f"with {self._f} which is a {self._type}")
