@@ -18,13 +18,13 @@ def test_csv_contents(uploaded_csv_file):
     uf = UploadedFile(test_file)
     csv_reader = csv.DictReader(uf)
     line = next(csv_reader)
-    assert line['header_1'] == 'First row col 1'
-    assert line['header_2'] == 'First row col 2'
-    assert line['header_3'] == 'First row col 3'
+    assert line['key'] == 'First row col 1'
+    assert line['sheet'] == 'First row col 2'
+    assert line['cell_ref'] == 'A15'
     line = next(csv_reader)
-    assert line['header_1'] == 'Second row col 1'
-    assert line['header_2'] == 'Second row col 2'
-    assert line['header_3'] == 'Second row col 3'
+    assert line['key'] == 'Second row col 1'
+    assert line['sheet'] == 'Second row col 2'
+    assert line['cell_ref'] == 'B15'
 
 
 def test_our_file_class_detects_filetype(uploaded_csv_file):
