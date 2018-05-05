@@ -1,6 +1,7 @@
 from django.core.files.uploadedfile import UploadedFile
 
 from .generic import splat_listed_dict_values
+from helpers.file_processors import add_datamaplines_from_csv
 from exceptions import IllegalFileUpload
 
 
@@ -81,4 +82,8 @@ class CleanUploadedFile:
         #   insensitive matches when testing the filetype.
         # FOR THE CSV HANDLING, WE USE FORMS AS SET OUT IN p164 of TWO SCOOPS
         print(f"We are now in the UploadedFileHandler.process() method "
-              f"with {self._f} which is a {self._type}")
+              f"with {self._f} which is a {self._acceptable_type}")
+        print(f"Passing the file to add_datamap_lines_from_csv")
+        res = add_datamaplines_from_csv(self._f)
+        print(res)
+

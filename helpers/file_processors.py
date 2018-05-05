@@ -4,6 +4,7 @@ e.g. CSV and xlsx files, for either the datamap or database.
 """
 
 import csv
+import codecs
 
 from django import forms
 
@@ -22,13 +23,12 @@ def add_datamaplines_from_csv(csv_file):
     records_added = 0
     errors = []
 
-    with open(csv_file, 'r') as f:
-        csv_reader = csv.DictReader(f)
-        for row in csv_reader:
-            form = CSVForm(row)
-            if form.is_valid():
-                # process
-                records_added += 1
-            else:
-                errors.append(form.errors)
-        return records_added, errors
+    csv_reader = csv.DictReader(codecs.iterdecode(csv_file, 'utf-8'))
+    for row in csv_reader:
+        form = CSVForm(row)
+        if form.is_valid():
+            # process
+            records_added += 1
+        else:
+            errors.append(form.errors)
+    return records_added, errors
