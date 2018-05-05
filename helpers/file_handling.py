@@ -1,6 +1,5 @@
 from django.core.files.uploadedfile import UploadedFile
 
-from .generic import splat_listed_dict_values
 from helpers.file_processors import add_datamaplines_from_csv
 from exceptions import IllegalFileUpload
 
@@ -38,10 +37,18 @@ class CleanUploadedFile:
         hit = 0
         for v in vals:
             for x in v:
-                if self._content_type in x:
+                if self._content_type == x:
                     hit += 1
         if hit == 0:
             raise IllegalFileUpload
+        else:
+            for i in self.acceptable_types.keys():
+                for x in self.acceptable_types[i]:
+                    if x == self._content_type:
+                        self._short_type = i
+                        self._acceptable_type = True
+                        return
+
         # if there are no lists that form values in the accessible_types dict,
         # we can just test for the filetpe in the accessible_type dict's
         # values as normal, and raise an exception if not found
@@ -55,7 +62,6 @@ class CleanUploadedFile:
         #       raise IllegalFileUpload
         # if we get to this poit, no exception has been raised, therefore
         # the filetype is acceptible.
-        self._acceptable_type = True
 
 
     def process(self):
@@ -82,6 +88,9 @@ class CleanUploadedFile:
         print(f"We are now in the UploadedFileHandler.process() method "
               f"with {self._f} which is a {self._acceptable_type}")
         print(f"Passing the file to add_datamap_lines_from_csv")
-        res = add_datamaplines_from_csv(self._f)
-        print(res)
+        if self._short_type == 'csv':
+            res = add_datamaplines_from_csv(self._f)
+            print(res)
+        else:
+            print("NOT A CSV!")
 
