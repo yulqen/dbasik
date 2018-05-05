@@ -13,8 +13,8 @@ class CleanUploadedFile:
     an IllegalFileUpload exception is raised."""
 
     acceptable_types = {
-        'csv': 'text/csv',
-        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'csv': ['text/csv'],
+        'xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
         'xlsm': [
             'application/vnd.ms-excel.sheet.macroEnabled.12',
             'application/vnd.ms-excel.sheet.macroenabled.12'
@@ -34,12 +34,14 @@ class CleanUploadedFile:
 
 
     def _check_type(self):
-        splatted_vals = splat_listed_dict_values(self.acceptable_types.values())
-        # if one of the accessible_types dict's values is a list, we test for
-        # acceptible values, and raise an exception if not found
-        if splatted_vals:
-            if self._content_type not in splatted_vals:
-                raise IllegalFileUpload
+        vals = self.acceptable_types.values()
+        hit = 0
+        for v in vals:
+            for x in v:
+                if self._content_type in x:
+                    hit += 1
+        if hit == 0:
+            raise IllegalFileUpload
         # if there are no lists that form values in the accessible_types dict,
         # we can just test for the filetpe in the accessible_type dict's
         # values as normal, and raise an exception if not found
@@ -51,10 +53,6 @@ class CleanUploadedFile:
         # else:
         #   if not XlsxTest(self_uploaded_file).pass:
         #       raise IllegalFileUpload
-
-        else:
-            if self._content_type not in self.acceptable_types.values():
-                raise IllegalFileUpload
         # if we get to this poit, no exception has been raised, therefore
         # the filetype is acceptible.
         self._acceptable_type = True
