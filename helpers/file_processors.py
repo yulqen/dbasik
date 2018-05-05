@@ -12,13 +12,22 @@ from datamap.models import DatamapLine
 
 
 class CSVForm(forms.ModelForm):
+    """
+    Used to verify an uploaded CSV file, line-by-line.
+    """
 
     class Meta:
         model = DatamapLine
-        exclude = ['datamap']
+        exclude = ['datamap'] # this is the ForeignKey
 
 
 def add_datamaplines_from_csv(csv_file):
+    """
+    Use a Form to validate input in an uploaded CSV
+    file.
+    :param csv_file: an opened file object
+    :return: tuple of records added and errors
+    """
 
     records_added = 0
     errors = []
