@@ -6,9 +6,6 @@ from io import StringIO, BytesIO
 import pytest
 
 
-TEMPDIR = tempfile.gettempdir()
-
-
 @pytest.fixture
 def uploaded_csv_file():
     uf = StringIO()
