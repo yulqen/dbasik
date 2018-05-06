@@ -48,5 +48,7 @@ def _validate_dmlines_from_csv(csv_file):
                     )
                 errors.append(form.errors)
             except KeyError:
+                # introspect models.py to get correct expected csv headers
+                # and send with this exception
                 raise IncorrectHeaders("Incorrect headers in csv file")
     return records_added, errors

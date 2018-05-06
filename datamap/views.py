@@ -47,12 +47,10 @@ def upload_datamap(request):
             if f.content_type == 'text/csv':
                 try:
                     CSVUploadedFile(f).process()
-                except IllegalFileUpload:
-                    # should behave as though illegal
-                    # not sure how this should occur but leaving it as a check
+                except IllegalFileUpload: # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, 'Illegal file type')
-                except IncorrectHeaders:
-                    messages.add_message(request, messages.INFO, 'Incorrect headers in CSV file')
+                except IncorrectHeaders as e:
+                    messages.add_message(request, messages.INFO, e.args[0])
         elif form.errors:
             for v in form.errors.values():
                 messages.add_message(request, messages.INFO, v)
