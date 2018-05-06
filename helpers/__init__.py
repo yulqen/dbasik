@@ -1,1 +1,1 @@
-from .file_handling import CleanUploadedFile
+from .file_handling import CSVUploadedFile

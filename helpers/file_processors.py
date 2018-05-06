@@ -9,6 +9,7 @@ import codecs
 from django import forms
 
 from datamap.models import DatamapLine
+from exceptions import IncorrectHeaders
 
 
 class CSVForm(forms.ModelForm):
@@ -39,10 +40,13 @@ def _validate_dmlines_from_csv(csv_file):
             # process
             records_added += 1
         else:
-            for k in form.errors.keys():
-                print(
-                    f"Error in {k}: {form.data[k]}\n"
-                    f"Detail: {form.errors[k][0]}"
-                )
-            errors.append(form.errors)
+            try:
+                for k in form.errors.keys():
+                    print(
+                        f"Error in {k}: {form.data[k]}\n"
+                        f"Detail: {form.errors[k][0]}"
+                    )
+                errors.append(form.errors)
+            except KeyError:
+                raise IncorrectHeaders("Incorrect headers in csv file")
     return records_added, errors

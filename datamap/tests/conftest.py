@@ -1,6 +1,3 @@
-import csv
-import tempfile
-
 from io import StringIO, BytesIO
 
 import pytest
