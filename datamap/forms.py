@@ -1,10 +1,10 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
 from .models import PortfolioFamily
-from helpers import CSVUploadedFile # change this
+from helpers import acceptable_types
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=CSVUploadedFile.acceptable_types,
+    allowed_extensions=acceptable_types,
     message='Needs to be a CSV or Excel file.')
 
 
