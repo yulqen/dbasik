@@ -1,6 +1,6 @@
 from django.core.files.uploadedfile import UploadedFile
 
-from helpers.file_processors import add_datamaplines_from_csv
+from helpers.file_processors import _validate_dmlines_from_csv
 from exceptions import IllegalFileUpload
 
 
@@ -89,7 +89,7 @@ class CleanUploadedFile:
               f"with {self._f} which is a {self._acceptable_type}")
         print(f"Passing the file to add_datamap_lines_from_csv")
         if self._short_type == 'csv':
-            res = add_datamaplines_from_csv(self._f)
+            res = _validate_dmlines_from_csv(self._f)
             print(res)
         else:
             print("NOT A CSV!")

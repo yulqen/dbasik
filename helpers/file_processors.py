@@ -21,7 +21,7 @@ class CSVForm(forms.ModelForm):
         exclude = ['datamap'] # this is the ForeignKey
 
 
-def add_datamaplines_from_csv(csv_file):
+def _validate_dmlines_from_csv(csv_file):
     """
     Use a Form to validate input in an uploaded CSV
     file.
@@ -39,5 +39,10 @@ def add_datamaplines_from_csv(csv_file):
             # process
             records_added += 1
         else:
+            for k in form.errors.keys():
+                print(
+                    f"Error in {k}: {form.data[k]}\n"
+                    f"Detail: {form.errors[k][0]}"
+                )
             errors.append(form.errors)
     return records_added, errors
