@@ -7,7 +7,7 @@ name = "pypi"
 
 [packages]
 
-Django = "*"
+django = "*"
 "psycopg2" = "*"
 
 
@@ -25,3 +25,5 @@ python-language-server = {extras = ["all"]}
 pyls-isort = "*"
 pytest = "*"
 pytest-django = "*"
+"flake8-bugbear" = "*"
+black = "*"
