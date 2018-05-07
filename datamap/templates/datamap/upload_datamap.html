@@ -16,7 +16,7 @@
         <form action="/uploaddatamap/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <p>{{ form.file_name }}</p>
-            <p>{{ form.datamap }}</p>
+            <p>{{ form.target_datamap }}</p>
             <p>{{ form.uploaded_file }}</p>
             <input type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>
         </form>

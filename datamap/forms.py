@@ -18,7 +18,7 @@ def datamap_choices():
 
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
-    datamap = forms.ChoiceField(choices=datamap_choices)
+    target_datamap = forms.ChoiceField(choices=datamap_choices)
     uploaded_file = forms.FileField(validators=[file_validator])
 
 

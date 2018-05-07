@@ -8,7 +8,7 @@ from typing import Tuple, List
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 
-from datamap.models import DatamapLine
+from datamap.models import DatamapLine, Datamap
 from exceptions import IncorrectHeaders
 
 
@@ -70,10 +70,26 @@ class CSVUploadedFile(DBUploadedFile):
         model_for_validation: str,
         app_model: str,
         given_name: str,
+        target_dm: int,
     ):
         self.model_for_validation = model_for_validation
         self.app_model = app_model
+        self.target_dm = target_dm
         super().__init__(uploaded_file, given_name)
+
+    def _process(self, row: dict):
+        """Save datamap line to database.
+        """
+        dm_inst = Datamap.objects.get(pk=self.target_dm)
+        dml = DatamapLine(
+            datamap=dm_inst,
+            key=row['key'],
+            sheet=row['sheet'],
+            cell_ref=row['cell_ref']
+        )
+        print(f"Saving {row['key']}")
+        dml.save()
+
 
     def _validate_dmlines_from_csv(
         self, csv_file: UploadedFile
@@ -94,7 +110,7 @@ class CSVUploadedFile(DBUploadedFile):
         for row in csv_reader:
             form = CSVForm(row)
             if form.is_valid():
-                # process
+                self._process(row)
                 records_added += 1
             else:
                 try:
