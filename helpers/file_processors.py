@@ -7,7 +7,7 @@ import csv
 import codecs
 
 from django import forms
-from django.core.files import UploadedFile
+from django.core.files.uploadedfile import UploadedFile
 
 from datamap.models import DatamapLine
 from exceptions import IncorrectHeaders

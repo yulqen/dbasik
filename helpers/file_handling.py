@@ -1,6 +1,6 @@
 from helpers.file_processors import _validate_dmlines_from_csv
 
-from django.core.files import UploadedFile
+from django.core.files.uploadedfile import UploadedFile
 
 
 acceptable_types = {
