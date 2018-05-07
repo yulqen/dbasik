@@ -44,10 +44,12 @@ class DBUploadedFile:
     Not to be implemented directly.
     """
 
-    def __init__(self, uploaded_file: UploadedFile) -> None:
+    def __init__(self, uploaded_file: UploadedFile, given_name: str) -> None:
         """Initialise with an opened file object and its short type.
         """
         self._uploaded_file = uploaded_file
+        self._actual_file_name = self._uploaded_file.name
+        self._given_name = given_name
 
     def process(self):
         raise NotImplementedError()
@@ -55,14 +57,23 @@ class DBUploadedFile:
 
 class CSVUploadedFile(DBUploadedFile):
     """Handles uploaded CSV files.
+
+    :param uploaded_file: an opened file object
+    :param model_for_validation: name of model
+    :param app_model: name of the Django app in which model object can be found
+    :param given_name: name captured by the text box in the HTML form
     """
 
     def __init__(
-        self, uploaded_file: UploadedFile, model_for_validation: str, app_model: str
+        self,
+        uploaded_file: UploadedFile,
+        model_for_validation: str,
+        app_model: str,
+        given_name: str,
     ):
         self.model_for_validation = model_for_validation
         self.app_model = app_model
-        super().__init__(uploaded_file)
+        super().__init__(uploaded_file, given_name)
 
     def _validate_dmlines_from_csv(
         self, csv_file: UploadedFile
@@ -125,7 +136,8 @@ class CSVUploadedFile(DBUploadedFile):
                     _keys = [k for k in _keys if not re.match(_id_regex, k)]
 
                     raise IncorrectHeaders(
-                        f"Incorrect headers in csv file - should include some of: {','.join(_keys)}"
+                        f"Incorrect headers in csv file - should include some "
+                        f"of: {','.join(_keys)}"
                     )
         csv_file.close()
         return records_added, errors
