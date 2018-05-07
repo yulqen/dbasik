@@ -1,5 +1,7 @@
 from helpers.file_processors import _validate_dmlines_from_csv
 
+from django.core.files import UploadedFile
+
 
 acceptable_types = {
     'csv': ['text/csv'],
@@ -17,8 +19,7 @@ class DBUploadedFile:
     Not to be implemented directly.
     """
 
-
-    def __init__(self, uploaded_file):
+    def __init__(self, uploaded_file: UploadedFile) -> None:
         """Initialise with an opened file object and its short type.
         """
         self._uploaded_file = uploaded_file

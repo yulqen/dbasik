@@ -7,9 +7,12 @@ import csv
 import codecs
 
 from django import forms
+from django.core.files import UploadedFile
 
 from datamap.models import DatamapLine
 from exceptions import IncorrectHeaders
+
+from typing import Tuple, List
 
 
 class CSVForm(forms.ModelForm):
@@ -22,7 +25,7 @@ class CSVForm(forms.ModelForm):
         exclude = ['datamap'] # this is the ForeignKey
 
 
-def _validate_dmlines_from_csv(csv_file):
+def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]:
     """
     Use a Form to validate input in an uploaded CSV
     file.
