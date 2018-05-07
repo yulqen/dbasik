@@ -87,7 +87,6 @@ class CSVUploadedFile(DBUploadedFile):
             sheet=row['sheet'],
             cell_ref=row['cell_ref']
         )
-        print(f"Saving {row['key']}")
         dml.save()
 
 
