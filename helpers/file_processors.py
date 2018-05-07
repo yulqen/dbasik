@@ -22,7 +22,7 @@ class CSVForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        exclude = ['datamap'] # this is the ForeignKey
+        exclude = ["datamap"]  # this is the ForeignKey
 
 
 def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]:
@@ -36,7 +36,7 @@ def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]
     records_added = 0
     errors = []
 
-    csv_reader = csv.DictReader(codecs.iterdecode(csv_file, 'utf-8'))
+    csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
     for row in csv_reader:
         form = CSVForm(row)
         if form.is_valid():
@@ -46,8 +46,7 @@ def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]
             try:
                 for k in form.errors.keys():
                     print(
-                        f"Error in {k}: {form.data[k]}\n"
-                        f"Detail: {form.errors[k][0]}"
+                        f"Error in {k}: {form.data[k]}\n" f"Detail: {form.errors[k][0]}"
                     )
                 errors.append(form.errors)
             except KeyError:

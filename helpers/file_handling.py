@@ -4,12 +4,12 @@ from django.core.files import UploadedFile
 
 
 acceptable_types = {
-    'csv': ['text/csv'],
-    'xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-    'xlsm': [
-        'application/vnd.ms-excel.sheet.macroEnabled.12',
-        'application/vnd.ms-excel.sheet.macroenabled.12'
-    ]
+    "csv": ["text/csv"],
+    "xlsx": ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+    "xlsm": [
+        "application/vnd.ms-excel.sheet.macroEnabled.12",
+        "application/vnd.ms-excel.sheet.macroenabled.12",
+    ],
 }
 
 
@@ -48,5 +48,3 @@ class XLSXUploadedFile(DBUploadedFile):
 class ZipUploadedFile(DBUploadedFile):
     """Handles uploaded zip files.
     """
-
-
