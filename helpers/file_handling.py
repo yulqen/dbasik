@@ -71,18 +71,20 @@ class CSVUploadedFile(DBUploadedFile):
         app_model: str,
         given_name: str,
         target_dm: int,
+        replace: bool='off'
     ):
         self.model_for_validation = model_for_validation
         self.app_model = app_model
         self.target_dm = target_dm
+        self.replace = replace
+        self._table_cleared = False
         super().__init__(uploaded_file, given_name)
 
-    def _process(self, row: dict):
+    def _process(self, row: dict, dm_instance):
         """Save datamap line to database.
         """
-        dm_inst = Datamap.objects.get(pk=self.target_dm)
         dml = DatamapLine(
-            datamap=dm_inst,
+            datamap=dm_instance,
             key=row['key'],
             sheet=row['sheet'],
             cell_ref=row['cell_ref']
@@ -108,8 +110,15 @@ class CSVUploadedFile(DBUploadedFile):
         csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
         for row in csv_reader:
             form = CSVForm(row)
-            if form.is_valid():
-                self._process(row)
+            if form.is_valid() and self.replace == 'on' and not self._table_cleared:
+                dm_inst = Datamap.objects.get(pk=self.target_dm)
+                DatamapLine.objects.filter(datamap=dm_inst).delete()
+                self._table_cleared = True
+                self._process(row, dm_inst)
+                records_added += 1
+            elif form.is_valid():
+                dm_inst = Datamap.objects.get(pk=self.target_dm)
+                self._process(row, dm_inst)
                 records_added += 1
             else:
                 try:

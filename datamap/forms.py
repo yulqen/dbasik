@@ -20,6 +20,7 @@ class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
     target_datamap = forms.ChoiceField(choices=datamap_choices)
     uploaded_file = forms.FileField(validators=[file_validator])
+    replace_all_entries = forms.BooleanField(initial=True, required=False)
 
 
 class CreateDatamapForm(forms.Form):
