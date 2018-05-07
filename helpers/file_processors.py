@@ -3,8 +3,12 @@ Code for processing uploaded files into system,
 e.g. CSV and xlsx files, for either the datamap or database.
 """
 
-import csv
 import codecs
+import csv
+import inspect
+import re
+from importlib import import_module
+from typing import Tuple, List
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
@@ -12,7 +16,8 @@ from django.core.files.uploadedfile import UploadedFile
 from datamap.models import DatamapLine
 from exceptions import IncorrectHeaders
 
-from typing import Tuple, List
+
+_target_model_exclude = "datamap"
 
 
 class CSVForm(forms.ModelForm):
@@ -22,7 +27,7 @@ class CSVForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        exclude = ["datamap"]  # this is the ForeignKey
+        exclude = [_target_model_exclude]  # this is the ForeignKey
 
 
 def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]:
@@ -32,6 +37,8 @@ def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]
     :param csv_file: an opened file object
     :return: tuple of records added and errors
     """
+
+    _id_regex = re.compile(".*_id$", re.I)
 
     records_added = 0
     errors = []
@@ -52,5 +59,29 @@ def _validate_dmlines_from_csv(csv_file: UploadedFile) -> Tuple[int, List[dict]]
             except KeyError:
                 # introspect models.py to get correct expected csv headers
                 # and send with this exception
-                raise IncorrectHeaders("Incorrect headers in csv file")
+
+                _models = import_module(f"{_target_model_exclude}.models")
+                _model_classes = [
+                    (k, v) for k, v in inspect.getmembers(_models) if inspect.isclass(v)
+                ]
+                _keys = [
+                    name
+                    for name in _model_classes[1][1].__dict__.keys()
+                    if name not in [
+                        "id",
+                        "__module__",
+                        "__doc__",
+                        "_meta",
+                        "DoesNotExist",
+                        "MultipleObjectsReturned",
+                        "objects",
+                        "__str__",
+                    ]
+                ]
+                _keys = [k for k in _keys if not re.match(_id_regex, k)]
+                _keys = [k for k in _keys if k != _target_model_exclude]
+
+                raise IncorrectHeaders(
+                    f"Incorrect headers in csv file - should be: {','.join(_keys)}"
+                )
     return records_added, errors

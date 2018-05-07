@@ -4,8 +4,8 @@ from .models import PortfolioFamily
 from helpers import acceptable_types
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=acceptable_types,
-    message='Needs to be a CSV or Excel file.')
+    allowed_extensions=acceptable_types, message="Needs to be a CSV or Excel file."
+)
 
 
 class UploadDatamap(forms.Form):
@@ -18,6 +18,4 @@ class CreateDatamapForm(forms.Form):
     pfs = PortfolioFamily.objects.all()
 
     name = forms.CharField(max_length=50)
-    portfolio_family = forms.ChoiceField(
-        choices=[(p.id, p.name) for p in pfs]
-    )
+    portfolio_family = forms.ChoiceField(choices=[(p.id, p.name) for p in pfs])
