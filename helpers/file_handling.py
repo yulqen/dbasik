@@ -57,6 +57,13 @@ class CSVUploadedFile(DBUploadedFile):
     """Handles uploaded CSV files.
     """
 
+    def __init__(
+        self, uploaded_file: UploadedFile, model_for_validation: str, app_model: str
+    ):
+        self.model_for_validation = model_for_validation
+        self.app_model = app_model
+        super().__init__(uploaded_file)
+
     def _validate_dmlines_from_csv(
         self, csv_file: UploadedFile
     ) -> Tuple[int, List[dict]]:
@@ -90,7 +97,7 @@ class CSVUploadedFile(DBUploadedFile):
                     # introspect models.py to get correct expected csv headers
                     # and send with this exception
 
-                    _models = import_module(f"{target_model_exclude}.models")
+                    _models = import_module(f"{self.app_model}.models")
                     _model_classes = [
                         (k, v)
                         for k, v in inspect.getmembers(_models)
@@ -111,7 +118,7 @@ class CSVUploadedFile(DBUploadedFile):
                         ]
                     ]
                     _keys = [k for k in _keys if not re.match(_id_regex, k)]
-                    _keys = [k for k in _keys if k != target_model_exclude]
+                    _keys = [k for k in _keys if k != self.app_model]
 
                     raise IncorrectHeaders(
                         f"Incorrect headers in csv file - should be: {','.join(_keys)}"
