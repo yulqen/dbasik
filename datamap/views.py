@@ -46,7 +46,7 @@ def upload_datamap(request):
             # pass to the file handler
             if f.content_type == "text/csv":
                 try:
-                    CSVUploadedFile(f, 'Datamap', 'datamap').process()
+                    CSVUploadedFile(f, 'DatamapLine', 'datamap').process()
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:

@@ -103,9 +103,14 @@ class CSVUploadedFile(DBUploadedFile):
                         for k, v in inspect.getmembers(_models)
                         if inspect.isclass(v)
                     ]
+                    _target_class = [
+                        class_
+                        for class_ in _model_classes
+                        if class_[0] == self.model_for_validation
+                    ]
                     _keys = [
                         name
-                        for name in _model_classes[1][1].__dict__.keys()
+                        for name in _target_class[0][1].__dict__.keys()
                         if name not in [
                             "id",
                             "__module__",
@@ -118,11 +123,11 @@ class CSVUploadedFile(DBUploadedFile):
                         ]
                     ]
                     _keys = [k for k in _keys if not re.match(_id_regex, k)]
-                    _keys = [k for k in _keys if k != self.app_model]
 
                     raise IncorrectHeaders(
-                        f"Incorrect headers in csv file - should be: {','.join(_keys)}"
+                        f"Incorrect headers in csv file - should include some of: {','.join(_keys)}"
                     )
+        csv_file.close()
         return records_added, errors
 
     def process(self):
