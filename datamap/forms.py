@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
-from .models import PortfolioFamily
+from .models import PortfolioFamily, Datamap
 from helpers import acceptable_types
 
 file_validator = FileExtensionValidator(
@@ -8,8 +8,17 @@ file_validator = FileExtensionValidator(
 )
 
 
+def datamap_choices():
+    d_maps = Datamap.objects.all()
+    return tuple(
+        [(d_maps.first().id, d_maps.first().name)
+         for d in d_maps]
+    )
+
+
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
+    datamap = forms.ChoiceField(choices=datamap_choices)
     uploaded_file = forms.FileField(validators=[file_validator])
 
 
