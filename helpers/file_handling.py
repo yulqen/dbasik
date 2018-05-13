@@ -136,6 +136,7 @@ class CSVUploadedFile(DBUploadedFile):
                         )
                         errors.append(err)
                 except KeyError:
+                    # move to configuration
                     _keys = ['key', 'sheet', 'cell_ref']
 
                     raise IncorrectHeaders(

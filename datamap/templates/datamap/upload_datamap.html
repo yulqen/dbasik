@@ -6,6 +6,7 @@
         <title>Upload datamap</title>
     </head>
     <body>
+        <p id='csv-field-advisory'>Please ensure your csv file has headers: {{ field_keys }}</p>
         {% if messages %}
         <ul>
             {% for message in messages %}

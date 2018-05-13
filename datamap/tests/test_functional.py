@@ -70,3 +70,8 @@ def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
         EC.presence_of_element_located((By.ID, "message-test"))
     )
     assert "Ensure this value has at most 100 characters (it has 106)" in message.text
+
+
+def test_guidance_text_for_csv_upload(selenium):
+    selenium.get("http://localhost:8000/uploaddatamap")
+    assert selenium.find_element_by_id('csv-field-advisory')

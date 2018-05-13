@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.urls import reverse
+from django.conf import settings
 
 from .forms import CreateDatamapForm, UploadDatamap
 from .models import Datamap, DatamapLine, PortfolioFamily
@@ -38,6 +39,12 @@ def create_datamap(request):
 
 
 def upload_datamap(request):
+
+    if settings.DATAMAP_FIELD_KEYS:
+        field_keys = settings.DATAMAP_FIELD_KEYS
+    else:
+        field_keys = ""
+
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
@@ -72,4 +79,4 @@ def upload_datamap(request):
     else:
         form = UploadDatamap()
 
-    return render(request, "datamap/upload_datamap.html", {"form": form})
+    return render(request, "datamap/upload_datamap.html", {"form": form, "field_keys": field_keys})
