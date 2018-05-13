@@ -42,6 +42,22 @@ def bad_csv_file(tmpdir):
 
 
 @pytest.fixture
+def csv_hundred_plus_key(tmpdir):
+    k = ("This is a key that is way too long and need to be "
+         "seriously truncated we dont like keys this length do we?")
+    uf = BytesIO()
+    uf.write(b"key,sheet,cell_ref\n")
+    uf.write(bytearray(f"{k},First row col 2,A15\n", 'utf-8'))
+    uf.write(b"Second row col 1,Second row col 2,B15\n")
+    uf.write(b"Third row col 1,Third row col 2,C15\n")
+    uf.write(b"Fourth row col 1,Fourth row col 2,D15\n")
+    uf.seek(0)
+    yield uf
+    uf.close()
+
+
+
+@pytest.fixture
 def good_csv_file(tmpdir):
     uf = tmpdir.mkdir("csv-files").join('good_datamap.csv')
     with open(uf, 'w') as f:
