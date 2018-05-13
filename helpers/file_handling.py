@@ -1,15 +1,13 @@
 import codecs
 import csv
-import inspect
-import re
-from importlib import import_module
+from typing import NamedTuple
 from typing import Tuple, List
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 
 from datamap.models import DatamapLine, Datamap
-from exceptions import IncorrectHeaders
+from exceptions import IncorrectHeaders, DatamapLineValidationError
 
 
 # used in introspecting the model for datamap class
@@ -26,6 +24,16 @@ acceptable_types = {
         "application/vnd.ms-excel.sheet.macroenabled.12",
     ],
 }
+
+
+class CSVValidationError(NamedTuple):
+    """Stores exception data when csv validator throws message.
+    We need to pass the data back to the user in a message, so here we go.
+    """
+    error_field: str
+    django_validator_message: str
+    field_given_value: str
+
 
 
 class CSVForm(forms.ModelForm):
@@ -102,8 +110,6 @@ class CSVUploadedFile(DBUploadedFile):
         :return: tuple of records added and errors
         """
 
-        _id_regex = re.compile(".*_id$", re.I)
-
         records_added = 0
         errors = []
 
@@ -122,12 +128,13 @@ class CSVUploadedFile(DBUploadedFile):
                 records_added += 1
             else:
                 try:
-                    for k in form.errors.keys():
-                        print(
-                            f"Error in {k}: {form.data[k]}\n"
-                            f"Detail: {form.errors[k][0]}"
+                    for i in form.errors.items():
+                        err = CSVValidationError(
+                            error_field=i[0],
+                            django_validator_message=i[1][0],
+                            field_given_value=form.data[i[0]]
                         )
-                    errors.append(form.errors)
+                        errors.append(err)
                 except KeyError:
                     _keys = ['key', 'sheet', 'cell_ref']
 
@@ -140,7 +147,10 @@ class CSVUploadedFile(DBUploadedFile):
 
     def process(self):
         res = self._validate_dmlines_from_csv(self._uploaded_file)
-        print(res)
+        try:
+            assert res[1] == []
+        except AssertionError:
+            raise DatamapLineValidationError(res[1])
 
 
 class XLSXUploadedFile(DBUploadedFile):

@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .forms import CreateDatamapForm, UploadDatamap
 from .models import Datamap, DatamapLine, PortfolioFamily
-from exceptions import IllegalFileUpload, IncorrectHeaders
+from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile
 
 
@@ -41,26 +41,30 @@ def upload_datamap(request):
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
-            print(request.FILES["uploaded_file"])
             f = request.FILES["uploaded_file"]
             given_name = request.POST["file_name"]
             dm = request.POST["target_datamap"]
             if "replace_all_entries" in request.POST:
                 replace = request.POST["replace_all_entries"]
             else:
-                replace = 'off'
-            print(type(f))
-            # pass to the file handler
+                replace = "off"
             if f.content_type == "text/csv":
                 try:
                     CSVUploadedFile(
                         f, "DatamapLine", "datamap", given_name, dm, replace
                     ).process()
-                    return HttpResponseRedirect(reverse('datamap', args=[dm]))
+                    return HttpResponseRedirect(reverse("datamap", args=[dm]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
                     messages.add_message(request, messages.INFO, e.args[0])
+                except DatamapLineValidationError as e:
+                    msg = (
+                        f"Validation error in field: {e.args[0][0].error_field}\n"
+                        f"{e.args[0][0].django_validator_message} {e.args[0][0].field_given_value}"
+                    )
+                    messages.add_message(request, messages.INFO, msg)
+
         elif form.errors:
             for v in form.errors.values():
                 messages.add_message(request, messages.INFO, v)

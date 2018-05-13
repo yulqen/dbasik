@@ -4,3 +4,7 @@ class IllegalFileUpload(Exception):
 
 class IncorrectHeaders(Exception):
     pass
+
+
+class DatamapLineValidationError(Exception):
+    pass

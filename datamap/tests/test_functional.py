@@ -59,3 +59,14 @@ def test_upload_correct_csv(selenium, good_csv_file):
     # TODO this needs to test for the name of the datamap
     # but we haven't included that yet. So test for it...
     assert "Datamap:" in redirected_datamap_page.text
+
+
+def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
+    selenium.get("http://localhost:8000/uploaddatamap")
+    selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
+    selenium.find_element_by_id("id_file_name").send_keys("Test file")
+    selenium.find_element_by_id("upload-button").click()
+    message = WebDriverWait(selenium, 3).until(
+        EC.presence_of_element_located((By.ID, "message-test"))
+    )
+    assert "Ensure this value has at most 100 characters (it has 106)" in message.text
