@@ -9,17 +9,29 @@
         {% if messages %}
         <ul>
             {% for message in messages %}
-            <li>{{ message }}</li>
+            <li id='message-test'>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
         <form action="/uploaddatamap/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>{{ form.file_name }}</p>
-            <p>{{ form.target_datamap }}</p>
-            <p>{{ form.uploaded_file }}</p>
-            <p>Replace all entries: {{ form.replace_all_entries }}</p>
-            <input type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>
+            <table id='form-table' border='1px'>
+                <tr>
+                    <td>Title of file:</td>
+                    <td>{{ form.file_name }}</td>
+                </tr>
+                <tr>
+                    <td>Select datamap:</td>
+                    <td>{{ form.target_datamap }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.uploaded_file }}</td>
+                </tr>
+                <tr>
+                    <td>Replace all entries: {{ form.replace_all_entries }}</td>
+                    <td><input id='upload-button' type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/></td>
+                </tr>
+            </table>
         </form>
     </body>
 </html>
