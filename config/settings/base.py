@@ -16,7 +16,8 @@ import json
 
 from django.core.exceptions import ImproperlyConfigured
 
-DATAMAP_FIELD_KEYS = ['key', 'sheet', 'cell_ref']
+#DATAMAP_FIELD_KEYS = ['key', 'sheet', 'cell_ref']
+DATAMAP_FIELD_KEYS = ['cell_key', 'template_sheet', 'cell_reference']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

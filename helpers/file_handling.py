@@ -40,6 +40,8 @@ class CSVForm(forms.ModelForm):
     """
     Used to verify an uploaded CSV file, line-by-line.
     """
+    # TODO this needs to change to use settings.DATAMAP_FIELD_KEYS
+    # instead of a modelform.
 
     class Meta:
         model = DatamapLine
@@ -67,23 +69,17 @@ class CSVUploadedFile(DBUploadedFile):
     """Handles uploaded CSV files.
 
     :param uploaded_file: an opened file object
-    :param model_for_validation: name of model
-    :param app_model: name of the Django app in which model object can be found
     :param given_name: name captured by the text box in the HTML form
     """
 
     def __init__(
         self,
         uploaded_file: UploadedFile,
-        model_for_validation: str,
-        app_model: str,
         given_name: str,
         target_dm: int,
         field_keys: list,
         replace: bool='off',
     ):
-        self.model_for_validation = model_for_validation
-        self.app_model = app_model
         self.target_dm = target_dm
         self.replace = replace
         self.field_keys = field_keys

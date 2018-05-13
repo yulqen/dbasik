@@ -57,9 +57,7 @@ def upload_datamap(request):
                 replace = "off"
             if f.content_type == "text/csv":
                 try:
-                    CSVUploadedFile(
-                        f, "DatamapLine", "datamap", given_name, dm, field_keys, replace,
-                    ).process()
+                    CSVUploadedFile(f, given_name, dm, field_keys, replace).process()
                     return HttpResponseRedirect(reverse("datamap", args=[dm]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
@@ -79,4 +77,6 @@ def upload_datamap(request):
     else:
         form = UploadDatamap()
 
-    return render(request, "datamap/upload_datamap.html", {"form": form, "field_keys": field_keys})
+    return render(
+        request, "datamap/upload_datamap.html", {"form": form, "field_keys": field_keys}
+    )
