@@ -129,35 +129,7 @@ class CSVUploadedFile(DBUploadedFile):
                         )
                     errors.append(form.errors)
                 except KeyError:
-                    # introspect models.py to get correct expected csv headers
-                    # and send with this exception
-
-                    _models = import_module(f"{self.app_model}.models")
-                    _model_classes = [
-                        (k, v)
-                        for k, v in inspect.getmembers(_models)
-                        if inspect.isclass(v)
-                    ]
-                    _target_class = [
-                        class_
-                        for class_ in _model_classes
-                        if class_[0] == self.model_for_validation
-                    ]
-                    _keys = [
-                        name
-                        for name in _target_class[0][1].__dict__.keys()
-                        if name not in [
-                            "id",
-                            "__module__",
-                            "__doc__",
-                            "_meta",
-                            "DoesNotExist",
-                            "MultipleObjectsReturned",
-                            "objects",
-                            "__str__",
-                        ]
-                    ]
-                    _keys = [k for k in _keys if not re.match(_id_regex, k)]
+                    _keys = ['key', 'sheet', 'cell_ref']
 
                     raise IncorrectHeaders(
                         f"Incorrect headers in csv file - should include some "
