@@ -79,12 +79,14 @@ class CSVUploadedFile(DBUploadedFile):
         app_model: str,
         given_name: str,
         target_dm: int,
-        replace: bool='off'
+        field_keys: list,
+        replace: bool='off',
     ):
         self.model_for_validation = model_for_validation
         self.app_model = app_model
         self.target_dm = target_dm
         self.replace = replace
+        self.field_keys = field_keys
         self._table_cleared = False
         super().__init__(uploaded_file, given_name)
 
@@ -137,7 +139,7 @@ class CSVUploadedFile(DBUploadedFile):
                         errors.append(err)
                 except KeyError:
                     # move to configuration
-                    _keys = ['key', 'sheet', 'cell_ref']
+                    _keys = self.field_keys
 
                     raise IncorrectHeaders(
                         f"Incorrect headers in csv file - should include some "
