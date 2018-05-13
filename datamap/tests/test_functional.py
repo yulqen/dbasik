@@ -32,13 +32,15 @@ def test_upload_datamap_form_items(selenium):
 
 
 @pytest.mark.nondestructive
-def test_upload_incorrect_csv(selenium):
+def test_upload_incorrect_csv(selenium, bad_csv_file):
     selenium.get("http://localhost:8000/uploaddatamap")
-    selenium.find_element_by_id("id_uploaded_file").send_keys("/home/lemon/Documents/bcompiler/source/datamap.csv")
+    selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
     selenium.find_element_by_id("id_file_name").send_keys("Test file")
     selenium.find_element_by_id("upload-button").click()
     try:
-        message = WebDriverWait(selenium, 3).until(EC.presence_of_element_located((By.ID, 'message-test')))
+        message = WebDriverWait(selenium, 3).until(
+            EC.presence_of_element_located((By.ID, "message-test"))
+        )
         print("Message found!")
         assert "Incorrect headers in csv file" in message.text
     except TimeoutException:
