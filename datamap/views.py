@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.urls import reverse
 
 from .forms import CreateDatamapForm, UploadDatamap
 from .models import Datamap, DatamapLine, PortfolioFamily
@@ -55,6 +56,7 @@ def upload_datamap(request):
                     CSVUploadedFile(
                         f, "DatamapLine", "datamap", given_name, dm, replace
                     ).process()
+                    return HttpResponseRedirect(reverse('datamap', args=[dm]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
