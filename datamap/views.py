@@ -17,7 +17,8 @@ class DatamapList(ListView):
 
 def datamap_view(request, dm_pk):
     dm_lines = DatamapLine.objects.filter(datamap_id=dm_pk).order_by("id")
-    context = {"dm_lines": dm_lines}
+    dm_name = Datamap.objects.get(pk=dm_pk).name
+    context = {"dm_lines": dm_lines, "dm_name": dm_name}
     return render(request, "datamap/datamap.html", context)
 
 
