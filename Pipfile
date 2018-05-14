@@ -1,18 +1,13 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 django = "*"
 "psycopg2" = "*"
 
-
 [dev-packages]
-
 neovim = "*"
 ptpython = "*"
 pdbpp = "*"
@@ -28,3 +23,5 @@ pytest-django = "*"
 "flake8-bugbear" = "*"
 black = "*"
 "flake8-mypy" = "*"
+selenium = "*"
+pytest-selenium = "*"

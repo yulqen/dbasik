@@ -2,18 +2,26 @@ from io import StringIO, BytesIO
 
 import pytest
 
+from django.core.management import call_command
+
 
 @pytest.fixture(scope='session')
-def django_db_setup():
-    from django.conf import settings
-    settings.DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'NAME': 'dbasik_dftgovernance',
-        'USER': 'lemon',
-        'PORT': '5432',
-        'PASSWORD': 'lemon'
-    }
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command('loaddata', 'fixtures/data.json')
+
+
+#@pytest.fixture(scope='session')
+#def django_db_setup():
+#    from django.conf import settings
+#    settings.DATABASES['default'] = {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'HOST': 'localhost',
+#        'NAME': 'dbasik_dftgovernance',
+#        'USER': 'lemon',
+#        'PORT': '5432',
+#        'PASSWORD': 'lemon'
+#    }
 
 
 @pytest.fixture
