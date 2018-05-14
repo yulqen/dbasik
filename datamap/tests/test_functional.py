@@ -13,7 +13,7 @@ from selenium.common.exceptions import TimeoutException
 @pytest.fixture
 def firefox_options(firefox_options):
     firefox_options.binary = "/opt/firefox-quantum/firefox"
-    #   firefox_options.headless = True
+    firefox_options.headless = True
     return firefox_options
 
 
@@ -33,7 +33,6 @@ def test_upload_datamap_form_items(selenium):
     assert selenium.find_element_by_id("upload-button")
 
 
-@pytest.mark.django_db
 def test_upload_incorrect_csv(selenium, bad_csv_file):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
@@ -49,7 +48,6 @@ def test_upload_incorrect_csv(selenium, bad_csv_file):
         print("No... timed out")
 
 
-@pytest.mark.django_db
 def test_upload_correct_csv(selenium, good_csv_file):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
@@ -63,7 +61,6 @@ def test_upload_correct_csv(selenium, good_csv_file):
     assert "Datamap:" in redirected_datamap_page.text
 
 
-@pytest.mark.django_db
 def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
