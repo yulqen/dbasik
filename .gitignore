@@ -6,3 +6,5 @@ secrets.json
 .pytest_cache/
 .vagrant/
 static/
+assets/
+test_output.html
