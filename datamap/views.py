@@ -40,10 +40,7 @@ def create_datamap(request):
 
 def upload_datamap(request):
 
-    if settings.DATAMAP_FIELD_KEYS:
-        field_keys = settings.DATAMAP_FIELD_KEYS
-    else:
-        field_keys = ""
+    field_keys = settings.DATAMAP_FIELD_KEYS
 
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)

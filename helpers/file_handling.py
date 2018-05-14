@@ -9,11 +9,6 @@ from django.core.files.uploadedfile import UploadedFile
 from datamap.models import DatamapLine, Datamap
 from exceptions import IncorrectHeaders, DatamapLineValidationError
 
-
-# used in introspecting the model for datamap class
-# TODO this should come from the config and might not
-# even be needed at all. Check the CSVFileUpload class
-
 target_model_exclude = "datamap"
 
 acceptable_types = {
@@ -33,7 +28,6 @@ class CSVValidationError(NamedTuple):
     error_field: str
     django_validator_message: str
     field_given_value: str
-
 
 
 class CSVForm(forms.ModelForm):
