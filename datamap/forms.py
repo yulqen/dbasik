@@ -10,10 +10,8 @@ file_validator = FileExtensionValidator(
 
 def datamap_choices():
     d_maps = Datamap.objects.all()
-    return tuple(
-        [(x.id, x.name)
-         for x in d_maps]
-    )
+    x = [(x.id, x.name) for x in d_maps]
+    return tuple(reversed(sorted(x, key=lambda dm: dm[0])))
 
 
 class UploadDatamap(forms.Form):
