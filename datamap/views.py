@@ -32,7 +32,7 @@ def create_datamap(request):
             pf_obj = PortfolioFamily.objects.get(pk=portfolio_family)
             new_dm = Datamap(name=name, portfolio_family=pf_obj)
             new_dm.save()
-            return HttpResponseRedirect("/admin")
+            return HttpResponseRedirect("/uploaddatamap")
     else:
         form = CreateDatamapForm()
 

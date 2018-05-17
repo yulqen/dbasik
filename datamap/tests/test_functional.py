@@ -75,3 +75,20 @@ def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
 def test_guidance_text_for_csv_upload(selenium):
     selenium.get("http://localhost:8000/uploaddatamap")
     assert selenium.find_element_by_id('csv-field-advisory')
+
+
+def test_datamap_create_form_items(selenium):
+    selenium.get("http://localhost:8000/createdatamap")
+    assert selenium.find_element_by_id('id_name')
+    assert selenium.find_element_by_id('id_portfolio_family')
+    assert selenium.find_element_by_id('submit-new-dm')
+
+
+def test_create_new_datamap(selenium):
+    selenium.get("http://localhost:8000/createdatamap")
+    selenium.find_element_by_id('id_name').send_keys("Test Datamap")
+    selenium.find_element_by_id("submit-new-dm").click()
+    advisory = WebDriverWait(selenium, 3).until(
+        EC.presence_of_element_located((By.ID, 'csv-field-advisory')) # this appears on dm upload page
+    )
+    assert advisory

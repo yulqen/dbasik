@@ -138,7 +138,7 @@ class CSVUploadedFile(DBUploadedFile):
         csv_file.close()
         return records_added, errors
 
-    def process(self):
+    def process(self) -> None:
         res = self._validate_dmlines_from_csv(self._uploaded_file)
         try:
             assert res[1] == []
