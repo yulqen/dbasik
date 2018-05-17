@@ -11,8 +11,8 @@ file_validator = FileExtensionValidator(
 def datamap_choices():
     d_maps = Datamap.objects.all()
     return tuple(
-        [(d_maps.first().id, d_maps.first().name)
-         for d in d_maps]
+        [(x.id, x.name)
+         for x in d_maps]
     )
 
 
