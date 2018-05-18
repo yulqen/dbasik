@@ -21,5 +21,8 @@
             </tr>
             {% endfor %}
         </table>
+        <p id='delete-datamap-button'>
+            <a href="{% url 'delete-datamap' dm.id %}">Delete this datamap</a>
+        </p>
     </body>
 </html>

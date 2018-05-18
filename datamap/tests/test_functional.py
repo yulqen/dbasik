@@ -102,5 +102,5 @@ def test_list_of_current_datamaps_on_create_datamap_page(selenium):
 
 
 def test_datamap_page_has_delete_button(selenium):
-    selenium.get("http://localhost:8000/createdatamap")
+    selenium.get("http://localhost:8000/datamap/1")
     assert selenium.find_element_by_id("delete-datamap-button")

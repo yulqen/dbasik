@@ -8,7 +8,7 @@ from django.conf import settings
 from .forms import CreateDatamapForm, UploadDatamap
 from .models import Datamap, DatamapLine, PortfolioFamily
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
-from helpers import CSVUploadedFile
+from helpers import CSVUploadedFile, delete_datamap
 
 
 class DatamapList(ListView):
@@ -18,8 +18,15 @@ class DatamapList(ListView):
 def datamap_view(request, dm_pk):
     dm_lines = DatamapLine.objects.filter(datamap_id=dm_pk).order_by("id")
     dm_name = Datamap.objects.get(pk=dm_pk).name
-    context = {"dm_lines": dm_lines, "dm_name": dm_name}
+    dm = Datamap.objects.get(pk=dm_pk)
+    context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
     return render(request, "datamap/datamap.html", context)
+
+
+def delete_datamap_view(request, dm_pk: int):
+    dm = Datamap.objects.get(pk=dm_pk)
+    delete_datamap(dm)
+    return HttpResponseRedirect("/datamaps")
 
 
 def create_datamap(request):

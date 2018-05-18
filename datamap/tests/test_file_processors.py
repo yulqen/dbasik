@@ -2,10 +2,8 @@
 
 import pytest
 
-from datamap.models import Datamap, DatamapLine
+from datamap.models import Datamap
 from helpers import delete_datamap
-
-# TODO write a function to remove datamap
 
 
 @pytest.mark.django_db
