@@ -1,7 +1,6 @@
 import codecs
 import csv
-from typing import NamedTuple
-from typing import Tuple, List
+from typing import NamedTuple, Tuple, List, Dict
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
@@ -34,6 +33,7 @@ class CSVForm(forms.ModelForm):
     """
     Used to verify an uploaded CSV file, line-by-line.
     """
+
     # TODO this needs to change to use settings.DATAMAP_FIELD_KEYS
     # instead of a modelform.
 
@@ -72,25 +72,24 @@ class CSVUploadedFile(DBUploadedFile):
         given_name: str,
         target_dm: int,
         field_keys: list,
-        replace: bool='off',
-    ):
+        replace: str = "off",
+    ) -> None:
         self.target_dm = target_dm
         self.replace = replace
         self.field_keys = field_keys
         self._table_cleared = False
         super().__init__(uploaded_file, given_name)
 
-    def _process(self, row: dict, dm_instance):
+    def _process(self, row: Dict[str, str], dm_instance):
         """Save datamap line to database.
         """
         dml = DatamapLine(
             datamap=dm_instance,
-            key=row['key'],
-            sheet=row['sheet'],
-            cell_ref=row['cell_ref']
+            key=row["key"],
+            sheet=row["sheet"],
+            cell_ref=row["cell_ref"],
         )
         dml.save()
-
 
     def _validate_dmlines_from_csv(
         self, csv_file: UploadedFile
@@ -108,7 +107,7 @@ class CSVUploadedFile(DBUploadedFile):
         csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
         for row in csv_reader:
             form = CSVForm(row)
-            if form.is_valid() and self.replace == 'on' and not self._table_cleared:
+            if form.is_valid() and self.replace == "on" and not self._table_cleared:
                 dm_inst = Datamap.objects.get(pk=self.target_dm)
                 DatamapLine.objects.filter(datamap=dm_inst).delete()
                 self._table_cleared = True
@@ -124,7 +123,7 @@ class CSVUploadedFile(DBUploadedFile):
                         err = CSVValidationError(
                             error_field=i[0],
                             django_validator_message=i[1][0],
-                            field_given_value=form.data[i[0]]
+                            field_given_value=form.data[i[0]],
                         )
                         errors.append(err)
                 except KeyError:
