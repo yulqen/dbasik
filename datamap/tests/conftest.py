@@ -7,14 +7,14 @@ from django.core.management import call_command
 from datamap.models import DatamapLine, Datamap, PortfolioFamily
 
 
-#@pytest.fixture(scope='session')
-#def django_db_setup(django_db_setup, django_db_blocker):
+# @pytest.fixture(scope='session')
+# def django_db_setup(django_db_setup, django_db_blocker):
 #    with django_db_blocker.unblock():
 #        call_command('loaddata', 'fixtures/data.json')
 
 
-#@pytest.fixture(scope='session')
-#def django_db_setup():
+# @pytest.fixture(scope='session')
+# def django_db_setup():
 #    from django.conf import settings
 #    settings.DATABASES['default'] = {
 #        'ENGINE': 'django.db.backends.postgresql',
@@ -41,8 +41,8 @@ def uploaded_csv_file():
 
 @pytest.fixture
 def bad_csv_file(tmpdir):
-    uf = tmpdir.mkdir("csv-files").join('bad_datamap.csv')
-    with open(uf, 'w') as f:
+    uf = tmpdir.mkdir("csv-files").join("bad_datamap.csv")
+    with open(uf, "w") as f:
         f.write("bad_key,bad_sheet,bad_cell_ref\n")
         f.write("First row col 1,First row col 2,A15\n")
         f.write("Second row col 1,Second row col 2,B15\n")
@@ -53,10 +53,12 @@ def bad_csv_file(tmpdir):
 
 @pytest.fixture
 def csv_hundred_plus_key(tmpdir):
-    uf = tmpdir.mkdir("csv-files").join('big_key_csv.csv')
-    k = ("This is a key that is way too long and need to be "
-         "seriously truncated we dont like keys this length do we?")
-    with open(uf, 'w') as f:
+    uf = tmpdir.mkdir("csv-files").join("big_key_csv.csv")
+    k = (
+        "This is a key that is way too long and need to be "
+        "seriously truncated we dont like keys this length do we?"
+    )
+    with open(uf, "w") as f:
         f.write("key,sheet,cell_ref\n")
         f.write(f"{k},First row col 2,A15\n")
         f.write("Second row col 1,Second row col 2,B15\n")
@@ -65,11 +67,10 @@ def csv_hundred_plus_key(tmpdir):
     return uf.strpath
 
 
-
 @pytest.fixture
 def good_csv_file(tmpdir):
-    uf = tmpdir.mkdir("csv-files").join('good_datamap.csv')
-    with open(uf, 'w') as f:
+    uf = tmpdir.mkdir("csv-files").join("good_datamap.csv")
+    with open(uf, "w") as f:
         f.write("key,sheet,cell_ref\n")
         f.write("First row col 1,First row col 2,A15\n")
         f.write("Second row col 1,Second row col 2,B15\n")
@@ -93,33 +94,18 @@ def uploaded_csv_file_bytes():
 
 @pytest.fixture
 def datamaplines_for_single_datamap():
-    pf = PortfolioFamily(
-       name="Portfolio Family 1"
-    )
+    pf = PortfolioFamily(name="Portfolio Family 1")
     pf.save()
-    dm = Datamap(
-        name="Datamap 1",
-        portfolio_family_id=pf.id,
-        active=False
-    )
+    dm = Datamap(name="Datamap 1", portfolio_family_id=pf.id, active=False)
     dm.save()
     dml1 = DatamapLine(
-        datamap_id=dm.id,
-        key="Key 1",
-        sheet="Sheet 1",
-        cell_ref="Cell_Ref 1"
+        datamap_id=dm.id, key="Key 1", sheet="Sheet 1", cell_ref="Cell_Ref 1"
     )
     dml2 = DatamapLine(
-        datamap_id=dm.id,
-        key="Key 2",
-        sheet="Sheet 2",
-        cell_ref="Cell_Ref 2"
+        datamap_id=dm.id, key="Key 2", sheet="Sheet 2", cell_ref="Cell_Ref 2"
     )
     dml3 = DatamapLine(
-        datamap_id=dm.id,
-        key="Key 3",
-        sheet="Sheet 3",
-        cell_ref="Cell_Ref 3"
+        datamap_id=dm.id, key="Key 3", sheet="Sheet 3", cell_ref="Cell_Ref 3"
     )
     dml1.save()
     dml2.save()
