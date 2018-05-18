@@ -11,5 +11,12 @@
             {{ form.as_p }}
             <input type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>
         </form>
+    <h2>Current datamaps in system:</h2>
+    {% for d in dms_l %}
+        <ul>
+            <li><a href="{%  url 'datamap' d.id %}">{{ d.name }}</a></li>
+        </ul>
+    {% endfor %}
+
     </body>
 </html>

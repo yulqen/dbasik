@@ -35,8 +35,10 @@ def create_datamap(request):
             return HttpResponseRedirect("/uploaddatamap")
     else:
         form = CreateDatamapForm()
+        # list of current datamaps
+        dms_l = Datamap.objects.all()
 
-    return render(request, "datamap/create_datamap.html", {"form": form})
+    return render(request, "datamap/create_datamap.html", {"form": form, 'dms_l': dms_l})
 
 
 def upload_datamap(request):
