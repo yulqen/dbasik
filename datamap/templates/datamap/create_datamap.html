@@ -13,7 +13,7 @@
         </form>
     <h2>Current datamaps in system:</h2>
     {% for d in dms_l %}
-        <ul>
+        <ul id="current-datamap-list">
             <li><a href="{%  url 'datamap' d.id %}">{{ d.name }}</a></li>
         </ul>
     {% endfor %}
