@@ -4,11 +4,13 @@ import pytest
 
 from django.core.management import call_command
 
+from datamap.models import DatamapLine, Datamap, PortfolioFamily
 
-@pytest.fixture(scope='session')
-def django_db_setup(django_db_setup, django_db_blocker):
-    with django_db_blocker.unblock():
-        call_command('loaddata', 'fixtures/data.json')
+
+#@pytest.fixture(scope='session')
+#def django_db_setup(django_db_setup, django_db_blocker):
+#    with django_db_blocker.unblock():
+#        call_command('loaddata', 'fixtures/data.json')
 
 
 #@pytest.fixture(scope='session')
@@ -87,3 +89,39 @@ def uploaded_csv_file_bytes():
     uf.seek(0)
     yield uf
     uf.close()
+
+
+@pytest.fixture
+def datamaplines_for_single_datamap():
+    pf = PortfolioFamily(
+       name="Portfolio Family 1"
+    )
+    pf.save()
+    dm = Datamap(
+        name="Datamap 1",
+        portfolio_family_id=pf.id,
+        active=False
+    )
+    dm.save()
+    dml1 = DatamapLine(
+        datamap_id=dm.id,
+        key="Key 1",
+        sheet="Sheet 1",
+        cell_ref="Cell_Ref 1"
+    )
+    dml2 = DatamapLine(
+        datamap_id=dm.id,
+        key="Key 2",
+        sheet="Sheet 2",
+        cell_ref="Cell_Ref 2"
+    )
+    dml3 = DatamapLine(
+        datamap_id=dm.id,
+        key="Key 3",
+        sheet="Sheet 3",
+        cell_ref="Cell_Ref 3"
+    )
+    dml1.save()
+    dml2.save()
+    dml3.save()
+    return dm.id
