@@ -4,8 +4,12 @@
 
 {% block content %}
 
+    <h1>Log-in</h1>
+
     {% if form.errors %}
-    <p>There is something wrong with what you entered!</p>
+        <p>Your username and password did't match. Please try again.</p>
+    {% else %}
+       <p>Please use the following form to log-in:</p> 
     {% endif %}
 
     {% if next %}
