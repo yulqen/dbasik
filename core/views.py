@@ -23,7 +23,7 @@ def register(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(request, user)
-            return redirect('index')
+            return redirect('dashboard')
         else:
             if form.errors:
                 k_lst = list(form.errors.keys())[0]
