@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
-from .models import PortfolioFamily, Datamap
+from .models import PortfolioFamily, Datamap, DatamapLine
 from helpers import acceptable_types
 
 file_validator = FileExtensionValidator(
@@ -27,3 +27,10 @@ class CreateDatamapForm(forms.Form):
 
     name = forms.CharField(max_length=50)
     portfolio_family = forms.ChoiceField(choices=[(p.id, p.name) for p in pfs])
+
+
+class EditDatamapLineForm(forms.ModelForm):
+
+    class Meta:
+        model = DatamapLine
+        exclude = ['datamap']

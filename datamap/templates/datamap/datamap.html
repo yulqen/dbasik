@@ -12,7 +12,7 @@
             </tr>
             {% for line in dm_lines %}
             <tr>
-                <td>{{ line.key }}</td>
+                <td><a href="{% url 'edit-datamapline' line.id %}">{{ line.key }}</a></td>
                 <td>{{ line.sheet }}</td>
                 <td>{{ line.cell_ref }}</td>
             </tr>

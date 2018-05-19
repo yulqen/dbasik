@@ -5,7 +5,7 @@ from django.views.generic import ListView
 from django.urls import reverse
 from django.conf import settings
 
-from .forms import CreateDatamapForm, UploadDatamap
+from .forms import CreateDatamapForm, UploadDatamap, EditDatamapLineForm
 from .models import Datamap, DatamapLine, PortfolioFamily
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
@@ -13,6 +13,34 @@ from helpers import CSVUploadedFile, delete_datamap
 
 class DatamapList(ListView):
     model = Datamap
+
+
+def edit_datamapline(request, dml_pk):
+    instance = DatamapLine.objects.get(pk=dml_pk)
+    if request.method == "POST":
+        form = EditDatamapLineForm(request.POST, instance)
+        if form.is_valid():
+            key = form.cleaned_data["key"]
+            sheet = form.cleaned_data["sheet"]
+            cell_ref = form.cleaned_data["cell_ref"]
+            dm_id = instance.datamap.id
+            existing_dml = DatamapLine.objects.get(pk=dml_pk)
+            existing_dml.key = key
+            existing_dml.sheet = sheet
+            existing_dml.cell_ref = cell_ref
+            existing_dml.save()
+            return HttpResponseRedirect(f"/datamap/{dm_id}")
+    else:
+        instance_data = {
+            'key': instance.key,
+            'sheet': instance.sheet,
+            'cell_ref': instance.cell_ref
+        }
+        form = EditDatamapLineForm(instance_data)
+
+    return render(
+        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
+    )
 
 
 def datamap_view(request, dm_pk):
@@ -45,7 +73,9 @@ def create_datamap(request):
         # list of current datamaps
         dms_l = Datamap.objects.all()
 
-    return render(request, "datamap/create_datamap.html", {"form": form, 'dms_l': dms_l})
+    return render(
+        request, "datamap/create_datamap.html", {"form": form, "dms_l": dms_l}
+    )
 
 
 def upload_datamap(request):
