@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <title>Datamap_list</title>
-    </head>
-    <body>
+{% extends "core/base.html" %}
+
+{% block title %}Datamaps{% endblock %}
+
+{% block content %}
         <h1>Datamaps</h1>
         <ul>
             {% if object_list %}
@@ -17,5 +14,5 @@
             {% endif %}
         </ul>
         <p><a href="{% url 'createdatamap' %}">Create a new datamap</a></p>
-    </body>
-</html>
+
+{% endblock %}
