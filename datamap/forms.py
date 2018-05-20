@@ -17,17 +17,15 @@ def datamap_choices():
 
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
-    target_datamap = forms.ChoiceField(choices=datamap_choices)
+    target_datamap = forms.ModelMultipleChoiceField(queryset=Datamap.objects.all())
     uploaded_file = forms.FileField(validators=[file_validator])
     replace_all_entries = forms.BooleanField(initial=True, required=False)
 
 
 class CreateDatamapForm(forms.Form):
 
-    pfs = PortfolioFamily.objects.all()
-
     name = forms.CharField(max_length=50)
-    portfolio_family = forms.ChoiceField(choices=[(p.id, p.name) for p in pfs])
+    portfolio_family = forms.ModelMultipleChoiceField(queryset=PortfolioFamily.objects.all())
 
 
 class EditDatamapLineForm(forms.ModelForm):
