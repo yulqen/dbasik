@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
+#from django.core.exceptions import ValidationError
 from .models import PortfolioFamily, Datamap, DatamapLine
 from helpers import acceptable_types
 
@@ -34,3 +35,13 @@ class EditDatamapLineForm(forms.ModelForm):
     class Meta:
         model = DatamapLine
         exclude = ['datamap']
+# HOW TO WRITE A CUSTOM CLEAN FUNCTION IN FORM
+# it must be of form clean_<attribute>(self) and
+# return the cleaned data or a ValidationError exception
+# see Django Unleased: https://www.safaribooksonline.com/library/view/django-unleashed/9780133812497/ch07lev2sec4.html
+# 7.3.5:
+#    def clean_sheet(self):
+#        if self.cleaned_data['sheet'] in ['Summary']:
+#            return self.cleaned_data['sheet']
+#        else:
+#            raise ValidationError("No..!")
