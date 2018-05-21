@@ -1,20 +1,27 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
+
+
+def _slugify(self):
+    return slugify(self.name)
 
 
 class Datamap(models.Model):
     """A datamap in the system."""
 
     name = models.CharField(max_length=50)
-    portfolio_family = models.ForeignKey("PortfolioFamily", on_delete=models.CASCADE, related_name='datamaps')
+    portfolio_family = models.ForeignKey(
+        "PortfolioFamily", on_delete=models.CASCADE, related_name="datamaps"
+    )
     active = models.BooleanField(default=False)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, blank=True, default=_slugify)
 
     class Meta:
-        unique_together = ('slug', 'portfolio_family')
+        unique_together = ("slug", "portfolio_family")
 
     def __str__(self):
         return self.name
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
