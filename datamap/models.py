@@ -1,9 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
-
-def _slugify(self):
-    return slugify(self.name)
+import uuid
 
 
 class Datamap(models.Model):
@@ -14,10 +12,7 @@ class Datamap(models.Model):
         "PortfolioFamily", on_delete=models.CASCADE, related_name="datamaps"
     )
     active = models.BooleanField(default=False)
-    slug = models.SlugField(max_length=50, blank=True, default=_slugify)
-
-    class Meta:
-        unique_together = ("slug", "portfolio_family")
+    slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
     def __str__(self):
         return self.name
@@ -26,6 +21,10 @@ class Datamap(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("slug", "portfolio_family")
+
 
 
 class DatamapLine(models.Model):
