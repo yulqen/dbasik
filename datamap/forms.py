@@ -25,7 +25,7 @@ class UploadDatamap(forms.Form):
 class CreateDatamapForm(forms.Form):
 
     name = forms.CharField(max_length=50)
-    portfolio_family = forms.ModelMultipleChoiceField(queryset=PortfolioFamily.objects.all())
+    portfolio_family = forms.ModelChoiceField(queryset=PortfolioFamily.objects.all())
 
 
 class EditDatamapLineForm(forms.ModelForm):

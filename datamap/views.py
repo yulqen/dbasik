@@ -64,7 +64,7 @@ def create_datamap(request):
         if form.is_valid():
             print(f"We received {form.cleaned_data}")
             name = form.cleaned_data["name"]
-            portfolio_family = form.cleaned_data["portfolio_family"].first()
+            portfolio_family = form.cleaned_data["portfolio_family"]
             pf_obj = PortfolioFamily.objects.get(pk=portfolio_family.id)
             new_dm = Datamap(name=name, portfolio_family=pf_obj)
             new_dm.save()
@@ -86,17 +86,18 @@ def upload_datamap(request):
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
+            slug = Datamap.objects.get(pk=form.cleaned_data['target_datamap'].id).slug
             f = request.FILES["uploaded_file"]
-            given_name = request.POST["file_name"]
-            dm = request.POST["target_datamap"]
+            given_name = form.cleaned_data["file_name"]
+            dm = form.cleaned_data["target_datamap"]
             if "replace_all_entries" in request.POST:
-                replace = request.POST["replace_all_entries"]
+                replace = form.cleaned_data["replace_all_entries"]
             else:
                 replace = "off"
             if f.content_type == "text/csv":
                 try:
-                    CSVUploadedFile(f, given_name, dm, field_keys, replace).process()
-                    return HttpResponseRedirect(reverse("datamap", args=[dm]))
+                    CSVUploadedFile(f, given_name, dm.id, field_keys, replace).process()
+                    return HttpResponseRedirect(reverse("datamap", args=[slug]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
