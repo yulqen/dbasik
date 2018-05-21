@@ -24,12 +24,13 @@ def edit_datamapline(request, dml_pk):
             sheet = form.cleaned_data["sheet"]
             cell_ref = form.cleaned_data["cell_ref"]
             dm_id = instance.datamap.id
+            slug = instance.datamap.slug
             existing_dml = DatamapLine.objects.get(pk=dml_pk)
             existing_dml.key = key
             existing_dml.sheet = sheet
             existing_dml.cell_ref = cell_ref
             existing_dml.save()
-            return HttpResponseRedirect(f"/datamap/{dm_id}")
+            return HttpResponseRedirect(f"/datamap/{slug}")
     else:
         instance_data = {
             'key': instance.key,
@@ -43,16 +44,16 @@ def edit_datamapline(request, dml_pk):
     )
 
 
-def datamap_view(request, dm_pk):
-    dm_lines = DatamapLine.objects.filter(datamap_id=dm_pk).order_by("id")
-    dm_name = Datamap.objects.get(pk=dm_pk).name
-    dm = Datamap.objects.get(pk=dm_pk)
+def datamap_view(request, slug):
+    dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
+    dm_name = Datamap.objects.get(slug=slug).name
+    dm = Datamap.objects.get(slug=slug)
     context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
     return render(request, "datamap/datamap.html", context)
 
 
-def delete_datamap_view(request, dm_pk: int):
-    dm = Datamap.objects.get(pk=dm_pk)
+def delete_datamap_view(request, slug):
+    dm = Datamap.objects.get(slug=slug)
     delete_datamap(dm)
     return HttpResponseRedirect("/datamaps")
 
@@ -63,8 +64,8 @@ def create_datamap(request):
         if form.is_valid():
             print(f"We received {form.cleaned_data}")
             name = form.cleaned_data["name"]
-            portfolio_family = form.cleaned_data["portfolio_family"]
-            pf_obj = PortfolioFamily.objects.get(pk=portfolio_family)
+            portfolio_family = form.cleaned_data["portfolio_family"].first()
+            pf_obj = PortfolioFamily.objects.get(pk=portfolio_family.id)
             new_dm = Datamap(name=name, portfolio_family=pf_obj)
             new_dm.save()
             return HttpResponseRedirect("/uploaddatamap")

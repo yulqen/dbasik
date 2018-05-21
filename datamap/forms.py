@@ -17,7 +17,7 @@ def datamap_choices():
 
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
-    target_datamap = forms.ModelMultipleChoiceField(queryset=Datamap.objects.all())
+    target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all())
     uploaded_file = forms.FileField(validators=[file_validator])
     replace_all_entries = forms.BooleanField(initial=True, required=False)
 
