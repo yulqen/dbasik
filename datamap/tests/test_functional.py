@@ -99,3 +99,20 @@ def test_create_new_datamap(selenium):
 def test_list_of_current_datamaps_on_create_datamap_page(selenium):
     selenium.get("http://localhost:8000/createdatamap")
     assert selenium.find_element_by_id("current-datamap-list")
+
+
+def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
+    rand_title = uuid.uuid4()
+    selenium.get("http://localhost:8000/createdatamap")
+    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
+    selenium.find_element_by_id("submit-new-dm").click()
+    selenium.get("http://localhost:8000/createdatamap")
+    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
+    selenium.find_element_by_id("submit-new-dm").click()
+    advisory = WebDriverWait(selenium, 3).until(
+        EC.presence_of_element_located(
+            (By.ID, "datamap-integrity-error")
+        )  # this appears on dm upload page
+    )
+    assert advisory
+

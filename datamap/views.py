@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from django.urls import reverse
 from django.conf import settings
+from django.db import IntegrityError
 
 from .forms import CreateDatamapForm, UploadDatamap, EditDatamapLineForm
 from .models import Datamap, DatamapLine, PortfolioFamily
@@ -62,13 +63,16 @@ def create_datamap(request):
     if request.method == "POST":
         form = CreateDatamapForm(request.POST)
         if form.is_valid():
-            print(f"We received {form.cleaned_data}")
             name = form.cleaned_data["name"]
             portfolio_family = form.cleaned_data["portfolio_family"]
             pf_obj = PortfolioFamily.objects.get(pk=portfolio_family.id)
             new_dm = Datamap(name=name, portfolio_family=pf_obj)
-            new_dm.save()
-            return HttpResponseRedirect("/uploaddatamap")
+            try:
+                new_dm.save()
+                return HttpResponseRedirect("/uploaddatamap")
+            except IntegrityError:
+                messages.add_message(request, messages.INFO, "Please ensure unique datamap name for this Portfolio Family")
+                dms_l = Datamap.objects.all()
     else:
         form = CreateDatamapForm()
         # list of current datamaps

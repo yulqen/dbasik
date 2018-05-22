@@ -3,6 +3,14 @@
 {% block title %}Create datamap{% endblock %}
 
 {% block content %}
+<p id='datamap-integrity-error'>Please ensure your datamap name for this portfolio is unique.</p>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li id='message-test'>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
         <form action="/createdatamap/" method="post" accept-charset="utf-8">
             {% csrf_token %}
             {{ form.as_p }}
