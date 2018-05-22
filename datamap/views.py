@@ -34,9 +34,9 @@ def edit_datamapline(request, dml_pk):
             return HttpResponseRedirect(f"/datamap/{slug}")
     else:
         instance_data = {
-            'key': instance.key,
-            'sheet': instance.sheet,
-            'cell_ref': instance.cell_ref
+            "key": instance.key,
+            "sheet": instance.sheet,
+            "cell_ref": instance.cell_ref,
         }
         form = EditDatamapLineForm(instance_data)
 
@@ -71,7 +71,11 @@ def create_datamap(request):
                 new_dm.save()
                 return HttpResponseRedirect("/uploaddatamap")
             except IntegrityError:
-                messages.add_message(request, messages.INFO, "Please ensure unique datamap name for this Portfolio Family")
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Please ensure unique datamap name for this Portfolio Family",
+                )
                 dms_l = Datamap.objects.all()
     else:
         form = CreateDatamapForm()
@@ -90,7 +94,7 @@ def upload_datamap(request):
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
-            slug = Datamap.objects.get(pk=form.cleaned_data['target_datamap'].id).slug
+            slug = Datamap.objects.get(pk=form.cleaned_data["target_datamap"].id).slug
             f = request.FILES["uploaded_file"]
             given_name = form.cleaned_data["file_name"]
             dm = form.cleaned_data["target_datamap"]
