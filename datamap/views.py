@@ -96,7 +96,6 @@ def upload_datamap(request):
         if form.is_valid():
             slug = Datamap.objects.get(pk=form.cleaned_data["target_datamap"].id).slug
             f = request.FILES["uploaded_file"]
-            given_name = form.cleaned_data["file_name"]
             dm = form.cleaned_data["target_datamap"]
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
@@ -104,7 +103,7 @@ def upload_datamap(request):
                 replace = "off"
             if f.content_type == "text/csv":
                 try:
-                    CSVUploadedFile(f, given_name, dm.id, field_keys, replace).process()
+                    CSVUploadedFile(f, dm.id, field_keys, replace).process()
                     return HttpResponseRedirect(reverse("datamap", args=[slug]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")

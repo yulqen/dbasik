@@ -10,7 +10,6 @@ file_validator = FileExtensionValidator(
 
 
 class UploadDatamap(forms.Form):
-    file_name = forms.CharField(max_length=30)
     target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all(), empty_label=None)
     uploaded_file = forms.FileField(validators=[file_validator])
     replace_all_entries = forms.BooleanField(initial=True, required=False)

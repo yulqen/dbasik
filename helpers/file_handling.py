@@ -48,12 +48,11 @@ class DBUploadedFile:
     Not to be implemented directly.
     """
 
-    def __init__(self, uploaded_file: UploadedFile, given_name: str) -> None:
+    def __init__(self, uploaded_file: UploadedFile) -> None:
         """Initialise with an opened file object and its short type.
         """
         self._uploaded_file = uploaded_file
         self._actual_file_name = self._uploaded_file.name
-        self._given_name = given_name
 
     def process(self):
         raise NotImplementedError()
@@ -63,13 +62,11 @@ class CSVUploadedFile(DBUploadedFile):
     """Handles uploaded CSV files.
 
     :param uploaded_file: an opened file object
-    :param given_name: name captured by the text box in the HTML form
     """
 
     def __init__(
         self,
         uploaded_file: UploadedFile,
-        given_name: str,
         target_dm: int,
         field_keys: list,
         replace: str = "off",
@@ -78,7 +75,7 @@ class CSVUploadedFile(DBUploadedFile):
         self.replace = replace
         self.field_keys = field_keys
         self._table_cleared = False
-        super().__init__(uploaded_file, given_name)
+        super().__init__(uploaded_file)
 
     def _process(self, row: Dict[str, str], dm_instance):
         """Save datamap line to database.

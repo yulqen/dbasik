@@ -25,7 +25,6 @@ def test_upload_datamap_form_items(selenium):
     selenium.get("http://localhost:8000/uploaddatamap")
     assert "Upload datamap" in selenium.title
     assert selenium.find_element_by_id("form-table")
-    assert selenium.find_element_by_id("id_file_name")
     assert selenium.find_element_by_id("id_target_datamap")
     assert selenium.find_element_by_id("id_uploaded_file")
     assert selenium.find_element_by_id("id_replace_all_entries")
@@ -35,7 +34,6 @@ def test_upload_datamap_form_items(selenium):
 def test_upload_incorrect_csv(selenium, bad_csv_file):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
-    selenium.find_element_by_id("id_file_name").send_keys("Test file")
     selenium.find_element_by_id("upload-button").click()
     try:
         message = WebDriverWait(selenium, 3).until(
@@ -50,7 +48,6 @@ def test_upload_incorrect_csv(selenium, bad_csv_file):
 def test_upload_correct_csv(selenium, good_csv_file):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
-    selenium.find_element_by_id("id_file_name").send_keys("Test file")
     selenium.find_element_by_id("upload-button").click()
     redirected_datamap_page = WebDriverWait(selenium, 10).until(
         EC.presence_of_element_located((By.ID, "show-datamap-table"))
@@ -63,7 +60,6 @@ def test_upload_correct_csv(selenium, good_csv_file):
 def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
     selenium.get("http://localhost:8000/uploaddatamap")
     selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
-    selenium.find_element_by_id("id_file_name").send_keys("Test file")
     selenium.find_element_by_id("upload-button").click()
     message = WebDriverWait(selenium, 3).until(
         EC.presence_of_element_located((By.ID, "message-test"))
@@ -115,4 +111,3 @@ def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
         )  # this appears on dm upload page
     )
     assert advisory
-
