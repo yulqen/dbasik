@@ -111,3 +111,12 @@ def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
         )  # this appears on dm upload page
     )
     assert advisory
+
+
+def test_add_datamapline_line_on_datamap_page(selenium):
+    rand_title = uuid.uuid4()
+    selenium.get("http://localhost:8000/createdatamap")
+    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
+    selenium.find_element_by_id("submit-new-dm").click()
+    selenium.get(f"http://localhost:8000/datamap/{str(rand_title)}")
+    assert selenium.find_element_by_id("add-line-to-datamap")

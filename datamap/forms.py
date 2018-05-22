@@ -9,6 +9,13 @@ file_validator = FileExtensionValidator(
 )
 
 
+class CreateDatamapLineForm(forms.ModelForm):
+
+    class Meta:
+        model = DatamapLine
+        exclude = ['datamap']
+
+
 class UploadDatamap(forms.Form):
     target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all(), empty_label=None)
     uploaded_file = forms.FileField(validators=[file_validator])

@@ -5,7 +5,8 @@ from .views import (
     datamap_view,
     upload_datamap,
     delete_datamap_view,
-    edit_datamapline
+    edit_datamapline,
+    create_datamapline,
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path("datamap/<slug:slug>/delete", delete_datamap_view, name="delete-datamap"),
     path("uploaddatamap/", upload_datamap, name="uploaddatamap"),
     path("edit-datamapline/<int:dml_pk>", edit_datamapline, name="edit-datamapline"),
+    path("create-datamapline/<slug:slug>", create_datamapline, name="add-dmline"),
 ]

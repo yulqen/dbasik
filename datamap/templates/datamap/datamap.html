@@ -20,6 +20,10 @@
         </table>
         <p id='delete-datamap-button'>
             <a href="{% url 'delete-datamap' dm.slug %}">Delete this datamap</a>
+        </p> |
+        <p id='add-line-to-datamap'>
+            <a href="{% url 'add-dmline' dm.slug %}">Add line to this datamap</a>
         </p>
+
 
 {% endblock %}

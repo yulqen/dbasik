@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.db import IntegrityError
 
-from .forms import CreateDatamapForm, UploadDatamap, EditDatamapLineForm
+from .forms import CreateDatamapForm, UploadDatamap, EditDatamapLineForm, CreateDatamapLineForm
 from .models import Datamap, DatamapLine, PortfolioFamily
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
@@ -125,4 +125,16 @@ def upload_datamap(request):
 
     return render(
         request, "datamap/upload_datamap.html", {"form": form, "field_keys": field_keys}
+    )
+
+
+def create_datamapline(request, slug):
+    if request.method == "POST":
+        form = CreateDatamapLineForm(request.POST)
+        if form.is_valid():
+            print("valid form!")
+    else:
+        form = CreateDatamapLineForm()
+    return render(
+        request, "datamap/edit_datamapline.html", {"form": form}
     )
