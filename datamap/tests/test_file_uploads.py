@@ -21,10 +21,10 @@ def test_csv_contents(uploaded_csv_file):
     uf = UploadedFile(uploaded_csv_file)
     csv_reader = csv.DictReader(uf)
     line = next(csv_reader)
-    assert line["key"] == "First row col 1"
-    assert line["sheet"] == "First row col 2"
+    assert line["key"] == "First row col 1UL"
+    assert line["sheet"] == "First row col 2UL"
     assert line["cell_ref"] == "A15"
     line = next(csv_reader)
-    assert line["key"] == "Second row col 1"
-    assert line["sheet"] == "Second row col 2"
+    assert line["key"] == "Second row col 1UL"
+    assert line["sheet"] == "Second row col 2UL"
     assert line["cell_ref"] == "B15"

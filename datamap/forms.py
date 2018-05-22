@@ -9,15 +9,9 @@ file_validator = FileExtensionValidator(
 )
 
 
-def datamap_choices():
-    d_maps = Datamap.objects.all()
-    x = [(x.id, x.name) for x in d_maps]
-    return tuple(reversed(sorted(x, key=lambda dm: dm[0])))
-
-
 class UploadDatamap(forms.Form):
     file_name = forms.CharField(max_length=30)
-    target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all())
+    target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all(), empty_label=None)
     uploaded_file = forms.FileField(validators=[file_validator])
     replace_all_entries = forms.BooleanField(initial=True, required=False)
 
@@ -25,7 +19,7 @@ class UploadDatamap(forms.Form):
 class CreateDatamapForm(forms.Form):
 
     name = forms.CharField(max_length=50)
-    portfolio_family = forms.ModelChoiceField(queryset=PortfolioFamily.objects.all())
+    portfolio_family = forms.ModelChoiceField(queryset=PortfolioFamily.objects.all(), empty_label=None)
 
 
 class EditDatamapLineForm(forms.ModelForm):

@@ -1,6 +1,5 @@
 import pytest
-
-from time import sleep
+import uuid
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -85,8 +84,9 @@ def test_datamap_create_form_items(selenium):
 
 
 def test_create_new_datamap(selenium):
+    rand_title = uuid.uuid4()
     selenium.get("http://localhost:8000/createdatamap")
-    selenium.find_element_by_id("id_name").send_keys("Test Datamap")
+    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
     selenium.find_element_by_id("submit-new-dm").click()
     advisory = WebDriverWait(selenium, 3).until(
         EC.presence_of_element_located(
