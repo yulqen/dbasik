@@ -128,11 +128,15 @@ def upload_datamap(request):
 
 
 def create_datamapline(request, slug):
-    dml_pk = DatamapLine.objects.get(datamap__slug=slug).id
+    dm_pk = Datamap.objects.get(slug=slug).id
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
         if form.is_valid():
-            print("valid form!")
+            key = form.cleaned_data['key']
+            sheet = form.cleaned_data['sheet']
+            cell_ref = form.cleaned_data['cell_ref']
+            dml = DatamapLine(dm_pk, key, sheet, cell_ref).create()
+            dml_pk = dml.id
     else:
         form = CreateDatamapLineForm()
     return render(
