@@ -24,7 +24,6 @@ def edit_datamapline(request, dml_pk):
             key = form.cleaned_data["key"]
             sheet = form.cleaned_data["sheet"]
             cell_ref = form.cleaned_data["cell_ref"]
-            dm_id = instance.datamap.id
             slug = instance.datamap.slug
             existing_dml = DatamapLine.objects.get(pk=dml_pk)
             existing_dml.key = key
@@ -129,6 +128,7 @@ def upload_datamap(request):
 
 
 def create_datamapline(request, slug):
+    dml_pk = DatamapLine.objects.get(datamap__slug=slug).id
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
         if form.is_valid():
@@ -136,5 +136,5 @@ def create_datamapline(request, slug):
     else:
         form = CreateDatamapLineForm()
     return render(
-        request, "datamap/edit_datamapline.html", {"form": form}
+        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
     )
