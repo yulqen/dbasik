@@ -1,10 +1,11 @@
+from django.conf import settings
 from django.contrib import messages
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import ListView
 from django.urls import reverse
-from django.conf import settings
-from django.db import IntegrityError
+from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
 
 from .forms import (
     CreateDatamapForm,
@@ -22,7 +23,7 @@ class DatamapList(ListView):
 
 
 def edit_datamapline(request, dml_pk):
-    instance = DatamapLine.objects.get(pk=dml_pk)
+    instance = get_object_or_404(DatamapLine, pk=dml_pk)
     if request.method == "POST":
         form = EditDatamapLineForm(request.POST, instance)
         if form.is_valid():
@@ -49,14 +50,14 @@ def edit_datamapline(request, dml_pk):
 
 def datamap_view(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
-    dm_name = Datamap.objects.get(slug=slug).name
-    dm = Datamap.objects.get(slug=slug)
+    dm_name = get_object_or_404(Datamap, slug=slug).name
+    dm = get_object_or_404(Datamap, slug=slug)
     context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
     return render(request, "datamap/datamap.html", context)
 
 
 def delete_datamap_view(request, slug):
-    dm = Datamap.objects.get(slug=slug)
+    dm = get_object_or_404(Datamap, slug=slug)
     delete_datamap(dm)
     return HttpResponseRedirect("/datamaps")
 
@@ -67,7 +68,7 @@ def create_datamap(request):
         if form.is_valid():
             name = form.cleaned_data["name"]
             portfolio_family = form.cleaned_data["portfolio_family"]
-            pf_obj = PortfolioFamily.objects.get(pk=portfolio_family.id)
+            pf_obj = get_object_or_404(PortfolioFamily, pk=portfolio_family.id)
             new_dm = Datamap(name=name, portfolio_family=pf_obj)
             try:
                 new_dm.save()
@@ -96,7 +97,9 @@ def upload_datamap(request):
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
-            slug = Datamap.objects.get(pk=form.cleaned_data["target_datamap"].id).slug
+            slug = get_object_or_404(
+                Datamap, pk=form.cleaned_data["target_datamap"].id
+            ).slug
             f = request.FILES["uploaded_file"]
             dm = form.cleaned_data["target_datamap"]
             if "replace_all_entries" in request.POST:
@@ -131,7 +134,7 @@ def upload_datamap(request):
 
 
 def create_datamapline(request, slug):
-    dm = Datamap.objects.get(slug=slug)
+    dm = Datamap.objects.get_object_or_404(slug=slug)
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
         if form.is_valid():
