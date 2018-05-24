@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -12,6 +13,11 @@ def index(request):
 @login_required
 def dashboard(request):
     return render(request, 'core/dashboard.html', {'section': 'dashboard'})
+
+
+def profile(request):
+    args = {'user': request.user}
+    return render(request, 'core/profile.html', args)
 
 
 def register(request):
