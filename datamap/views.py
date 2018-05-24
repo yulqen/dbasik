@@ -6,7 +6,12 @@ from django.urls import reverse
 from django.conf import settings
 from django.db import IntegrityError
 
-from .forms import CreateDatamapForm, UploadDatamap, EditDatamapLineForm, CreateDatamapLineForm
+from .forms import (
+    CreateDatamapForm,
+    UploadDatamap,
+    EditDatamapLineForm,
+    CreateDatamapLineForm,
+)
 from .models import Datamap, DatamapLine, PortfolioFamily
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
@@ -33,9 +38,7 @@ def edit_datamapline(request, dml_pk):
             return HttpResponseRedirect(f"/datamap/{slug}")
     else:
         instance_data = {
-            "key": instance.key,
-            "sheet": instance.sheet,
-            "cell_ref": instance.cell_ref,
+            "key": instance.key, "sheet": instance.sheet, "cell_ref": instance.cell_ref
         }
         form = EditDatamapLineForm(instance_data)
 
@@ -128,17 +131,23 @@ def upload_datamap(request):
 
 
 def create_datamapline(request, slug):
-    dm_pk = Datamap.objects.get(slug=slug).id
+    dm = Datamap.objects.get(slug=slug)
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
         if form.is_valid():
-            key = form.cleaned_data['key']
-            sheet = form.cleaned_data['sheet']
-            cell_ref = form.cleaned_data['cell_ref']
-            dml = DatamapLine(dm_pk, key, sheet, cell_ref).create()
+            key = form.cleaned_data["key"]
+            sheet = form.cleaned_data["sheet"]
+            cell_ref = form.cleaned_data["cell_ref"]
+            dml = DatamapLine.objects.create(
+                datamap=dm, key=key, sheet=sheet, cell_ref=cell_ref
+            )
             dml_pk = dml.id
+            return HttpResponseRedirect(f"/datamap/{slug}")
     else:
         form = CreateDatamapLineForm()
+        dml_pk = None
     return render(
-        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
+        request,
+        "datamap/create_datamapline.html",
+        {"form": form, "dml_pk": dml_pk, "slug": slug},
     )

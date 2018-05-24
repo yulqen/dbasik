@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block title %}Create datamapline{% endblock %}
+
+{% block content %}
+        <h1 id="create-datamapline">Create datamapline</h1>
+        <form action="/create-datamapline/{{ slug }}" method="post" accept-charset="utf-8">
+            {% csrf_token %}
+            {{ form.as_table }} 
+            <td><input id='submit-button' type="submit" value="Submit" name="submit-edited_dml" id="submit-edited-dml"/></td>
+        </form>
+
+{% endblock %}
