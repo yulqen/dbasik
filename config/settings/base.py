@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'datamap.apps.DatamapConfig',
     'core.apps.CoreConfig',
+    'users.apps.UsersConfig',
+    'register.apps.RegisterConfig',
 ]
 
 MIDDLEWARE = [
