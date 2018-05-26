@@ -18,49 +18,7 @@ from register.models import Tier
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
 
-
-class DatamapList(ListView):
-    model = Datamap
-
-
-def edit_datamapline(request, dml_pk):
-    instance = get_object_or_404(DatamapLine, pk=dml_pk)
-    if request.method == "POST":
-        form = EditDatamapLineForm(request.POST, instance)
-        if form.is_valid():
-            key = form.cleaned_data["key"]
-            sheet = form.cleaned_data["sheet"]
-            cell_ref = form.cleaned_data["cell_ref"]
-            slug = instance.datamap.slug
-            existing_dml = DatamapLine.objects.get(pk=dml_pk)
-            existing_dml.key = key
-            existing_dml.sheet = sheet
-            existing_dml.cell_ref = cell_ref
-            existing_dml.save()
-            return HttpResponseRedirect(f"/datamap/{slug}")
-    else:
-        instance_data = {
-            "key": instance.key, "sheet": instance.sheet, "cell_ref": instance.cell_ref
-        }
-        form = EditDatamapLineForm(instance_data)
-
-    return render(
-        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
-    )
-
-
-def datamap_detail(request, slug):
-    dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
-    dm_name = get_object_or_404(Datamap, slug=slug).name
-    dm = get_object_or_404(Datamap, slug=slug)
-    context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
-    return render(request, "datamap/datamap.html", context)
-
-
-def delete_datamap_view(request, slug):
-    dm = get_object_or_404(Datamap, slug=slug)
-    delete_datamap(dm)
-    return HttpResponseRedirect("/datamaps")
+# datamap view functions
 
 
 def create_datamap(request):
@@ -88,6 +46,75 @@ def create_datamap(request):
 
     return render(
         request, "datamap/create_datamap.html", {"form": form, "dms_l": dms_l}
+    )
+
+
+def datamap_detail(request, slug):
+    dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
+    dm_name = get_object_or_404(Datamap, slug=slug).name
+    dm = get_object_or_404(Datamap, slug=slug)
+    context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
+    return render(request, "datamap/datamap.html", context)
+
+
+class DatamapList(ListView):
+    model = Datamap
+
+
+def delete_datamap_view(request, slug):
+    dm = get_object_or_404(Datamap, slug=slug)
+    delete_datamap(dm)
+    return HttpResponseRedirect("/datamaps")
+
+
+# datamapline view functions
+
+def create_datamapline(request, slug):
+    dm = Datamap.objects.get_object_or_404(slug=slug)
+    if request.method == "POST":
+        form = CreateDatamapLineForm(request.POST)
+        if form.is_valid():
+            key = form.cleaned_data["key"]
+            sheet = form.cleaned_data["sheet"]
+            cell_ref = form.cleaned_data["cell_ref"]
+            dml = DatamapLine.objects.create(
+                datamap=dm, key=key, sheet=sheet, cell_ref=cell_ref
+            )
+            dml_pk = dml.id
+            return HttpResponseRedirect(f"/datamap/{slug}")
+    else:
+        form = CreateDatamapLineForm()
+        dml_pk = None
+    return render(
+        request,
+        "datamap/create_datamapline.html",
+        {"form": form, "dml_pk": dml_pk, "slug": slug},
+    )
+
+
+def edit_datamapline(request, dml_pk):
+    instance = get_object_or_404(DatamapLine, pk=dml_pk)
+    if request.method == "POST":
+        form = EditDatamapLineForm(request.POST, instance)
+        if form.is_valid():
+            key = form.cleaned_data["key"]
+            sheet = form.cleaned_data["sheet"]
+            cell_ref = form.cleaned_data["cell_ref"]
+            slug = instance.datamap.slug
+            existing_dml = DatamapLine.objects.get(pk=dml_pk)
+            existing_dml.key = key
+            existing_dml.sheet = sheet
+            existing_dml.cell_ref = cell_ref
+            existing_dml.save()
+            return HttpResponseRedirect(f"/datamap/{slug}")
+    else:
+        instance_data = {
+            "key": instance.key, "sheet": instance.sheet, "cell_ref": instance.cell_ref
+        }
+        form = EditDatamapLineForm(instance_data)
+
+    return render(
+        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
     )
 
 
@@ -131,27 +158,4 @@ def upload_datamap(request):
 
     return render(
         request, "datamap/upload_datamap.html", {"form": form, "field_keys": field_keys}
-    )
-
-
-def create_datamapline(request, slug):
-    dm = Datamap.objects.get_object_or_404(slug=slug)
-    if request.method == "POST":
-        form = CreateDatamapLineForm(request.POST)
-        if form.is_valid():
-            key = form.cleaned_data["key"]
-            sheet = form.cleaned_data["sheet"]
-            cell_ref = form.cleaned_data["cell_ref"]
-            dml = DatamapLine.objects.create(
-                datamap=dm, key=key, sheet=sheet, cell_ref=cell_ref
-            )
-            dml_pk = dml.id
-            return HttpResponseRedirect(f"/datamap/{slug}")
-    else:
-        form = CreateDatamapLineForm()
-        dml_pk = None
-    return render(
-        request,
-        "datamap/create_datamapline.html",
-        {"form": form, "dml_pk": dml_pk, "slug": slug},
     )
