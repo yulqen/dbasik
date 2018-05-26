@@ -19,7 +19,7 @@
     <h2>Current datamaps in system:</h2>
     {% for d in dms_l %}
         <ul id="current-datamap-list">
-            <li><a href="{%  url 'datamap' d.slug %}">{{ d.name }}</a></li>
+            <li><a href="{%  url 'datamap-detail' d.slug %}">{{ d.name }}</a></li>
         </ul>
     {% endfor %}
 

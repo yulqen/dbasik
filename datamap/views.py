@@ -49,7 +49,7 @@ def edit_datamapline(request, dml_pk):
     )
 
 
-def datamap_view(request, slug):
+def datamap_detail(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
     dm_name = get_object_or_404(Datamap, slug=slug).name
     dm = get_object_or_404(Datamap, slug=slug)
@@ -110,7 +110,7 @@ def upload_datamap(request):
             if f.content_type == "text/csv":
                 try:
                     CSVUploadedFile(f, dm.id, field_keys, replace).process()
-                    return HttpResponseRedirect(reverse("datamap", args=[slug]))
+                    return HttpResponseRedirect(reverse("datamap-detail", args=[slug]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
