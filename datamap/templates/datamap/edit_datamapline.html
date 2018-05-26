@@ -3,7 +3,7 @@
 {% block title %}Edit datamapline{% endblock %}
 
 {% block content %}
-        <h1 id="edit-datamapline">Edit datamapline</h1>
+        <h1 id="datamapline-update">Edit datamapline</h1>
         <form action="/edit-datamapline/{{ dml_pk }}" method="post" accept-charset="utf-8">
             {% csrf_token %}
             {{ form.as_table }} 

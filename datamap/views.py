@@ -21,7 +21,7 @@ from helpers import CSVUploadedFile, delete_datamap
 # datamap view functions
 
 
-def create_datamap(request):
+def datamap_create(request):
     if request.method == "POST":
         form = CreateDatamapForm(request.POST)
         if form.is_valid():
@@ -61,7 +61,7 @@ class DatamapList(ListView):
     model = Datamap
 
 
-def delete_datamap_view(request, slug):
+def datamap_delete(request, slug):
     dm = get_object_or_404(Datamap, slug=slug)
     delete_datamap(dm)
     return HttpResponseRedirect("/datamaps")
@@ -69,7 +69,7 @@ def delete_datamap_view(request, slug):
 
 # datamapline view functions
 
-def create_datamapline(request, slug):
+def datamapline_create(request, slug):
     dm = Datamap.objects.get_object_or_404(slug=slug)
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
@@ -92,7 +92,7 @@ def create_datamapline(request, slug):
     )
 
 
-def edit_datamapline(request, dml_pk):
+def datamapline_update(request, dml_pk):
     instance = get_object_or_404(DatamapLine, pk=dml_pk)
     if request.method == "POST":
         form = EditDatamapLineForm(request.POST, instance)

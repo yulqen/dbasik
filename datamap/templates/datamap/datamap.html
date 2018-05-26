@@ -12,17 +12,17 @@
             </tr>
             {% for line in dm_lines %}
             <tr>
-                <td><a href="{% url 'edit-datamapline' line.id %}">{{ line.key }}</a></td>
+                <td><a href="{% url 'datamapline-update' line.id %}">{{ line.key }}</a></td>
                 <td>{{ line.sheet }}</td>
                 <td>{{ line.cell_ref }}</td>
             </tr>
             {% endfor %}
         </table>
         <p id='delete-datamap-button'>
-            <a href="{% url 'delete-datamap' dm.slug %}">Delete this datamap</a>
+            <a href="{% url 'datamap-delete' dm.slug %}">Delete this datamap</a>
         </p> |
         <p id='add-line-to-datamap'>
-            <a href="{% url 'add-dmline' dm.slug %}">Add line to this datamap</a>
+            <a href="{% url 'datamapline-create' dm.slug %}">Add line to this datamap</a>
         </p>
 
 
