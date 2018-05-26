@@ -4,7 +4,8 @@ import pytest
 
 from django.core.management import call_command
 
-from datamap.models import DatamapLine, Datamap, PortfolioFamily
+from datamap.models import DatamapLine, Datamap
+from register.models import Tier
 
 
 # @pytest.fixture(scope='session')
@@ -94,9 +95,9 @@ def uploaded_csv_file_bytes():
 
 @pytest.fixture
 def datamaplines_for_single_datamap():
-    pf = PortfolioFamily(name="Portfolio Family 1")
+    pf = Tier(name="Tier 1")
     pf.save()
-    dm = Datamap(name="Datamap 1", portfolio_family_id=pf.id, active=False)
+    dm = Datamap(name="Datamap 1", tier_id=pf.id, active=False)
     dm.save()
     dml1 = DatamapLine(
         datamap_id=dm.id, key="Key 1", sheet="Sheet 1", cell_ref="Cell_Ref 1"

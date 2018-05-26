@@ -13,7 +13,8 @@ from .forms import (
     EditDatamapLineForm,
     CreateDatamapLineForm,
 )
-from .models import Datamap, DatamapLine, PortfolioFamily
+from .models import Datamap, DatamapLine
+from register.models import Tier
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
 
@@ -67,9 +68,9 @@ def create_datamap(request):
         form = CreateDatamapForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data["name"]
-            portfolio_family = form.cleaned_data["portfolio_family"]
-            pf_obj = get_object_or_404(PortfolioFamily, pk=portfolio_family.id)
-            new_dm = Datamap(name=name, portfolio_family=pf_obj)
+            tier = form.cleaned_data["tier"]
+            pf_obj = get_object_or_404(Tier, pk=tier.id)
+            new_dm = Datamap(name=name, tier=pf_obj)
             try:
                 new_dm.save()
                 return HttpResponseRedirect("/uploaddatamap")
@@ -77,7 +78,7 @@ def create_datamap(request):
                 messages.add_message(
                     request,
                     messages.INFO,
-                    "Please ensure unique datamap name for this Portfolio Family",
+                    "Please ensure unique datamap name for this Tier",
                 )
                 dms_l = Datamap.objects.all()
     else:

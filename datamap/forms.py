@@ -1,7 +1,8 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
 #from django.core.exceptions import ValidationError
-from .models import PortfolioFamily, Datamap, DatamapLine
+from .models import Datamap, DatamapLine
+from register.models import Tier
 from helpers import acceptable_types
 
 file_validator = FileExtensionValidator(
@@ -25,7 +26,7 @@ class UploadDatamap(forms.Form):
 class CreateDatamapForm(forms.Form):
 
     name = forms.CharField(max_length=50)
-    portfolio_family = forms.ModelChoiceField(queryset=PortfolioFamily.objects.all(), empty_label=None)
+    tier = forms.ModelChoiceField(queryset=Tier.objects.all(), empty_label=None)
 
 
 class EditDatamapLineForm(forms.ModelForm):

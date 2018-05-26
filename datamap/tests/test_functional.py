@@ -75,7 +75,7 @@ def test_guidance_text_for_csv_upload(selenium):
 def test_datamap_create_form_items(selenium):
     selenium.get("http://localhost:8000/createdatamap")
     assert selenium.find_element_by_id("id_name")
-    assert selenium.find_element_by_id("id_portfolio_family")
+    assert selenium.find_element_by_id("id_tier")
     assert selenium.find_element_by_id("submit-new-dm")
 
 

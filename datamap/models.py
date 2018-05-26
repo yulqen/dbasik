@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 
+from register.models import Tier
+
 import uuid
 
 
@@ -8,23 +10,19 @@ class Datamap(models.Model):
     """A datamap in the system."""
 
     name = models.CharField(max_length=50)
-    portfolio_family = models.ForeignKey(
-        "PortfolioFamily", on_delete=models.CASCADE, related_name="datamaps"
-    )
+    tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
     def __str__(self):
         return self.name
 
-
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ("slug", "portfolio_family")
-
+        unique_together = ("slug", "tier")
 
 
 class DatamapLine(models.Model):
@@ -36,11 +34,3 @@ class DatamapLine(models.Model):
 
     def __str__(self):
         return f"{self.key} for {self.datamap}"
-
-
-class PortfolioFamily(models.Model):
-    """Tier 1, Tier 2, etc"""
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
