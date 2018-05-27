@@ -31,7 +31,7 @@ def datamap_create(request):
             new_dm = Datamap(name=name, tier=pf_obj)
             try:
                 new_dm.save()
-                return HttpResponseRedirect("/uploaddatamap")
+                return HttpResponseRedirect("/datamaps/uploaddatamap")
             except IntegrityError:
                 messages.add_message(
                     request,
@@ -51,7 +51,7 @@ def datamap_create(request):
 
 def datamap_detail(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
-    dm_name = get_object_or_404(Datamap, slug=slug).name
+    dm_name = Datamap.objects.get(slug=slug).name
     dm = get_object_or_404(Datamap, slug=slug)
     context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
     return render(request, "datamap/datamap.html", context)
@@ -70,7 +70,7 @@ def datamap_delete(request, slug):
 # datamapline view functions
 
 def datamapline_create(request, slug):
-    dm = Datamap.objects.get_object_or_404(slug=slug)
+    dm = get_object_or_404(Datamap, slug=slug)
     if request.method == "POST":
         form = CreateDatamapLineForm(request.POST)
         if form.is_valid():
@@ -81,7 +81,7 @@ def datamapline_create(request, slug):
                 datamap=dm, key=key, sheet=sheet, cell_ref=cell_ref
             )
             dml_pk = dml.id
-            return HttpResponseRedirect(f"/datamap/{slug}")
+            return HttpResponseRedirect(f"/datamaps/{slug}")
     else:
         form = CreateDatamapLineForm()
         dml_pk = None
@@ -106,7 +106,7 @@ def datamapline_update(request, dml_pk):
             existing_dml.sheet = sheet
             existing_dml.cell_ref = cell_ref
             existing_dml.save()
-            return HttpResponseRedirect(f"/datamap/{slug}")
+            return HttpResponseRedirect(f"/datamaps/{slug}")
     else:
         instance_data = {
             "key": instance.key, "sheet": instance.sheet, "cell_ref": instance.cell_ref
