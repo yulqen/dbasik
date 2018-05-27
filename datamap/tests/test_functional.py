@@ -120,3 +120,22 @@ def test_add_datamapline_line_on_datamap_page(selenium):
     selenium.find_element_by_id("submit-new-dm").click()
     selenium.get(f"http://localhost:8000/datamaps/{str(rand_title)}")
     assert selenium.find_element_by_id("add-line-to-datamap")
+
+
+def test_manually_add_datamapline(selenium):
+    rand_title = uuid.uuid4()
+    selenium.get("http://localhost:8000/datamaps/create")
+    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
+    selenium.find_element_by_id("submit-new-dm").click()
+    selenium.get(f"http://localhost:8000/datamaps/create-datamapline/{rand_title}")
+    selenium.find_element_by_id("id_key").send_keys("This is an imitation datamapline KEY")
+    selenium.find_element_by_id("id_sheet").send_keys("SHEET NAME")
+    selenium.find_element_by_id("id_cell_ref").send_keys("CELL_REF")
+    selenium.find_element_by_id("submit-new-dml").click()
+    header = WebDriverWait(selenium, 3).until(
+        EC.presence_of_element_located(
+            (By.ID, "show-datamap-table")
+        )  # this appears on dm upload page
+    )
+    assert str(rand_title) in header.text
+
