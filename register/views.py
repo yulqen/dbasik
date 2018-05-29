@@ -5,6 +5,11 @@ from django.views.generic import ListView, DetailView
 from . models import ProjectType
 
 
+class ProjectTypeDelete(DeleteView):
+    model = ProjectType
+    success_url = "/register/projecttype/"
+
+
 class ProjectTypeDetail(DetailView):
     model = ProjectType
 
