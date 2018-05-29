@@ -9,6 +9,8 @@ from .views import (
     datamapline_create,
 )
 
+app_name = "datamaps"
+
 urlpatterns = [
     path("", DatamapList.as_view(), name="datamap-list"),
     path("create/", datamap_create, name="datamap-create"),

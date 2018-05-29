@@ -2,6 +2,8 @@ from django.db import models
 from datetime import date
 from users.models import Employee, DfTGroup, Organisation
 
+from django_extensions.db.fields import AutoSlugField
+
 ###############
 # superclasses#
 ###############
@@ -32,7 +34,8 @@ class AppModel(models.Model):
 
 
 class ProjectType(AppModel):
-    name = models.CharField(max_length=50, blank=False)
+    name = models.CharField(max_length=50, blank=False, unique=True)
+    slug = AutoSlugField(populate_from=['name'])
 
     def __str__(self):
         return self.name
@@ -112,13 +115,13 @@ class RiskRPA(AppModel):
 
 class Mandate(AppModel):
     current_position = models.TextField(blank=True)
-    known_constraints = models.ManyToManyField(Constraint, null=True)
-    internal_organisations_affected = models.ManyToManyField(DfTGroup, null=True)
-    external_organisations_affected = models.ManyToManyField(Organisation, null=True)
+    known_constraints = models.ManyToManyField(Constraint)
+    internal_organisations_affected = models.ManyToManyField(DfTGroup)
+    external_organisations_affected = models.ManyToManyField(Organisation)
     critical_success_factor = models.TextField(blank=True)
-    objectives = models.ManyToManyField(Objective, null=True)
-    major_deliverables = models.ManyToManyField(Deliverable, null=True)
-    strategic_outcomes = models.ManyToManyField(StrategicOutcome, null=True)
+    objectives = models.ManyToManyField(Objective)
+    major_deliverables = models.ManyToManyField(Deliverable)
+    strategic_outcomes = models.ManyToManyField(StrategicOutcome)
 
 
 class Classification(AppModel):
@@ -149,7 +152,7 @@ class PortfolioInitialisation(AppModel):
     project_methodology = models.TextField()
     start_date_at_initialisation = models.DateField(blank=True, null=True)
     planned_end_date_at_initialisation = models.DateField(blank=True, null=True)
-    key_milestones = models.ManyToManyField(Milestone)
+    key_milestones = models.ManyToManyField(Milestone, related_name="pi_initial_milestones")
     sobc_approval = models.DateField(blank=True, null=True)
     obc_approval = models.DateField(blank=True, null=True)
     fbc_approval = models.DateField(blank=True, null=True)
@@ -157,20 +160,17 @@ class PortfolioInitialisation(AppModel):
     start_of_construction_build_at_initialisation = models.DateField(
         blank=True, null=True
     )
-    initial_project_assurance_milestones = models.ManyToManyField(Milestone)
+    initial_project_assurance_milestones = models.ManyToManyField(Milestone, related_name="initial_milestones")
 
 
 class Project(AppModel):
     name = models.CharField(max_length=255, blank=False)
-    dependencies = models.ManyToManyField("Project")
+    dependencies = models.ManyToManyField("Project", blank=True)
     mandate = models.OneToOneField(Mandate, on_delete=models.CASCADE)
     portfolio_initialisation = models.OneToOneField(
-        PortfolioInitialisation, on_delete=models.CASCADE
+        PortfolioInitialisation, on_delete=models.CASCADE, related_name="project_portfolio_initialisation"
     )
     mandate_active = models.BooleanField(default=False)
-    portfolio_initialisation = models.ForeignKey(
-        PortfolioInitialisation, on_delete=models.CASCADE, null=True
-    )
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE, null=True)
     stage = models.ForeignKey(ProjectStage, on_delete=models.CASCADE, null=True)

@@ -51,7 +51,7 @@ class Role(AppModel):
 class Employee(AppModel):
     first_name = models.CharField(max_length=50, default="First Name")
     last_name = models.CharField(max_length=100, default="Last Name")
-    organisation = models.ManyToManyField(DfTDivision)
+    organisation = models.ManyToManyField(Organisation)
     email = models.EmailField(blank=True)
     mobile = models.CharField(max_length=12)
     landline = models.CharField(max_length=25)
