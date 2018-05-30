@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button
 
 
-class ProjectTypeCreateForm(forms.ModelForm):
+class ProjectTypeForm(forms.ModelForm):
 
     class Meta:
         model = models.ProjectType
@@ -21,7 +21,7 @@ class ProjectTypeCreateForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Fieldset(
-                'Create a new Project Type',
+                'Create/Edit Project Type',
                 'name',
                 'description',
             ),

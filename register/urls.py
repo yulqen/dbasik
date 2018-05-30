@@ -4,11 +4,13 @@ from .views import (
     ProjectTypeList,
     ProjectTypeDetail,
     ProjectTypeDelete,
+    ProjectTypeUpdate,
 )
 
 app_name = "register"
 
 urlpatterns = [
+    path("projecttype/<slug:slug>/update", ProjectTypeUpdate.as_view(), name="projecttype_update"),
     path("projecttype/create", ProjectTypeCreate.as_view(), name="projecttype_create"),
     path(
         "projecttype/<slug:slug>",

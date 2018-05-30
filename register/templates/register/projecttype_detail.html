@@ -7,16 +7,15 @@
 <div class="container">
     
     <h3>Project Type: {{ object.name }}</h3>
-
-    <h4>Description:</h4>
-    {% if object.description %}
-    <p>{{ object.description }}</p>
-    {% else %}
-    <p>There is no description for this Project Type.</p>
-    {% endif %}
-
     <div class="container">
-    Buttons in here 
+        {% if object.description %}
+        <p class="w-75 p-3 border">{{ object.description }}</p>
+        {% else %}
+        <p>There is no description for this Project Type.</p>
+        {% endif %}
+    </div>
+    <div class="buttonHolder">
+        <a class="btn btn-danger" href="{% url 'register:projecttype_delete' object.slug %}">Delete</a>
     </div>
 
 </div>
