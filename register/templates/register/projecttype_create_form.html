@@ -1,5 +1,8 @@
 {% extends "core/base.html" %}
 
+{% load crispy_forms_tags %}
+{% crispy project_type_create_form.helper %}
+
 {% block title %}{{ dm_name }}{% endblock %}
 
 {% block content %}
@@ -7,11 +10,10 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h3 id="create-projecttype">Create Project Type: {{ dm_name }} </h3>
-            <form action="" method="post">{% csrf_token %}
-                {{ form.as_p }}
-                <button class="btn btn-primary" type="submit" value="Save" />Save</button>
-            </form>
+            <fieldset>
+                <h4>Create a new Project Type</h4>
+            {% crispy form %}
+            </fieldset>
         </div>
 
         <div class="col-sm-6">
