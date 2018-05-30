@@ -21,6 +21,6 @@ urlpatterns = [
     path("delete/<slug:slug>/", DatamapDelete.as_view(), name="datamap_delete"),
     path("edit-datamapline/<int:dml_pk>/", datamapline_update, name="datamapline-update"),
     path("create-datamapline/<slug:slug>/", datamapline_create, name="datamapline-create"),
-    path("<slug:slug>/", datamap_detail, name="datamap_detail"),
     path("uploaddatamap/", upload_datamap, name="uploaddatamap"),
+    path("<slug:slug>/", datamap_detail, name="datamap_detail"),
 ]

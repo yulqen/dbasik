@@ -26,7 +26,7 @@ class Datamap(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        unique_together = ("slug", "tier")
+        unique_together = ("tier", "active")
 
 
 class DatamapLine(models.Model):

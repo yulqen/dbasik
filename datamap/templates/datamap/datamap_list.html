@@ -8,12 +8,16 @@
         <h3>Datamaps</h3>
         <table class="table table-hover">
             <thead>
-                <th scope="col">Datamap name</tr>
+                <th scope="col" class="col-sm-4">Datamap name</th>
+                <th scope="col" class="col-sm-2">Tier</th>
+                <th scope="col" class="col-sm-2">Active</th>
             </thead>
             {% if object_list %}
                 {% for datamap in object_list %}
                 <tr>
-                    <td><a href="{% url 'datamaps:datamap_detail' datamap.slug %}"> {{ datamap.name }}</a></td>
+                    <td><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
+                    <td> {{ datamap.tier }}</a></td>
+                    <td> {{ datamap.active }}</a></td>
                 </tr>
                 {% endfor %}
             {% else %}
