@@ -16,13 +16,13 @@
             </fieldset>
         </div>
 
-        <div class="col-sm-6">
-            <div class="card" style="width: 18rem;">
+        <div class="col-sm-4">
+            <div class="card border-light mb-3" style="width: 18rem;">
+                <div class="card-header">Current Project Types in system</div>
                 <div class="card-body">
-                    <h5 class="card-title">Current datamaps in system</h5>
                     {% for item in existing_objects %}
-                    <ul id="current-datamap-list">
-                        <li class="card-text"><a href="{%  url 'register:projecttype_detail' item.slug %}">{{ item }}</a></li>
+                    <ul id="current-datamap-list" class="list-group">
+                        <li class="list-group-item card-text"><a href="{%  url 'register:projecttype_detail' item.slug %}">{{ item }}</a></li>
                     </ul>
                     {% endfor %}
                 </div> 
