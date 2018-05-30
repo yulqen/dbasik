@@ -15,7 +15,13 @@ class ProjectTypeDelete(DeleteView):
 class ProjectTypeUpdate(UpdateView):
     model = ProjectType
     form_class = ProjectTypeForm
-    template_name_suffix = "_update_form"
+    template_name_suffix = "_update"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = ProjectType.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
 
 
 class ProjectTypeDetail(DetailView):
@@ -29,7 +35,7 @@ class ProjectTypeList(ListView):
 
 class ProjectTypeCreate(CreateView):
     model = ProjectType
-    template_name_suffix = "_create_form"
+    template_name_suffix = "_create"
     form_class = ProjectTypeForm
 
     def get_context_data(self, **kwargs):

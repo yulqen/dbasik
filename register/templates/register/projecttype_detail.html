@@ -15,6 +15,7 @@
         {% endif %}
     </div>
     <div class="buttonHolder">
+        <a class="btn btn-primary" href="{% url 'register:projecttype_update' object.slug %}">Update</a>
         <a class="btn btn-danger" href="{% url 'register:projecttype_delete' object.slug %}">Delete</a>
     </div>
 
