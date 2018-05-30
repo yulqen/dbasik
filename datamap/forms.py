@@ -1,13 +1,44 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
+from django.urls import reverse
 #from django.core.exceptions import ValidationError
 from .models import Datamap, DatamapLine
 from register.models import Tier
 from helpers import acceptable_types
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button
 
 file_validator = FileExtensionValidator(
     allowed_extensions=acceptable_types, message="Needs to be a CSV or Excel file."
 )
+
+
+class DatamapForm(forms.ModelForm):
+
+    class Meta:
+        model = Datamap
+        fields = ['name', 'tier', 'active']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        cancel_redirect = reverse('datamaps:datamap-list')
+
+        self.helper = FormHelper(self)
+        self.helper.form_class = "form-group"
+        self.helper.form_method = "post"
+        self.helper.layout = Layout(
+            Fieldset(
+                'Create/Edit Datamap',
+                'name',
+                'tier',
+                'active'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit'),
+                Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+            )
+        )
 
 
 class CreateDatamapLineForm(forms.ModelForm):

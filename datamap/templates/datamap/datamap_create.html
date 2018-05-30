@@ -1,29 +1,19 @@
 {% extends "core/base.html" %}
 
+{% load crispy_forms_tags %}
+{% crispy tier_create_form.helper %}
+
 {% block title %}Create datamap{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <p id='datamap-integrity-error'>Please ensure your datamap name for this portfolio is unique.</p>
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li id='message-test'>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <form action="/datamaps/create/" method="post" accept-charset="utf-8">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button class="btn btn-primary" type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/>Create</button>
-            </form>
+            {% crispy form %}
         </div>
 
         <div class="col-sm-6">
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Current datamaps in system</h5>
                     {% for d in dms_l %}

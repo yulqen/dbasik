@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.urls import reverse
 
 from register.models import Tier
 
@@ -13,6 +14,9 @@ class Datamap(models.Model):
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
+
+    def get_absolute_url(self):
+        return reverse('datamaps:datamap-detail', args=[str(self.slug)])
 
     def __str__(self):
         return self.name

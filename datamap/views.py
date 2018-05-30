@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 
 from .forms import (
@@ -14,11 +14,36 @@ from .forms import (
     CreateDatamapLineForm,
 )
 from .models import Datamap, DatamapLine
+from .forms import DatamapForm
 from register.models import Tier
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
 
 # datamap view functions
+
+
+class DatamapUpdate(UpdateView):
+    model = Datamap
+    template_name_suffix = "_update"
+    form_class = DatamapForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = Datamap.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
+
+
+class DatamapCreate(CreateView):
+    model = Datamap
+    template_name_suffix = "_create"
+    form_class = DatamapForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = Datamap.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
 
 
 def datamap_create(request):
@@ -54,7 +79,7 @@ def datamap_detail(request, slug):
     dm_name = Datamap.objects.get(slug=slug).name
     dm = get_object_or_404(Datamap, slug=slug)
     context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
-    return render(request, "datamap/datamap.html", context)
+    return render(request, "datamap/datamap_detail.html", context)
 
 
 class DatamapList(ListView):
