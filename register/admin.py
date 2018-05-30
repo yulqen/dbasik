@@ -1,17 +1,14 @@
 from django.contrib import admin
-from register.models import (Project, Tier, ProjectPhase, ProjectType,
-                             AgencyDeliveryPartner, ProjectStage, StrategicAlignment,
+from register.models import (Project, Tier, ProjectType, ProjectStage, StrategicAlignment,
                              Organisation, Objective, StrategicOutcome, Deliverable,
                              Constraint, RAGColour, RiskRPA, Mandate, Classification,
                              Milestone, PortfolioInitialisation)
 
-from users.models import DfTGroup, Division, Employee
+from users.models import DfTGroup, DfTDivision, Employee
 
 admin.site.register(Project)
 admin.site.register(Tier)
-admin.site.register(ProjectPhase)
 admin.site.register(ProjectType)
-admin.site.register(AgencyDeliveryPartner)
 admin.site.register(ProjectStage)
 admin.site.register(StrategicAlignment)
 admin.site.register(Organisation)
@@ -27,5 +24,5 @@ admin.site.register(Milestone)
 admin.site.register(PortfolioInitialisation)
 
 admin.site.register(DfTGroup)
-admin.site.register(Division)
+admin.site.register(DfTDivision)
 admin.site.register(Employee)

@@ -7,12 +7,12 @@
         <ul>
             {% if object_list %}
                 {% for datamap in object_list %}
-                <li><a href="{% url 'datamap-detail' datamap.slug %}"> {{ datamap.name }}</a></li>
+                <li><a href="{% url 'datamaps:datamap-detail' datamap.slug %}"> {{ datamap.name }}</a></li>
                 {% endfor %}
             {% else %}
                 <p>There are no datamaps.</p>
             {% endif %}
         </ul>
-        <p><a href="{% url 'datamap-create' %}">Create a new datamap</a></p>
+        <p><a href="{% url 'datamaps:datamap-create' %}">Create a new datamap</a></p>
 
 {% endblock %}

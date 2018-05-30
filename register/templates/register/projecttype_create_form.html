@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ dm_name }}{% endblock %}
+
+{% block content %}
+    <h2 id="create-projecttype">Create Project Type: {{ dm_name }} </h2>
+
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+
+    <h2>Existing Project Types:</h2>
+
+    <ul>
+        {% for item in existing_objects %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

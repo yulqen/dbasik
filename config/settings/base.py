@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
+from pathlib import Path
 
 from django.urls import reverse_lazy
 from django.core.exceptions import ImproperlyConfigured
@@ -20,7 +21,12 @@ DATAMAP_FIELD_KEYS = ['key', 'sheet', 'cell_ref']
 #DATAMAP_FIELD_KEYS = ['cell_key', 'template_sheet', 'cell_reference']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+MEDIA_ROOT = BASE_DIR / 'media'
+#STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = '/static/'
 
 #SECRETS
 with open('secrets.json') as f:
@@ -121,7 +127,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')

@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block title %}Delete Project Type{% endblock %}
+
+{% block content %}
+
+<form method="post" accept-charset="utf-8">{% csrf_token %}
+    Are you sure you want to delete "{{ object }}"?
+    <input type="submit" value="Submit" name="submit" id="submit-button"/>
+    
+</form>
+
+
+{% endblock %}

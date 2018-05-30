@@ -20,6 +20,15 @@ class AppModel(models.Model):
         abstract = True
 
 
+class Organisation(AppModel):
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+
 class DfTGroup(AppModel):
     name = models.CharField(max_length=50, blank=False, default="None")
 
@@ -27,7 +36,7 @@ class DfTGroup(AppModel):
         return self.name
 
 
-class Division(AppModel):
+class DfTDivision(AppModel):
     name = models.CharField(max_length=50, blank=False)
     dft_group = models.ForeignKey(DfTGroup, on_delete=models.CASCADE)
 
@@ -35,10 +44,18 @@ class Division(AppModel):
         return self.name
 
 
+class Role(AppModel):
+    name = models.CharField(max_length=50)
+
+
 class Employee(AppModel):
     first_name = models.CharField(max_length=50, default="First Name")
     last_name = models.CharField(max_length=100, default="Last Name")
-    division = models.ForeignKey(Division, on_delete=models.CASCADE, null=True)
+    organisation = models.ManyToManyField(Organisation)
+    email = models.EmailField(blank=True)
+    mobile = models.CharField(max_length=12)
+    landline = models.CharField(max_length=25)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
 
     def __str__(self):
