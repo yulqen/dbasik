@@ -40,7 +40,7 @@ class ProjectType(AppModel):
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:projecttype_create', args=[str(self.pk)])
+        return reverse('register:projecttype_detail', args=[str(self.slug)])
 
     def __str__(self):
         return self.name
