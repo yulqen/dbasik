@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         
-        <h2>Datamaps</h2>
+        <h3>Datamaps</h3>
         <table class="table table-hover">
             <thead>
                 <th scope="col">Datamap name</tr>
@@ -20,7 +20,9 @@
                 <td>There are no datamaps.</td>
             {% endif %}
         </table>
-        <p><a href="{% url 'datamaps:datamap-create' %}">Create a new datamap</a></p>
+        <div class="container">
+            <a class="btn btn-primary" href="{% url 'datamaps:datamap-create' %}">Add line to this datamap</a>
+        </div>
     </div>
 
 {% endblock %}
