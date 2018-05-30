@@ -43,6 +43,7 @@ class DatamapCreate(CreateView):
     model = Datamap
     template_name_suffix = "_create"
     form_class = DatamapForm
+    success_url = reverse_lazy('datamaps:uploaddatamap')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
