@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+
+{% block title %}List of Tiers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>Tiers</h3>
+    <div class="container">
+        <p>This text is hard-coded into the template but should be moved into the database.</p>
+        <p>General description of what a Project Type is and why we need it.</p>
+        <table class="table table-hover">
+            <tr>
+                <th scope="col">Tier</th>
+            </tr>
+            {% for item in object_list %}
+            <tr><td><a href="{% url "register:tier_detail" item.slug %}">{{ item }}</a></td></tr>
+            {% endfor %}
+
+        </table>
+        <div class="buttonHolder">
+            <a class="btn btn-primary" href="{% url 'register:tier_create' %}">Create New Project Type</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

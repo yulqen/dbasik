@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    
+    <h3>Tier: {{ object.name }}</h3>
+    <div class="container">
+        {% if object.description %}
+        <p class="w-75 p-3 border">{{ object.description }}</p>
+        {% else %}
+        <p>There is no description for this Project Type.</p>
+        {% endif %}
+    </div>
+    <div class="buttonHolder">
+        <a class="btn btn-primary" href="{% url 'register:tier_update' object.slug %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'register:tier_delete' object.slug %}">Delete</a>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -48,7 +48,11 @@ class ProjectType(AppModel):
 
 class Tier(AppModel):
     name = models.CharField(max_length=50, blank=False)
+    slug = AutoSlugField(populate_from=['name'])
     description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('register:tier_detail', args=[str(self.slug)])
 
     def __str__(self):
         return self.name

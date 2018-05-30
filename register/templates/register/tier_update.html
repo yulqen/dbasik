@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% load crispy_forms_tags %}
+{% crispy project_type_create_form.helper %}
+
+{% block title %}Update Tier{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% crispy form %}
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card border-light mb-3" style="width: 18rem;">
+                <div class="card-header">Current Project Types in system</div>
+                <div class="card-body">
+                    {% if existing_objects %}
+                        {% for item in existing_objects %}
+                        <ul id="current-datamap-list" class="list-group">
+                            <li class="list-group-item card-text"><a href="{%  url 'register:projecttype_detail' item.slug %}">{{ item }}</a></li>
+                        </ul>
+                        {% endfor %}
+                    {% else %}
+                        <p>No Tiers in system.</p>
+                    {% endif %}
+
+                </div> 
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
