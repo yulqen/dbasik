@@ -3,13 +3,21 @@
 {% block title %}{{ dm_name }}{% endblock %}
 
 {% block content %}
+<div class="container">
+    
         <h3 id="show-datamap-table">Datamap: {{ dm_name }} </h3>
+        <div class="container">
+            <a class="btn btn-danger" href="{% url 'datamaps:delete' dm.slug %}">Delete this datamap</a>
+            <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
+        </div>
+        <div class="container">
+            
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">Key</td>
-                    <th scope="col">Sheet</td>
-                    <th scope="col">Cell Reference</td>
+                    <th scope="col" class="col-sm-2">Sheet</td>
+                    <th scope="col" class="col-sm-1">Cell Reference</td>
                 </tr>
             </thead>
             <tbody>
@@ -22,12 +30,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p id='delete-datamap-button'>
-            <a href="{% url 'datamaps:delete' dm.slug %}">Delete this datamap</a>
-        </p> |
-        <p id='add-line-to-datamap'>
-            <a href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
-        </p>
-
+    </div>
+</div>
 
 {% endblock %}

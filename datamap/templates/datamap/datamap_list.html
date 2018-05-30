@@ -3,16 +3,24 @@
 {% block title %}Datamaps{% endblock %}
 
 {% block content %}
-        <h1>Datamaps</h1>
-        <ul>
+    <div class="container">
+        
+        <h2>Datamaps</h2>
+        <table class="table table-hover">
+            <thead>
+                <th scope="col">Datamap name</tr>
+            </thead>
             {% if object_list %}
                 {% for datamap in object_list %}
-                <li><a href="{% url 'datamaps:datamap-detail' datamap.slug %}"> {{ datamap.name }}</a></li>
+                <tr>
+                    <td><a href="{% url 'datamaps:datamap-detail' datamap.slug %}"> {{ datamap.name }}</a></td>
+                </tr>
                 {% endfor %}
             {% else %}
-                <p>There are no datamaps.</p>
+                <td>There are no datamaps.</td>
             {% endif %}
-        </ul>
+        </table>
         <p><a href="{% url 'datamaps:datamap-create' %}">Create a new datamap</a></p>
+    </div>
 
 {% endblock %}
