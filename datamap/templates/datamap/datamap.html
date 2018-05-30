@@ -4,25 +4,29 @@
 
 {% block content %}
         <h1 id="show-datamap-table">Datamap: {{ dm_name }} </h1>
-        <table>
-            <tr>
-                <td>Key</td>
-                <td>Sheet</td>
-                <td>Cell Reference</td>
-            </tr>
-            {% for line in dm_lines %}
-            <tr>
-                <td><a href="{% url 'datamapline-update' line.id %}">{{ line.key }}</a></td>
-                <td>{{ line.sheet }}</td>
-                <td>{{ line.cell_ref }}</td>
-            </tr>
-            {% endfor %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Key</td>
+                    <th scope="col">Sheet</td>
+                    <th scope="col">Cell Reference</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in dm_lines %}
+                <tr>
+                    <td><a href="{% url 'datamaps:datamapline-update' line.id %}">{{ line.key }}</a></td>
+                    <td>{{ line.sheet }}</td>
+                    <td>{{ line.cell_ref }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         <p id='delete-datamap-button'>
-            <a href="{% url 'datamap-delete' dm.slug %}">Delete this datamap</a>
+            <a href="{% url 'datamaps:delete' dm.slug %}">Delete this datamap</a>
         </p> |
         <p id='add-line-to-datamap'>
-            <a href="{% url 'datamapline-create' dm.slug %}">Add line to this datamap</a>
+            <a href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
         </p>
 
 

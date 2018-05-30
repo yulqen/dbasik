@@ -137,7 +137,7 @@ def upload_datamap(request):
             if f.content_type == "text/csv":
                 try:
                     CSVUploadedFile(f, dm.id, field_keys, replace).process()
-                    return HttpResponseRedirect(reverse("datamap-detail", args=[slug]))
+                    return HttpResponseRedirect(reverse("datamaps:datamap-detail", args=[slug]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
