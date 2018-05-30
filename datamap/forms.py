@@ -22,7 +22,7 @@ class DatamapForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        cancel_redirect = reverse('datamaps:datamap-list')
+        cancel_redirect = reverse('datamaps:datamap_list')
 
         self.helper = FormHelper(self)
         self.helper.form_class = "form-group"

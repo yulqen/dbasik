@@ -20,7 +20,7 @@
                     {% if existing_objects %}
                         {% for item in existing_objects %}
                         <ul id="current-datamap-list" class="list-group">
-                            <li class="list-group-item card-text"><a href="{%  url 'datamaps:datamap-detail' item.slug %}">{{ item }}</a></li>
+                            <li class="list-group-item card-text"><a href="{%  url 'datamaps:datamap_detail' item.slug %}">{{ item }}</a></li>
                         </ul>
                         {% endfor %}
                     {% else %}

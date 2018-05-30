@@ -16,7 +16,7 @@ class Datamap(models.Model):
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
     def get_absolute_url(self):
-        return reverse('datamaps:datamap-detail', args=[str(self.slug)])
+        return reverse('datamaps:datamap_detail', args=[str(self.slug)])
 
     def __str__(self):
         return self.name

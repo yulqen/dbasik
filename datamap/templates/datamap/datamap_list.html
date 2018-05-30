@@ -13,7 +13,7 @@
             {% if object_list %}
                 {% for datamap in object_list %}
                 <tr>
-                    <td><a href="{% url 'datamaps:datamap-detail' datamap.slug %}"> {{ datamap.name }}</a></td>
+                    <td><a href="{% url 'datamaps:datamap_detail' datamap.slug %}"> {{ datamap.name }}</a></td>
                 </tr>
                 {% endfor %}
             {% else %}

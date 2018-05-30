@@ -16,9 +16,9 @@
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Current datamaps in system</h5>
-                    {% for d in dms_l %}
-                    <ul id="current-datamap-list">
-                        <li class="card-text"><a href="{%  url 'datamaps:datamap-detail' d.slug %}">{{ d.name }}</a></li>
+                    {% for item in existing_objects %}
+                    <ul id="current-datamap-list" class="list-group">
+                        <li class="list-group-item card-text"><a href="{%  url 'datamaps:datamap_detail' item.slug %}">{{ item.name }}</a></li>
                     </ul>
                     {% endfor %}
                 </div> 

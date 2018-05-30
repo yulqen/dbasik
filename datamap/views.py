@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic import ListView, CreateView, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404
 
 from .forms import (
@@ -20,6 +20,12 @@ from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidatio
 from helpers import CSVUploadedFile, delete_datamap
 
 # datamap view functions
+
+
+class DatamapDelete(DeleteView):
+    model = Datamap
+    success_url = reverse_lazy("datamaps:datamap_list")
+
 
 
 class DatamapUpdate(UpdateView):
@@ -76,9 +82,10 @@ def datamap_create(request):
 
 def datamap_detail(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
+    dms = Datamap.objects.all()
     dm_name = Datamap.objects.get(slug=slug).name
     dm = get_object_or_404(Datamap, slug=slug)
-    context = {"dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
+    context = {"dms": dms, "dm_lines": dm_lines, "dm_name": dm_name, "dm": dm}
     return render(request, "datamap/datamap_detail.html", context)
 
 
@@ -162,7 +169,7 @@ def upload_datamap(request):
             if f.content_type == "text/csv":
                 try:
                     CSVUploadedFile(f, dm.id, field_keys, replace).process()
-                    return HttpResponseRedirect(reverse("datamaps:datamap-detail", args=[slug]))
+                    return HttpResponseRedirect(reverse("datamaps:datamap_detail", args=[slug]))
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:
