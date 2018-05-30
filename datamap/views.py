@@ -2,22 +2,22 @@ from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.shortcuts import get_object_or_404
 
 from .forms import (
     CreateDatamapForm,
     UploadDatamap,
     EditDatamapLineForm,
     CreateDatamapLineForm,
+    DatamapForm,
 )
 from .models import Datamap, DatamapLine
-from .forms import DatamapForm
-from register.models import Tier
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
 from helpers import CSVUploadedFile, delete_datamap
+from register.models import Tier
+
 
 # datamap view functions
 
@@ -25,7 +25,6 @@ from helpers import CSVUploadedFile, delete_datamap
 class DatamapDelete(DeleteView):
     model = Datamap
     success_url = reverse_lazy("datamaps:datamap_list")
-
 
 
 class DatamapUpdate(UpdateView):
@@ -36,7 +35,7 @@ class DatamapUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Datamap.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -48,7 +47,7 @@ class DatamapCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Datamap.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -100,6 +99,7 @@ def datamap_delete(request, slug):
 
 
 # datamapline view functions
+
 
 def datamapline_create(request, slug):
     dm = get_object_or_404(Datamap, slug=slug)
@@ -169,7 +169,9 @@ def upload_datamap(request):
             if f.content_type == "text/csv":
                 try:
                     CSVUploadedFile(f, dm.id, field_keys, replace).process()
-                    return HttpResponseRedirect(reverse("datamaps:datamap_detail", args=[slug]))
+                    return HttpResponseRedirect(
+                        reverse("datamaps:datamap_detail", args=[slug])
+                    )
                 except IllegalFileUpload:  # TODO: implement this - was removed in refactor
                     messages.add_message(request, messages.INFO, "Illegal file type")
                 except IncorrectHeaders as e:

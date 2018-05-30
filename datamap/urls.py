@@ -7,7 +7,6 @@ from .views import (
     datamap_create,
     datamap_detail,
     upload_datamap,
-    datamap_delete,
     datamapline_update,
     datamapline_create,
 )

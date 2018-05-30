@@ -1,32 +1,17 @@
 {% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% crispy upload_datamap.helper %}
 
 {% block title %}Upload datamap{% endblock %}
 
 {% block content %}
-    <p id='csv-field-advisory'>Please ensure your csv file has headers: {{ field_keys }}</p>
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <div class="alert alert-dismissible alert-danger">
-            <li id='message-test'>{{ message }}</li>
-        </div>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <form action="/datamaps/uploaddatamap/" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table id='form-table' border='1px'>
-            <tr>
-                <td>Select datamap:</td>
-                <td>{{ form.target_datamap }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.uploaded_file }}</td>
-            </tr>
-            <tr>
-                <td>Replace all entries: {{ form.replace_all_entries }}</td>
-                <td><input id='upload-button' type="submit" value="Create" name="submit-new-dm" id="submit-new-dm"/></td>
-            </tr>
-        </table>
-    </form>
+
+<div class="container">
+   <div class="row">
+       <div class="col">
+        {% crispy form %}
+       </div>
+       
+   </div> 
+</div>
 {% endblock %}
