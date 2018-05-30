@@ -6,10 +6,6 @@
 <div class="container">
     
         <h3 id="show-datamap-table">Datamap: {{ dm_name }} </h3>
-        <div class="buttonHolder">
-            <a class="btn btn-danger" href="{% url 'datamaps:delete' dm.slug %}">Delete this datamap</a>
-            <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
-        </div>
         <div class="container">
             
         <table class="table table-hover">
@@ -30,6 +26,10 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="buttonHolder">
+            <a class="btn btn-danger" href="{% url 'datamaps:delete' dm.slug %}">Delete this datamap</a>
+            <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
+        </div>
     </div>
 </div>
 
