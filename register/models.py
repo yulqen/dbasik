@@ -3,6 +3,7 @@ from datetime import date
 from users.models import Employee, DfTGroup, Organisation
 
 from django_extensions.db.fields import AutoSlugField
+from django.urls import reverse
 
 ###############
 # superclasses#
@@ -36,6 +37,10 @@ class AppModel(models.Model):
 class ProjectType(AppModel):
     name = models.CharField(max_length=50, blank=False, unique=True)
     slug = AutoSlugField(populate_from=['name'])
+    description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('register:projecttype_create', args=[str(self.pk)])
 
     def __str__(self):
         return self.name

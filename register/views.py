@@ -20,7 +20,7 @@ class ProjectTypeList(ListView):
 
 class ProjectTypeCreate(CreateView):
     model = ProjectType
-    fields = ['name']
+    fields = ['name', 'description']
     template_name_suffix = "_create_form"
     success_url = "/register/projecttype/"
 

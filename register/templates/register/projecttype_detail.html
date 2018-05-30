@@ -4,7 +4,21 @@
 
 {% block content %}
 
-<h2>Project Type: {{ object.name }}</h2>
+<div class="container">
+    
+    <h3>Project Type: {{ object.name }}</h3>
 
+    <h4>Description:</h4>
+    {% if object.description %}
+    <p>{{ object.description }}</p>
+    {% else %}
+    <p>There is no description for this Project Type.</p>
+    {% endif %}
+
+    <div class="container">
+    Buttons in here 
+    </div>
+
+</div>
 
 {% endblock %}

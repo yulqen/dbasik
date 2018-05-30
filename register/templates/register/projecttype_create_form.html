@@ -3,20 +3,30 @@
 {% block title %}{{ dm_name }}{% endblock %}
 
 {% block content %}
-    <h2 id="create-projecttype">Create Project Type: {{ dm_name }} </h2>
 
-    <form action="" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save" />
-    </form>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3 id="create-projecttype">Create Project Type: {{ dm_name }} </h3>
+            <form action="" method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary" type="submit" value="Save" />Save</button>
+            </form>
+        </div>
 
-    <h2>Existing Project Types:</h2>
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Current datamaps in system</h5>
+                    {% for item in existing_objects %}
+                    <ul id="current-datamap-list">
+                        <li class="card-text"><a href="{%  url 'register:projecttype_detail' item.slug %}">{{ item }}</a></li>
+                    </ul>
+                    {% endfor %}
+                </div> 
+            </div>
+        </div>
+    </div>
 
-    <ul>
-        {% for item in existing_objects %}
-        <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
-
-
+</div>
 {% endblock %}
