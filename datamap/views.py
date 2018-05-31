@@ -108,6 +108,9 @@ class DatamapLineCreate(CreateView):
     model = DatamapLine
     form_class = DatamapLineForm
 
+    def get_success_url(self):
+        return reverse('datamaps:datamap_detail', args=[self.kwargs['slug']])
+
 
 def datamapline_create(request, slug):
     dm = get_object_or_404(Datamap, slug=slug)
