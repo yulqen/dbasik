@@ -7,7 +7,7 @@ from .models import Datamap, DatamapLine
 from register.models import Tier
 from helpers import acceptable_types
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button
+from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden
 
 file_validator = FileExtensionValidator(
     allowed_extensions=acceptable_types, message="Needs to be a CSV or Excel file."
@@ -55,19 +55,26 @@ class DatamapLineForm(forms.ModelForm):
         model = DatamapLine
         fields = ["datamap", "key", "sheet", "cell_ref"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, datamap_id, *args, **kwargs):
+        self.datamap_id = datamap_id
         super().__init__(*args, **kwargs)
 
-        cancel_redirect = reverse('datamaps:datamap_list')
+        cancel_redirect = reverse("datamaps:datamap_list")
 
         self.helper = FormHelper()
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "datamap", "key", "sheet", "cell_ref"),
+            Fieldset("Create/Edit DatamapLine", "key", "sheet", "cell_ref"),
+            Hidden("datamap", self.datamap_id),
             ButtonHolder(
                 Submit("submit", "Submit"),
-                Button("cancel", "Cancel", onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+                Button(
+                    "cancel",
+                    "Cancel",
+                    onclick=f"location.href='{cancel_redirect}';",
+                    css_class="btn btn-danger",
+                ),
             ),
         )
 
@@ -83,17 +90,23 @@ class UploadDatamap(forms.Form):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Upload Datamap", "target_datamap", "uploaded_file", "replace_all_entries"),
+            Fieldset(
+                "Upload Datamap",
+                "target_datamap",
+                "uploaded_file",
+                "replace_all_entries",
+            ),
             ButtonHolder(
                 Submit("submit", "Submit"),
-                #Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+                # Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
             ),
         )
 
-    target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all(), empty_label=None)
+    target_datamap = forms.ModelChoiceField(
+        queryset=Datamap.objects.all(), empty_label=None
+    )
     uploaded_file = forms.FileField(validators=[file_validator])
     replace_all_entries = forms.BooleanField(initial=True, required=False)
-
 
 
 class CreateDatamapForm(forms.Form):
