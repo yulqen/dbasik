@@ -36,5 +36,8 @@ class DatamapLine(models.Model):
     sheet = models.CharField(max_length=50)
     cell_ref = models.CharField(max_length=10)
 
+    class Meta:
+        unique_together = ("sheet", "cell_ref")
+
     def __str__(self):
         return f"{self.key} for {self.datamap}"
