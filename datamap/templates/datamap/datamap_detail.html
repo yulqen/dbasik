@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th scope="col">Key</td>
-                    <th scope="col" class="col-sm-2">Sheet</td>
+                    <th rcope="col" class="col-sm-2">Sheet</td>
                     <th scope="col" class="col-sm-1">Cell Reference</td>
                 </tr>
             </thead>
@@ -27,7 +27,7 @@
             </tbody>
         </table>
         <div class="buttonHolder">
-            <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
+            <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' %}">Add line to this datamap</a>
             <a class="btn btn-primary" href="{% url 'datamaps:datamap_update' dm.slug %}">Edit</a>
             <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' dm.slug %}">Delete this datamap</a>
         </div>

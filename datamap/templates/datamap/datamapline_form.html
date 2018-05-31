@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+
+{% load crispy_forms_tags %}
+{% crispy tier_create_form.helper %}
+
+{% block title %}Create a new Tier{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% crispy form %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

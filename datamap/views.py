@@ -12,6 +12,7 @@ from .forms import (
     EditDatamapLineForm,
     CreateDatamapLineForm,
     DatamapForm,
+    DatamapLineForm,
 )
 from .models import Datamap, DatamapLine
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
@@ -100,6 +101,12 @@ def datamap_delete(request, slug):
 
 
 # datamapline view functions
+
+
+class DatamapLineCreate(CreateView):
+
+    model = DatamapLine
+    form_class = DatamapLineForm
 
 
 def datamapline_create(request, slug):
