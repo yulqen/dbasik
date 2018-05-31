@@ -42,13 +42,6 @@ class DatamapForm(forms.ModelForm):
         )
 
 
-class CreateDatamapLineForm(forms.ModelForm):
-
-    class Meta:
-        model = DatamapLine
-        exclude = ["datamap"]
-
-
 class DatamapLineForm(forms.ModelForm):
 
     class Meta:

@@ -10,7 +10,6 @@ from .forms import (
     CreateDatamapForm,
     UploadDatamap,
     EditDatamapLineForm,
-    CreateDatamapLineForm,
     DatamapForm,
     DatamapLineForm,
 )
@@ -53,34 +52,6 @@ class DatamapCreate(CreateView):
         return context
 
 
-def datamap_create(request):
-    if request.method == "POST":
-        form = CreateDatamapForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data["name"]
-            tier = form.cleaned_data["tier"]
-            pf_obj = get_object_or_404(Tier, pk=tier.id)
-            new_dm = Datamap(name=name, tier=pf_obj)
-            try:
-                new_dm.save()
-                return HttpResponseRedirect("/datamaps/uploaddatamap")
-            except IntegrityError:
-                messages.add_message(
-                    request,
-                    messages.INFO,
-                    "Please ensure unique datamap name for this Tier",
-                )
-                dms_l = Datamap.objects.all()
-    else:
-        form = CreateDatamapForm()
-        # list of current datamaps
-        dms_l = Datamap.objects.all()
-
-    return render(
-        request, "datamap/create_datamap.html", {"form": form, "dms_l": dms_l}
-    )
-
-
 def datamap_detail(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
     dms = Datamap.objects.all()
@@ -115,29 +86,6 @@ class DatamapLineCreate(CreateView):
 
     def get_success_url(self):
         return reverse('datamaps:datamap_detail', args=[self.kwargs['slug']])
-
-
-def datamapline_create(request, slug):
-    dm = get_object_or_404(Datamap, slug=slug)
-    if request.method == "POST":
-        form = CreateDatamapLineForm(request.POST)
-        if form.is_valid():
-            key = form.cleaned_data["key"]
-            sheet = form.cleaned_data["sheet"]
-            cell_ref = form.cleaned_data["cell_ref"]
-            dml = DatamapLine.objects.create(
-                datamap=dm, key=key, sheet=sheet, cell_ref=cell_ref
-            )
-            dml_pk = dml.id
-            return HttpResponseRedirect(f"/datamaps/{slug}")
-    else:
-        form = CreateDatamapLineForm()
-        dml_pk = None
-    return render(
-        request,
-        "datamap/create_datamapline.html",
-        {"form": form, "dml_pk": dml_pk, "slug": slug},
-    )
 
 
 def datamapline_update(request, dml_pk):

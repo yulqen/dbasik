@@ -4,12 +4,10 @@ from .views import (
     DatamapList,
     DatamapUpdate,
     DatamapDelete,
-    datamap_create,
     datamap_detail,
     upload_datamap,
     datamapline_update,
     DatamapLineCreate,
-    datamapline_create,
 )
 
 app_name = "datamaps"
