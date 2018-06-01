@@ -135,11 +135,9 @@ def upload_datamap(request):
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
-            slug = get_object_or_404(
-                Datamap, pk=form.cleaned_data["target_datamap"].id
-            ).slug
-            csv_file = request.FILES["uploaded_file"]
             dm = form.cleaned_data["target_datamap"]
+            slug = dm.slug
+            csv_file = request.FILES["uploaded_file"]
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
             else:
@@ -148,23 +146,20 @@ def upload_datamap(request):
                 csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
                 for row in csv_reader:
                     csv_form = CSVForm(row)
-                    if not csv_form.is_valid():
+                    if csv_form.is_valid():
+                        if replace == "on":
+                            DatamapLine.objects.filter(datamap=dm, key=form.cleaned_data['key']).delete()
+                            _process(row, dm)
+                        else:
+                            _process(row, dm)
+                    else:
                         for field, error in csv_form.errors.items():
                             if field == "key":
                                 messages.add_message(request, messages.ERROR, "Field: {} Errors: {} Key: {}".format(field, ', '.join(error), row['key']))
                             else:
                                 messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
+                            DatamapLine.objects.filter(datamap=dm).delete()
                         return render(request, "datamap/upload_datamap.html", {"form": form})
-                csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
-                for row in csv_reader:
-                    if csv_form.is_valid() and replace == "on":
-                        dm_inst = Datamap.objects.get(pk=dm.id)
-                        DatamapLine.objects.filter(datamap=dm_inst).delete()
-                        _process(row, dm_inst)
-                    elif csv_form.is_valid():
-                        dm_inst = Datamap.objects.get(pk=dm.id)
-                        _process(row, dm)
-
 
                 return HttpResponseRedirect(reverse("datamaps:datamap_list"))
 
