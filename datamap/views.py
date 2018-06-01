@@ -132,6 +132,8 @@ def _process(row, dm_instance):
 
 def upload_datamap(request):
 
+    errors = []
+
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
@@ -160,6 +162,28 @@ def upload_datamap(request):
                                 messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
                             DatamapLine.objects.filter(datamap=dm).delete()
                         return render(request, "datamap/upload_datamap.html", {"form": form})
+=======
+                    if not csv_form.is_valid():
+                        for e in csv_form.errors.items():
+                            errors.append(e)
+                if errors:
+                    for e in errors:
+                        if e[0] == "key":
+                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {} Key: {}".format(e[0], ', '.join(e[1]), row['key']))
+                        else:
+                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(e[0], ', '.join(e[1])))
+                    return render(request, "datamap/upload_datamap.html", {"form": form})
+                csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
+                for row in csv_reader:
+                    if csv_form.is_valid() and replace == "on":
+                        dm_inst = Datamap.objects.get(pk=dm.id)
+                        DatamapLine.objects.filter(datamap=dm_inst).delete()
+                        _process(row, dm_inst)
+                    elif csv_form.is_valid():
+                        dm_inst = Datamap.objects.get(pk=dm.id)
+                        _process(row, dm)
+
+>>>>>>> develop
 
                 return HttpResponseRedirect(reverse("datamaps:datamap_list"))
 
