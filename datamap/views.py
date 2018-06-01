@@ -149,23 +149,39 @@ def upload_datamap(request):
                     csv_form = CSVForm(row)
                     if csv_form.is_valid():
                         if replace is True:
-                            DatamapLine.objects.filter(datamap=dm, key=csv_form.cleaned_data['key']).delete()
+                            DatamapLine.objects.filter(
+                                datamap=dm, key=csv_form.cleaned_data["key"]
+                            ).delete()
                             try:
                                 _process(row, dm)
                             except IntegrityError as err:
                                 messages.add_message(request, messages.ERROR, err)
-                                return render(request, "datamap/upload_datamap.html", {"form": form})
+                                return render(
+                                    request,
+                                    "datamap/upload_datamap.html",
+                                    {"form": form},
+                                )
                         else:
                             try:
                                 _process(row, dm)
                             except IntegrityError as err:
                                 messages.add_message(request, messages.ERROR, err)
-                                return render(request, "datamap/upload_datamap.html", {"form": form})
+                                return render(
+                                    request,
+                                    "datamap/upload_datamap.html",
+                                    {"form": form},
+                                )
                     else:
                         for field, error in csv_form.errors.items():
-                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
+                            messages.add_message(
+                                request,
+                                messages.ERROR,
+                                "Field: {} Errors: {}".format(field, ", ".join(error)),
+                            )
                         DatamapLine.objects.filter(datamap=dm).delete()
-                        return render(request, "datamap/upload_datamap.html", {"form": form})
+                        return render(
+                            request, "datamap/upload_datamap.html", {"form": form}
+                        )
                     if not csv_form.is_valid():
                         for e in csv_form.errors.items():
                             errors.append(e)
