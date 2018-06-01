@@ -9,7 +9,12 @@ from .views import (
     TierList,
     TierDetail,
     TierDelete,
-    TierUpdate
+    TierUpdate,
+    ProjectStageCreate,
+    ProjectStageList,
+    ProjectStageDetail,
+    ProjectStageDelete,
+    ProjectStageUpdate,
 )
 
 app_name = "register"
@@ -41,5 +46,19 @@ urlpatterns = [
         "tier/<slug:slug>/delete",
         TierDelete.as_view(),
         name="tier_delete",
+    ),
+
+    path("projectstage/<slug:slug>/update", ProjectStageUpdate.as_view(), name="projectstage_update"),
+    path("projectstage/create", ProjectStageCreate.as_view(), name="projectstage_create"),
+    path(
+        "projectstage/<slug:slug>",
+        ProjectStageDetail.as_view(),
+        name="projectstage_detail",
+    ),
+    path("projectstage/", ProjectStageList.as_view(), name="projectstage_list"),
+    path(
+        "projectstage/<slug:slug>/delete",
+        ProjectStageDelete.as_view(),
+        name="projectstage_delete",
     ),
 ]

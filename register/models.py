@@ -52,7 +52,7 @@ class Tier(AppModel):
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:tier_detail', args=[str(self.slug)])
+        return reverse('register:tier_list')
 
     def __str__(self):
         return self.name
@@ -60,7 +60,11 @@ class Tier(AppModel):
 
 class ProjectStage(AppModel):
     name = models.CharField(max_length=100, blank=False)
+    slug = AutoSlugField(populate_from=['name'])
     description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('register:projectstage_list')
 
     def __str__(self):
         return self.name

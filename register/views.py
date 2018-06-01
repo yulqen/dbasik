@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
-from . models import ProjectType, Tier
-from . forms import ProjectTypeForm, TierForm
+from . models import ProjectType, Tier, ProjectStage
+from . forms import ProjectTypeForm, TierForm, ProjectStageForm
 
 
 class ProjectTypeDelete(DeleteView):
@@ -78,5 +78,43 @@ class TierUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Tier.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
+
+
+
+class ProjectStageCreate(CreateView):
+    model = ProjectStage
+    template_name_suffix = "_create"
+    form_class = ProjectStageForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = ProjectStage.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
+
+
+class ProjectStageList(ListView):
+    model = ProjectStage
+
+
+class ProjectStageDetail(DetailView):
+    model = ProjectStage
+
+
+class ProjectStageDelete(DeleteView):
+    model = ProjectStage
+    success_url = reverse_lazy("register:projectstage_list")
+
+
+class ProjectStageUpdate(UpdateView):
+    model = ProjectStage
+    form_class = ProjectStageForm
+    template_name_suffix = "_update"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = ProjectStage.objects.all()
         context['existing_objects'] = existing_objects
         return context
