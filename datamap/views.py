@@ -162,7 +162,6 @@ def upload_datamap(request):
                                 messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
                             DatamapLine.objects.filter(datamap=dm).delete()
                         return render(request, "datamap/upload_datamap.html", {"form": form})
-=======
                     if not csv_form.is_valid():
                         for e in csv_form.errors.items():
                             errors.append(e)
