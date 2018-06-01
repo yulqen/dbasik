@@ -1,7 +1,6 @@
 import csv
 import codecs
 
-from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
@@ -10,7 +9,6 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from .forms import (
-    CreateDatamapForm,
     UploadDatamap,
     EditDatamapLineForm,
     DatamapForm,
@@ -18,9 +16,6 @@ from .forms import (
     CSVForm,
 )
 from .models import Datamap, DatamapLine
-from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
-from helpers import CSVUploadedFile, delete_datamap
-from register.models import Tier
 
 
 # datamap view functions
@@ -67,12 +62,6 @@ def datamap_detail(request, slug):
 
 class DatamapList(ListView):
     model = Datamap
-
-
-def datamap_delete(request, slug):
-    dm = get_object_or_404(Datamap, slug=slug)
-    delete_datamap(dm)
-    return HttpResponseRedirect("/datamaps")
 
 
 # datamapline view functions
