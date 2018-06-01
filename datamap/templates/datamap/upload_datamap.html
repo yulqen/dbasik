@@ -7,8 +7,18 @@
 {% block content %}
 
 <div class="container">
+
    <div class="row">
        <div class="col">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-danger">
+                <li id='message-test'>{{ message }}</li>
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% crispy form %}
        </div>
        

@@ -115,6 +115,9 @@ class CSVUploadedFile(DBUploadedFile):
                 self._process(row, dm_inst)
                 records_added += 1
             else:
+                # TODO - this error handling is crude and results in incorrect
+                # exceptions. Need to revise this otherwise there is no datamap
+                # uploading going on.
                 try:
                     for i in form.errors.items():
                         err = CSVValidationError(

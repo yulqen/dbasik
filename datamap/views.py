@@ -118,6 +118,7 @@ def upload_datamap(request):
 
     field_keys = settings.DATAMAP_FIELD_KEYS
 
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
