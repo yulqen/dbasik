@@ -25,9 +25,6 @@ class Datamap(models.Model):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-    class Meta:
-        unique_together = ("tier", "active")
-
 
 class DatamapLine(models.Model):
     """A single line in the datamap."""
@@ -37,7 +34,7 @@ class DatamapLine(models.Model):
     cell_ref = models.CharField(max_length=10)
 
     class Meta:
-        unique_together = ("sheet", "cell_ref")
+        unique_together = ("datamap", "sheet", "cell_ref")
 
     def __str__(self):
         return f"{self.key} for {self.datamap}"

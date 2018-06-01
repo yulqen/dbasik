@@ -138,7 +138,6 @@ def upload_datamap(request):
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
             dm = form.cleaned_data["target_datamap"]
-            slug = dm.slug
             csv_file = request.FILES["uploaded_file"]
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
@@ -149,41 +148,27 @@ def upload_datamap(request):
                 for row in csv_reader:
                     csv_form = CSVForm(row)
                     if csv_form.is_valid():
-                        if replace == "on":
-                            DatamapLine.objects.filter(datamap=dm, key=form.cleaned_data['key']).delete()
-                            _process(row, dm)
+                        if replace is True:
+                            DatamapLine.objects.filter(datamap=dm, key=csv_form.cleaned_data['key']).delete()
+                            try:
+                                _process(row, dm)
+                            except IntegrityError as err:
+                                messages.add_message(request, messages.ERROR, err)
+                                return render(request, "datamap/upload_datamap.html", {"form": form})
                         else:
-                            _process(row, dm)
+                            try:
+                                _process(row, dm)
+                            except IntegrityError as err:
+                                messages.add_message(request, messages.ERROR, err)
+                                return render(request, "datamap/upload_datamap.html", {"form": form})
                     else:
                         for field, error in csv_form.errors.items():
-                            if field == "key":
-                                messages.add_message(request, messages.ERROR, "Field: {} Errors: {} Key: {}".format(field, ', '.join(error), row['key']))
-                            else:
-                                messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
-                            DatamapLine.objects.filter(datamap=dm).delete()
+                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(field, ', '.join(error)))
+                        DatamapLine.objects.filter(datamap=dm).delete()
                         return render(request, "datamap/upload_datamap.html", {"form": form})
                     if not csv_form.is_valid():
                         for e in csv_form.errors.items():
                             errors.append(e)
-                if errors:
-                    for e in errors:
-                        if e[0] == "key":
-                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {} Key: {}".format(e[0], ', '.join(e[1]), row['key']))
-                        else:
-                            messages.add_message(request, messages.ERROR, "Field: {} Errors: {}".format(e[0], ', '.join(e[1])))
-                    return render(request, "datamap/upload_datamap.html", {"form": form})
-                csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
-                for row in csv_reader:
-                    if csv_form.is_valid() and replace == "on":
-                        dm_inst = Datamap.objects.get(pk=dm.id)
-                        DatamapLine.objects.filter(datamap=dm_inst).delete()
-                        _process(row, dm_inst)
-                    elif csv_form.is_valid():
-                        dm_inst = Datamap.objects.get(pk=dm.id)
-                        _process(row, dm)
-
->>>>>>> develop
-
                 return HttpResponseRedirect(reverse("datamaps:datamap_list"))
 
         elif form.errors:
