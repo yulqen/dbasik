@@ -14,6 +14,19 @@ file_validator = FileExtensionValidator(
 )
 
 
+class CSVForm(forms.ModelForm):
+    """
+    Used to verify an uploaded CSV file, line-by-line.
+    """
+
+    # TODO this needs to change to use settings.DATAMAP_FIELD_KEYS
+    # instead of a modelform.
+
+    class Meta:
+        model = DatamapLine
+        exclude = ["datamap"]  # this is the ForeignKey
+
+
 class DatamapForm(forms.ModelForm):
 
     class Meta:

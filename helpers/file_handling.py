@@ -3,6 +3,7 @@ import csv
 from typing import NamedTuple, Tuple, List, Dict
 
 from django import forms
+from django.contrib import messages
 from django.core.files.uploadedfile import UploadedFile
 
 from datamap.models import DatamapLine, Datamap
@@ -48,9 +49,10 @@ class DBUploadedFile:
     Not to be implemented directly.
     """
 
-    def __init__(self, uploaded_file: UploadedFile) -> None:
+    def __init__(self, request, uploaded_file: UploadedFile) -> None:
         """Initialise with an opened file object and its short type.
         """
+        self.request = request
         self._uploaded_file = uploaded_file
         self._actual_file_name = self._uploaded_file.name
 
@@ -66,6 +68,7 @@ class CSVUploadedFile(DBUploadedFile):
 
     def __init__(
         self,
+        request,
         uploaded_file: UploadedFile,
         target_dm: int,
         field_keys: list,
@@ -75,7 +78,7 @@ class CSVUploadedFile(DBUploadedFile):
         self.replace = replace
         self.field_keys = field_keys
         self._table_cleared = False
-        super().__init__(uploaded_file)
+        super().__init__(request, uploaded_file)
 
     def _process(self, row: Dict[str, str], dm_instance):
         """Save datamap line to database.
@@ -104,6 +107,8 @@ class CSVUploadedFile(DBUploadedFile):
         csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
         for row in csv_reader:
             form = CSVForm(row)
+            if form.errors:
+                messages.add_message(self.request, messages.ERROR, form.errors)
             if form.is_valid() and self.replace == "on" and not self._table_cleared:
                 dm_inst = Datamap.objects.get(pk=self.target_dm)
                 DatamapLine.objects.filter(datamap=dm_inst).delete()
@@ -118,6 +123,7 @@ class CSVUploadedFile(DBUploadedFile):
                 # TODO - this error handling is crude and results in incorrect
                 # exceptions. Need to revise this otherwise there is no datamap
                 # uploading going on.
+                continue
                 try:
                     for i in form.errors.items():
                         err = CSVValidationError(

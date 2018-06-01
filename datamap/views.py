@@ -1,3 +1,6 @@
+import csv
+import codecs
+
 from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
@@ -12,6 +15,7 @@ from .forms import (
     EditDatamapLineForm,
     DatamapForm,
     DatamapLineForm,
+    CSVForm,
 )
 from .models import Datamap, DatamapLine
 from exceptions import IllegalFileUpload, IncorrectHeaders, DatamapLineValidationError
@@ -114,39 +118,51 @@ def datamapline_update(request, dml_pk):
     )
 
 
+def _process(row, dm_instance):
+    """Save datamap line to database.
+    """
+    dml = DatamapLine(
+        datamap=dm_instance,
+        key=row["key"],
+        sheet=row["sheet"],
+        cell_ref=row["cell_ref"],
+    )
+    dml.save()
+
 def upload_datamap(request):
 
     field_keys = settings.DATAMAP_FIELD_KEYS
 
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     if request.method == "POST":
+        _table_cleared = False
         form = UploadDatamap(request.POST, request.FILES)
         if form.is_valid():
             slug = get_object_or_404(
                 Datamap, pk=form.cleaned_data["target_datamap"].id
             ).slug
-            f = request.FILES["uploaded_file"]
+            csv_file = request.FILES["uploaded_file"]
             dm = form.cleaned_data["target_datamap"]
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
             else:
                 replace = "off"
-            if f.content_type == "text/csv":
-                try:
-                    CSVUploadedFile(f, dm.id, field_keys, replace).process()
-                    return HttpResponseRedirect(
-                        reverse("datamaps:datamap_detail", args=[slug])
-                    )
-                except IllegalFileUpload:  # TODO: implement this - was removed in refactor
-                    messages.add_message(request, messages.INFO, "Illegal file type")
-                except IncorrectHeaders as e:
-                    messages.add_message(request, messages.INFO, e.args[0])
-                except DatamapLineValidationError as e:
-                    msg = (
-                        f"Validation error in field: {e.args[0][0].error_field}\n"
-                        f"{e.args[0][0].django_validator_message} {e.args[0][0].field_given_value}"
-                    )
-                    messages.add_message(request, messages.INFO, msg)
+            if csv_file.content_type == "text/csv":
+                csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
+                for row in csv_reader:
+                    form = CSVForm(row)
+                    if form.errors:
+                        messages.add_message(request, messages.ERROR, form.errors)
+                    if form.is_valid() and replace == "on" and not _table_cleared:
+                        dm_inst = Datamap.objects.get(pk=dm.id)
+                        DatamapLine.objects.filter(datamap=dm_inst).delete()
+                        _table_cleared = True
+                        _process(row, dm_inst)
+                    elif form.is_valid():
+                        dm_inst = Datamap.objects.get(pk=dm.id)
+                        _process(row, dm)
+                    else:
+                        continue
+
 
         elif form.errors:
             for v in form.errors.values():
