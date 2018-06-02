@@ -99,7 +99,7 @@ class UploadDatamap(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        #       cancel_redirect = reverse('datamaps:datamap_list')
+        cancel_redirect = reverse('datamaps:datamap_list')
 
         self.helper = FormHelper()
         self.helper.form_class = "form-group"
@@ -112,7 +112,7 @@ class UploadDatamap(forms.Form):
             ),
             ButtonHolder(
                 Submit("submit", "Submit"),
-                # Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+                Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
             ),
         )
 
