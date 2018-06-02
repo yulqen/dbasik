@@ -192,6 +192,6 @@ def upload_datamap(request, slug):
 
     else:
         dm_from_slug = get_object_or_404(Datamap, slug=slug).id
-        form = UploadDatamap(datamap_id=int(dm_from_slug))
+        form = UploadDatamap(dm_from_slug)
 
     return render(request, "datamap/upload_datamap.html", {"form": form})

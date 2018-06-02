@@ -93,8 +93,16 @@ class DatamapLineForm(forms.ModelForm):
 
 class UploadDatamap(forms.Form):
 
-    def __init__(self, datamap_id, *args, **kwargs):
-        self.datamap_id = datamap_id
+    target_datamap = forms.ModelChoiceField(queryset=Datamap.objects.all())
+    uploaded_file = forms.FileField(validators=[file_validator])
+    replace_all_entries = forms.BooleanField(initial=True, required=False)
+
+    def __init__(self, *args, **kwargs):
+        if args:
+            self.dm_instance = args[-1]
+            args = args[:-1]
+        else:
+            self.dm_instance = None
         super().__init__(*args, **kwargs)
 
         #       cancel_redirect = reverse('datamaps:datamap_list')
@@ -108,18 +116,13 @@ class UploadDatamap(forms.Form):
                 "uploaded_file",
                 "replace_all_entries",
             ),
-            Hidden("target_datamap", self.datamap_id),
+            Hidden("target_datamap", self.dm_instance),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 # Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
             ),
         )
 
-    target_datamap = forms.ModelChoiceField(
-        queryset=Datamap.objects.all(), empty_label=None
-    )
-    uploaded_file = forms.FileField(validators=[file_validator])
-    replace_all_entries = forms.BooleanField(initial=True, required=False)
 
 
 class EditDatamapLineForm(forms.ModelForm):
