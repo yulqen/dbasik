@@ -47,7 +47,7 @@ class ProjectType(AppModel):
 
 
 class Tier(AppModel):
-    name = models.CharField(max_length=50, blank=False)
+    name = models.CharField(max_length=25, blank=False)
     slug = AutoSlugField(populate_from=['name'])
     description = models.TextField(blank=True)
 

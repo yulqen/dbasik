@@ -1,6 +1,7 @@
 import csv
 import codecs
 
+from django.utils.text import slugify
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
@@ -16,6 +17,7 @@ from .forms import (
     CSVForm,
 )
 from .models import Datamap, DatamapLine
+from register.models import Tier
 
 
 # datamap view functions
@@ -42,7 +44,14 @@ class DatamapCreate(CreateView):
     model = Datamap
     template_name_suffix = "_create"
     form_class = DatamapForm
-    success_url = reverse_lazy("datamaps:uploaddatamap")
+#   success_url = reverse_lazy("datamaps:uploaddatamap", )
+
+    def get_success_url(self, **kwargs):
+        name_field = self.request.POST['name']
+        tier_id = self.request.POST['tier']
+        tier_name = get_object_or_404(Tier, pk=tier_id).name
+        slugged = slugify("-".join([name_field, tier_name]))
+        return reverse_lazy("datamaps:uploaddatamap", args=[slugged])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,12 +128,13 @@ def _process(row, dm_instance):
     dml.save()
 
 
-def upload_datamap(request):
+def upload_datamap(request, slug):
 
     errors = []
 
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
+        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         if form.is_valid():
             dm = form.cleaned_data["target_datamap"]
             csv_file = request.FILES["uploaded_file"]
@@ -181,6 +191,7 @@ def upload_datamap(request):
                 messages.add_message(request, messages.INFO, v)
 
     else:
-        form = UploadDatamap()
+        dm_from_slug = get_object_or_404(Datamap, slug=slug).id
+        form = UploadDatamap(datamap_id=int(dm_from_slug))
 
     return render(request, "datamap/upload_datamap.html", {"form": form})
