@@ -19,7 +19,7 @@
             <tbody>
                 {% for line in dm_lines %}
                 <tr>
-                    <td><a href="{% url 'datamaps:datamapline-update' line.id %}">{{ line.key }}</a></td>
+                    <td><a href="{% url 'datamaps:datamapline_update' line.id %}">{{ line.key }}</a></td>
                     <td>{{ line.sheet }}</td>
                     <td>{{ line.cell_ref }}</td>
                 </tr>

@@ -61,6 +61,34 @@ class DatamapForm(forms.ModelForm):
         )
 
 
+class DatamapLineEditForm(forms.ModelForm):
+
+    class Meta:
+        model = DatamapLine
+        fields = ["key", "sheet", "cell_ref"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        cancel_redirect = reverse("datamaps:datamap_list")
+
+        self.helper = FormHelper()
+        self.helper.form_class = "form-group"
+        self.helper.form_method = "post"
+        self.helper.layout = Layout(
+            Fieldset("Create/Edit DatamapLine", "key", "sheet", "cell_ref"),
+            ButtonHolder(
+                Submit("submit", "Submit"),
+                Button(
+                    "cancel",
+                    "Cancel",
+                    onclick=f"location.href='{cancel_redirect}';",
+                    css_class="btn btn-danger",
+                ),
+            ),
+        )
+
+
 class DatamapLineForm(forms.ModelForm):
 
     class Meta:
@@ -116,13 +144,6 @@ class UploadDatamap(forms.Form):
             ),
         )
 
-
-
-class EditDatamapLineForm(forms.ModelForm):
-
-    class Meta:
-        model = DatamapLine
-        exclude = ["datamap"]
 
 
 # HOW TO WRITE A CUSTOM CLEAN FUNCTION IN FORM

@@ -11,9 +11,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from .forms import (
     UploadDatamap,
-    EditDatamapLineForm,
     DatamapForm,
     DatamapLineForm,
+    DatamapLineEditForm,
     CSVForm,
 )
 from .models import Datamap, DatamapLine
@@ -90,30 +90,13 @@ class DatamapLineCreate(CreateView):
         return reverse("datamaps:datamap_detail", args=[self.kwargs["slug"]])
 
 
-def datamapline_update(request, dml_pk):
-    instance = get_object_or_404(DatamapLine, pk=dml_pk)
-    if request.method == "POST":
-        form = EditDatamapLineForm(request.POST, instance)
-        if form.is_valid():
-            key = form.cleaned_data["key"]
-            sheet = form.cleaned_data["sheet"]
-            cell_ref = form.cleaned_data["cell_ref"]
-            slug = instance.datamap.slug
-            existing_dml = DatamapLine.objects.get(pk=dml_pk)
-            existing_dml.key = key
-            existing_dml.sheet = sheet
-            existing_dml.cell_ref = cell_ref
-            existing_dml.save()
-            return HttpResponseRedirect(f"/datamaps/{slug}")
-    else:
-        instance_data = {
-            "key": instance.key, "sheet": instance.sheet, "cell_ref": instance.cell_ref
-        }
-        form = EditDatamapLineForm(instance_data)
+class DatamapLineUpdate(UpdateView):
+    model = DatamapLine
+    form_class = DatamapLineEditForm
 
-    return render(
-        request, "datamap/edit_datamapline.html", {"form": form, "dml_pk": dml_pk}
-    )
+    def get_success_url(self):
+        dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs['pk']).datamap.slug
+        return reverse("datamaps:datamap_detail", args=[dm_slug])
 
 
 def _process(row, dm_instance):

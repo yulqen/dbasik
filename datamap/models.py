@@ -39,5 +39,8 @@ class DatamapLine(models.Model):
     class Meta:
         unique_together = ("datamap", "sheet", "cell_ref")
 
+    def get_absolute_url(self):
+        return reverse('datamaps:datamap_list')
+
     def __str__(self):
         return f"{self.key} for {self.datamap}"
