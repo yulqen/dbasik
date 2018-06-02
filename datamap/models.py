@@ -15,6 +15,9 @@ class Datamap(models.Model):
     active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
+    class Meta:
+        unique_together = ("name", "tier")
+
     def get_absolute_url(self):
         return reverse('datamaps:datamap_detail', args=[str(self.slug)])
 
@@ -22,7 +25,7 @@ class Datamap(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify("-".join([self.name, self.tier.name]))
         super().save(*args, **kwargs)
 
 
