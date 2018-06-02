@@ -88,6 +88,19 @@ class DatamapLineEditForm(forms.ModelForm):
             ),
         )
 
+    def clean_cell_ref(self):
+        given_value = self.cleaned_data["cell_ref"]
+        occurances = DatamapLine.objects.filter(cell_ref=given_value).filter(
+            datamap=self.instance.datamap
+        ).filter(
+            sheet=self.cleaned_data["sheet"]
+        ).count()
+        if occurances > 0:
+            raise forms.ValidationError(
+                "You already have that cell reference/sheet/datamap combination - no duplicates please!"
+            )
+        return self.cleaned_data['cell_ref']
+
 
 class DatamapLineForm(forms.ModelForm):
 
@@ -127,32 +140,20 @@ class UploadDatamap(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        cancel_redirect = reverse('datamaps:datamap_list')
+        cancel_redirect = reverse("datamaps:datamap_list")
 
         self.helper = FormHelper()
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset(
-                "Upload Datamap",
-                "uploaded_file",
-                "replace_all_entries",
-            ),
+            Fieldset("Upload Datamap", "uploaded_file", "replace_all_entries"),
             ButtonHolder(
                 Submit("submit", "Submit"),
-                Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+                Button(
+                    "cancel",
+                    "Cancel",
+                    onclick=f"location.href='{cancel_redirect}';",
+                    css_class="btn btn-danger",
+                ),
             ),
         )
-
-
-
-# HOW TO WRITE A CUSTOM CLEAN FUNCTION IN FORM
-# it must be of form clean_<attribute>(self) and
-# return the cleaned data or a ValidationError exception
-# see Django Unleased: https://www.safaribooksonline.com/library/view/django-unleashed/9780133812497/ch07lev2sec4.html
-# 7.3.5:
-#    def clean_sheet(self):
-#        if self.cleaned_data['sheet'] in ['Summary']:
-#            return self.cleaned_data['sheet']
-#        else:
-#            raise ValidationError("No..!")
