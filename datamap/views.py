@@ -134,9 +134,8 @@ def upload_datamap(request, slug):
 
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         if form.is_valid():
-            dm = form.cleaned_data["target_datamap"]
+            dm = get_object_or_404(Datamap, slug=slug)
             csv_file = request.FILES["uploaded_file"]
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
@@ -191,7 +190,6 @@ def upload_datamap(request, slug):
                 messages.add_message(request, messages.INFO, v)
 
     else:
-        dm_from_slug = get_object_or_404(Datamap, slug=slug).id
-        form = UploadDatamap(dm_from_slug)
+        form = UploadDatamap()
 
     return render(request, "datamap/upload_datamap.html", {"form": form})
