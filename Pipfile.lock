@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "445c7365445f92248eec0b31f0103ccff98394c8e185b735b63ed12d087beccb"
+            "sha256": "e646228a661fddcc936dfc82bf4da51951a2de64587d8a865e65615feaf5696b"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -29,10 +29,10 @@
     "default": {
         "django": {
             "hashes": [
-                "sha256:26b34f4417aa38d895b6b5307177b51bc3f4d53179d8696a5c19dcb50582523c",
-                "sha256:71d1a584bb4ad2b4f933d07d02c716755c1394feaac1ce61ce37843ac5401092"
+                "sha256:69ff89fa3c3a8337015478a1a0744f52a9fef5d12c1efa01a01f99bcce9bf10c",
+                "sha256:3eb25c99df1523446ec2dc1b00e25eb2ecbdf42c9d8b0b8b32a204a8db9011f8"
             ],
-            "version": "==2.0.5"
+            "version": "==2.0.6"
         },
         "django-crispy-forms": {
             "hashes": [
@@ -512,10 +512,10 @@
         },
         "pytest-html": {
             "hashes": [
-                "sha256:3171027ee492382904c1f143889b699751c54d4e1ada836aa394a68c3c707c0b",
-                "sha256:47cc6edca06e4a036045bcc16ace13f470846a9ef1103ba2c851780ed44e3f4b"
+                "sha256:e7ee0f7a83f6a6d2a5a356c09d64ba8acffd007b8b76c5f421f2e39e9f92b1fe",
+                "sha256:74ad1ad9bf4c2c15184e4d7f31fe28fa09c19ff6a459e65c106be88f1e5349cd"
             ],
-            "version": "==1.18.0"
+            "version": "==1.19.0"
         },
         "pytest-metadata": {
             "hashes": [
@@ -540,9 +540,9 @@
         },
         "python-language-server": {
             "hashes": [
-                "sha256:3256dd149fb9142935916b42e9a7fefb9d8a0b7c3a6333f14d77b62ed2322058"
+                "sha256:ea40be565429570a318bc010dc8f88250c7bece054880e60704235c3056c6bd8"
             ],
-            "version": "==0.18.0"
+            "version": "==0.19.0"
         },
         "requests": {
             "hashes": [
@@ -640,6 +640,13 @@
                 "sha256:3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e"
             ],
             "version": "==0.1.7"
+        },
+        "werkzeug": {
+            "hashes": [
+                "sha256:d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b",
+                "sha256:c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c"
+            ],
+            "version": "==0.14.1"
         },
         "wmctrl": {
             "hashes": [
