@@ -12,6 +12,7 @@
                     <th scope="col">Key</td>
                     <th rcope="col" class="col-sm-2">Sheet</td>
                     <th scope="col" class="col-sm-1">Cell Reference</td>
+                    <th scope="col" class="col-sm-2">Action</td>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,11 @@
                     <td><a href="{% url 'datamaps:datamapline_update' line.id %}">{{ line.key }}</a></td>
                     <td>{{ line.sheet }}</td>
                     <td>{{ line.cell_ref }}</td>
+                    <td>
+
+                        <a class="btn btn-primary mx-1 px-2" href="{% url 'datamaps:datamapline_update' line.id %}">Edit</a>
+                        <a class="btn btn-danger mx-1 px-2" href="{% url 'datamaps:datamapline_delete' line.id %}">DELETE</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
