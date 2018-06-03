@@ -95,8 +95,8 @@ class DatamapLineUpdate(UpdateView):
     form_class = DatamapLineEditForm
 
     def get_success_url(self):
-        dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs['pk']).datamap.slug
-        return reverse("datamaps:datamap_detail", args=[dm_slug])
+#       dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs['pk']).datamap.slug
+        return reverse("datamaps:datamap_detail", kwargs={'pk': self.object.pk})
 
 
 def _process(row, dm_instance):

@@ -67,7 +67,7 @@ class DatamapLineEditForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        fields = ["key", "sheet", "cell_ref"]
+        fields = ["datamap", "key", "sheet", "cell_ref"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -78,7 +78,7 @@ class DatamapLineEditForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "key", "sheet", "cell_ref"),
+            Fieldset("Create/Edit DatamapLine", "datamap", "key", "sheet", "cell_ref"),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
