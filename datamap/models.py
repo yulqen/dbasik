@@ -30,9 +30,20 @@ class Datamap(models.Model):
 
 
 class DatamapLine(models.Model):
+
+    DATAMAPLINE_TYPES = (
+        ('Text', "TEXT"),
+        ('Integer', "INTEGER"),
+        ('Float', "FLOAT"),
+        ('Date', "DATE"),
+    )
+
     """A single line in the datamap."""
     datamap = models.ForeignKey("Datamap", on_delete=models.CASCADE)
     key = models.CharField(max_length=100)
+    data_type = models.CharField(max_length=10, choices=DATAMAPLINE_TYPES, default='Text')
+    required = models.BooleanField(default=True)
+    max_length = models.IntegerField(blank=True, null=True)
     sheet = models.CharField(max_length=50)
     cell_ref = models.CharField(max_length=10)
 

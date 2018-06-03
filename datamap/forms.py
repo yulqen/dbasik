@@ -32,7 +32,7 @@ class CSVForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        exclude = ["datamap"]  # this is the ForeignKey
+        exclude = ["datamap", "data_type", "max_length", "required"]  # this is the ForeignKey
 
 
 class DatamapForm(forms.ModelForm):
@@ -67,7 +67,7 @@ class DatamapLineEditForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        fields = ["datamap", "key", "sheet", "cell_ref"]
+        fields = ["datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -78,7 +78,7 @@ class DatamapLineEditForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "datamap", "key", "sheet", "cell_ref"),
+            Fieldset("Create/Edit DatamapLine", "datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
@@ -102,7 +102,7 @@ class DatamapLineForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        fields = ["datamap", "key", "sheet", "cell_ref"]
+        fields = ["datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"]
 
     def __init__(self, datamap_id, *args, **kwargs):
         self.datamap_id = datamap_id
@@ -114,7 +114,7 @@ class DatamapLineForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "key", "sheet", "cell_ref"),
+            Fieldset("Create/Edit DatamapLine", "datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
             Hidden("datamap", self.datamap_id),
             ButtonHolder(
                 Submit("submit", "Submit"),
