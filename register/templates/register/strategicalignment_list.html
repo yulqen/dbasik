@@ -16,7 +16,7 @@
             {% for item in object_list %}
             <tr>
                 <td><a href="{% url "register:strategicalignment_detail" item.slug %}">{{ item }}</a></td>
-                <td>{{ item.description }}</a></td>
+                <td>{{ item.description }}</td>
             </tr>
             {% endfor %}
 

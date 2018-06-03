@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from . models import ProjectType, Tier, ProjectStage, StrategicAlignment
 from . forms import ProjectTypeForm, TierForm, ProjectStageForm, StrategicAlignmentForm
@@ -37,6 +37,7 @@ class ProjectTypeCreate(CreateView):
     model = ProjectType
     template_name_suffix = "_create"
     form_class = ProjectTypeForm
+    success_url = reverse_lazy("register:projecttype_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -49,6 +50,7 @@ class TierCreate(CreateView):
     model = Tier
     template_name_suffix = "_create"
     form_class = TierForm
+    success_url = reverse_lazy("register:tier_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -87,6 +89,7 @@ class ProjectStageCreate(CreateView):
     model = ProjectStage
     template_name_suffix = "_create"
     form_class = ProjectStageForm
+    success_url = reverse_lazy("register:projectstage_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -124,6 +127,7 @@ class StrategicAlignmentCreate(CreateView):
     model = StrategicAlignment
     template_name_suffix = "_create"
     form_class = StrategicAlignmentForm
+    success_url = reverse_lazy("register:strategicalignment_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -10,8 +10,9 @@
             <form method="post" accept-charset="utf-8">{% csrf_token %}
                 Are you sure you want to delete "{{ object }}"?
         </div>
-        <div class="col">
+        <div class="buttonHolder p-1">
             <button class="btn btn-danger" type="submit" value="Submit" name="submit" id="submit-button"/>Yes</button>
+            <a href="{% url 'register:projecttype_detail' object.slug %}" class="btn btn-primary">Cancel</a> 
         </div>
     </form>
     </div>    
