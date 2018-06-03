@@ -1,2 +1,3 @@
 gunicorn
-mod-wsgi
+setproctitle
+django-crispy-forms

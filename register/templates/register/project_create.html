@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+
+{% load crispy_forms_tags %}
+{% crispy project_create_form.helper %}
+
+{% block title %}Create a new Project{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% crispy form %}
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card border-light mb-3" style="width: 18rem;">
+                <div class="card-header">Current Projects in system</div>
+                <div class="card-body">
+                    {% for item in existing_objects %}
+                    <ul id="current-datamap-list" class="list-group">
+                        <li class="list-group-item card-text"><a href="{%  url 'register:project_detail' item.slug %}">{{ item }}</a></li>
+                    </ul>
+                    {% endfor %}
+                </div> 
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

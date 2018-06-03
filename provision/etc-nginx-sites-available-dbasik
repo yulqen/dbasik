@@ -1,0 +1,18 @@
+server {
+    listen 80;
+    server_name 209.97.142.1;
+
+    access_log /dbasik/code/logs/nginx-access.log;
+    error_log /dbasik/code/logs/nginx-error.log;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /dbasik/code/dbasik_dftgovernance/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/dbasik/code/run/gunicorn.sock;
+    }
+}
+

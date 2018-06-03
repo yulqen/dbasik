@@ -111,3 +111,36 @@ class StrategicAlignmentForm(forms.ModelForm):
                 Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
             )
         )
+
+
+class ProjectForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Project
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        cancel_redirect = reverse('register:project_list')
+
+        self.helper = FormHelper(self)
+        self.helper.form_class = "form-group"
+        self.helper.form_method = "post"
+        self.helper.layout = Layout(
+            Fieldset(
+                'Create/Edit Project',
+                'name',
+                'dependencies',
+                'tier',
+                'project_type',
+                'stage',
+                'start_date',
+                'planned_end_date',
+                'baseline_wlc',
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit'),
+                Button('cancel', 'Cancel', onclick=f"location.href='{cancel_redirect}';", css_class="btn btn-danger")
+            )
+        )

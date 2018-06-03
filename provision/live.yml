@@ -1,0 +1,6 @@
+- hosts: 209.97.142.1
+  roles:
+    - setup-live
+    - deploy-live
+  vars_files:
+    - setup/vars/main.yml

@@ -24,19 +24,21 @@ system_packages:
   - tk-dev
   - libpython3-dev
   - supervisor
+  - rsync
   - nginx-full
+  - sudo
 
 python_packages:
   - pip
   - virtualenv
 
-project_path: /vagrant/code/dbasik_dftgovernance
+project_path: /dbasik/code/dbasik_dftgovernance
 project_name: dbasik
-downloads_dir: /home/vagrant/Downloads
-virtualenv_root: /vagrant/virtualenvs
+downloads_dir: /home/dbasik/Downloads
+virtualenv_root: /dbasik/virtualenvs
 requirements_files:
   - "{{ project_path }}/requirements.txt"
   - "{{ project_path }}/requirements_dev.txt"
   - "{{ project_path }}/requirements_deploy.txt"
 required_python_version: 3.6.5
-installed_python_path: /home/vagrant/python{{ required_python_version }}
+installed_python_path: /home/dbasik/python{{ required_python_version }}

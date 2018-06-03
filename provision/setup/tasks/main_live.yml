@@ -1,0 +1,139 @@
+- name: Set up dbasik user
+  become: yes
+  user:
+    state: present
+    name: dbasik
+
+- name: Sync source files
+  synchronize:
+    src: /home/lemon/code/python/dbasik-dev/dbasik-dftgovernance
+    dest: /dbasik/code/dbasik_dftgovernance
+
+- name: update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: Install system packages
+  become: yes
+  apt: name={{ item }} state=present
+  with_items: "{{ system_packages }}"
+
+- name: Create python binary directories
+  become: yes
+  file:
+    group: dbasik
+    owner: dbasik
+    state: directory
+    path: "{{ installed_python_path }}"
+
+- name: Create a Download directory
+  become: yes
+  file:
+    group: dbasik
+    owner: dbasik
+    state: directory
+    path: "{{ downloads_dir }}"
+
+- name: Test for downloaded Python tarball
+  stat:
+#   path: /home/vagrant/.Python3.6.5/bin/python3.6
+    path: "{{ downloads_dir }}/Python-{{ required_python_version }}.tar.xz"
+  register: py
+
+- name: Test for newly-installed Python installation
+  stat:
+    path: "{{ installed_python_path }}/bin/python3.6"
+  register: pybin
+
+- name: Debug!
+  debug:
+    msg: "Python binary exists"
+  when: pybin.stat.exists
+
+- name: Download Python installation files
+  get_url:
+    url: https://www.python.org/ftp/python/{{ required_python_version }}/Python-{{ required_python_version }}.tar.xz
+    dest: "{{ downloads_dir }}"
+  when: not py.stat.exists
+
+- name: Unpack Python installation files
+  unarchive:
+    src: "{{ downloads_dir }}/Python-{{ required_python_version }}.tar.xz"
+    dest: "{{ downloads_dir }}"
+    remote_src: yes
+  when: not pybin.stat.exists
+
+- name: Configure Python source files
+  command: ./configure --prefix="{{ installed_python_path }}" --enable-shared
+  args:
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
+  when: not pybin.stat.exists
+
+- name: Make Python source files
+  command: make
+  args:
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
+  when: not pybin.stat.exists
+
+- name: Make install Python source files
+  command: make install
+  args:
+    chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
+  when: not pybin.stat.exists
+
+- name: Copy libpython3.6m.so.1.0 to /usr/lib/x86_64-linux-gnu
+  become: yes
+  copy:
+    remote_src: yes
+    src: "{{ installed_python_path }}/lib/libpython3.6m.so.1.0"
+    dest: /usr/lib/x86_64-linux-gnu/  
+
+- name: Install base Python packages (for system use)
+  become: yes
+  easy_install: name={{ item }}
+  with_items: "{{ python_packages }}"
+
+- name: Create virtualenv directory
+  file:
+      group: dbasik
+      owner: dbasik
+      mode: 0755
+      state: directory
+      path: "{{ virtualenv_root }}"
+
+- name: Set up dbasik virtualenv using installed python (will skip if not present)
+  pip:
+      requirements: "{{ item }}"
+      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
+      virtualenv_python: "{{ installed_python_path }}/bin/python3.6"
+  loop: "{{ requirements_files }}"
+  when: pybin.stat.exists
+
+- name: Set up dbasik virtualenv with system python
+  pip:
+      requirements: "{{ item }}"
+      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
+      virtualenv_python: python3
+  loop: "{{ requirements_files }}"
+  when: not pybin.stat.exists
+
+- name: ensure database user is created
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: dbasik
+    password: dbasik
+    role_attr_flags: CREATEDB,SUPERUSER
+
+- name: create database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: dbasik_dftgovernance
+
+- name: migrate database
+  django_manage:
+    command: migrate
+    app_path: "{{ project_path }}"
+    settings: 'config.settings.deploy'
+    virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
