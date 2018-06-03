@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 

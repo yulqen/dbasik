@@ -1,6 +1,8 @@
 from django import forms
+from django.db import IntegrityError
 from django.core.validators import FileExtensionValidator
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 # from django.core.exceptions import ValidationError
 from .models import Datamap, DatamapLine
@@ -88,18 +90,6 @@ class DatamapLineEditForm(forms.ModelForm):
             ),
         )
 
-    def clean_cell_ref(self):
-        given_value = self.cleaned_data["cell_ref"]
-        occurances = DatamapLine.objects.filter(cell_ref=given_value).filter(
-            datamap=self.instance.datamap
-        ).filter(
-            sheet=self.cleaned_data["sheet"]
-        ).count()
-        if occurances > 0:
-            raise forms.ValidationError(
-                "You already have that cell reference/sheet/datamap combination - no duplicates please!"
-            )
-        return self.cleaned_data['cell_ref']
 
 
 class DatamapLineForm(forms.ModelForm):
