@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block title %}List of Strategic Alignments{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>Strategic Alignments</h3>
+    <div class="container">
+        <p>This text is hard-coded into the template but should be moved into the database.</p>
+        <p>General description of what a Strategic Alignment is and why we need it.</p>
+        <table class="table table-hover">
+            <tr>
+                <th scope="col">Strategic Alignment</th>
+                <th scope="col">Description</th>
+            </tr>
+            {% for item in object_list %}
+            <tr>
+                <td><a href="{% url "register:strategicalignment_detail" item.slug %}">{{ item }}</a></td>
+                <td>{{ item.description }}</a></td>
+            </tr>
+            {% endfor %}
+
+        </table>
+        <div class="buttonHolder">
+            <a class="btn btn-primary" href="{% url 'register:strategicalignment_create' %}">Create New Strategic Alignment</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
-from . models import ProjectType, Tier, ProjectStage
-from . forms import ProjectTypeForm, TierForm, ProjectStageForm
+from . models import ProjectType, Tier, ProjectStage, StrategicAlignment
+from . forms import ProjectTypeForm, TierForm, ProjectStageForm, StrategicAlignmentForm
 
 
 class ProjectTypeDelete(DeleteView):
@@ -116,5 +116,42 @@ class ProjectStageUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = ProjectStage.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
+
+
+class StrategicAlignmentCreate(CreateView):
+    model = StrategicAlignment
+    template_name_suffix = "_create"
+    form_class = StrategicAlignmentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = StrategicAlignment.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
+
+
+class StrategicAlignmentList(ListView):
+    model = StrategicAlignment
+
+
+class StrategicAlignmentDetail(DetailView):
+    model = StrategicAlignment
+
+
+class StrategicAlignmentDelete(DeleteView):
+    model = StrategicAlignment
+    success_url = reverse_lazy("register:strategicalignment_list")
+
+
+class StrategicAlignmentUpdate(UpdateView):
+    model = StrategicAlignment
+    form_class = StrategicAlignmentForm
+    template_name_suffix = "_update"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = StrategicAlignment.objects.all()
         context['existing_objects'] = existing_objects
         return context

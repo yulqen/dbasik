@@ -15,6 +15,11 @@ from .views import (
     ProjectStageDetail,
     ProjectStageDelete,
     ProjectStageUpdate,
+    StrategicAlignmentCreate,
+    StrategicAlignmentList,
+    StrategicAlignmentDetail,
+    StrategicAlignmentDelete,
+    StrategicAlignmentUpdate,
 )
 
 app_name = "register"
@@ -60,5 +65,19 @@ urlpatterns = [
         "projectstage/<slug:slug>/delete",
         ProjectStageDelete.as_view(),
         name="projectstage_delete",
+    ),
+
+    path("strategicalignment/<slug:slug>/update", StrategicAlignmentUpdate.as_view(), name="strategicalignment_update"),
+    path("strategicalignment/create", StrategicAlignmentCreate.as_view(), name="strategicalignment_create"),
+    path(
+        "strategicalignment/<slug:slug>",
+        StrategicAlignmentDetail.as_view(),
+        name="strategicalignment_detail",
+    ),
+    path("strategicalignment/", StrategicAlignmentList.as_view(), name="strategicalignment_list"),
+    path(
+        "strategicalignment/<slug:slug>/delete",
+        StrategicAlignmentDelete.as_view(),
+        name="strategicalignment_delete",
     ),
 ]

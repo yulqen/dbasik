@@ -72,7 +72,11 @@ class ProjectStage(AppModel):
 
 class StrategicAlignment(AppModel):
     name = models.CharField(max_length=100, blank=False)
+    slug = AutoSlugField(populate_from=['name'])
     description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('register:strategicalignment_list')
 
     def __str__(self):
         return self.name
