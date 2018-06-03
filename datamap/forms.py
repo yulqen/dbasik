@@ -91,6 +91,12 @@ class DatamapLineEditForm(forms.ModelForm):
         )
 
 
+class DatamapLineDeleteForm(forms.ModelForm):
+
+    class Meta:
+        model = DatamapLine
+        fields = ["datamap", "key", "sheet", "cell_ref"]
+
 
 class DatamapLineForm(forms.ModelForm):
 

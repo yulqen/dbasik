@@ -14,6 +14,7 @@ from .forms import (
     DatamapForm,
     DatamapLineForm,
     DatamapLineEditForm,
+    DatamapLineDeleteForm,
     CSVForm,
 )
 from .models import Datamap, DatamapLine
@@ -97,6 +98,12 @@ class DatamapLineUpdate(UpdateView):
     def get_success_url(self):
 #       dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs['pk']).datamap.slug
         return reverse("datamaps:datamap_detail", kwargs={'pk': self.object.pk})
+
+
+
+class DatamapLineDelete(DeleteView):
+    model = DatamapLine
+    success_url = reverse_lazy("datamaps:datamap_list")
 
 
 def _process(row, dm_instance):

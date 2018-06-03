@@ -7,7 +7,8 @@ from .views import (
     datamap_detail,
     upload_datamap,
     DatamapLineCreate,
-    DatamapLineUpdate
+    DatamapLineUpdate,
+    DatamapLineDelete,
 )
 
 app_name = "datamaps"
@@ -18,6 +19,7 @@ urlpatterns = [
     path("update/<slug:slug>", DatamapUpdate.as_view(), name="datamap_update"),
     path("delete/<slug:slug>/", DatamapDelete.as_view(), name="datamap_delete"),
     path("edit-datamapline/<int:pk>/", DatamapLineUpdate.as_view(), name="datamapline_update"),
+    path("datamapline/<int:pk>/delete", DatamapLineDelete.as_view(), name="datmapline_delete"),
     path("uploaddatamap/<slug:slug>/", upload_datamap, name="uploaddatamap"),
     path("create-datamapline/<slug:slug>", DatamapLineCreate.as_view(), name="datamapline-create"),
     path("<slug:slug>/", datamap_detail, name="datamap_detail"),
