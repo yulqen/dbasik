@@ -49,11 +49,11 @@ class DatamapCreate(CreateView):
     model = Datamap
     template_name_suffix = "_create"
     form_class = DatamapForm
-#   success_url = reverse_lazy("datamaps:uploaddatamap", )
+    #   success_url = reverse_lazy("datamaps:uploaddatamap", )
 
     def get_success_url(self, **kwargs):
-        name_field = self.request.POST['name']
-        tier_id = self.request.POST['tier']
+        name_field = self.request.POST["name"]
+        tier_id = self.request.POST["tier"]
         tier_name = get_object_or_404(Tier, pk=tier_id).name
         slugged = slugify("-".join([name_field, tier_name]))
         return reverse_lazy("datamaps:uploaddatamap", args=[slugged])
@@ -100,10 +100,9 @@ class DatamapLineUpdate(UpdateView):
     form_class = DatamapLineEditForm
 
     def get_success_url(self):
-        dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs['pk']).datamap.slug
-#       return reverse("datamaps:datamapline_detail", kwargs={'pk': self.object.pk})
-        return reverse("datamaps:datamap_detail", kwargs={'slug': dm_slug})
-
+        dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs["pk"]).datamap.slug
+        #       return reverse("datamaps:datamapline_detail", kwargs={'pk': self.object.pk})
+        return reverse("datamaps:datamap_detail", kwargs={"slug": dm_slug})
 
 
 class DatamapLineDelete(DeleteView):
@@ -125,6 +124,12 @@ def _process(row, dm_instance):
 
 def upload_datamap(request, slug):
 
+    acceptable_content = [
+        "text/csv",
+        "application/vnd.ms-excel",
+        "text/comma-separated-values",
+    ]
+
     errors = []
 
     if request.method == "POST":
@@ -133,11 +138,12 @@ def upload_datamap(request, slug):
             dm = get_object_or_404(Datamap, slug=slug)
             csv_file = request.FILES["uploaded_file"]
             logger.info(f"Filetype {csv_file.content_type} uploaded")
+            logger.info(f"Acceptable is: {acceptable_content}")
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
             else:
                 replace = "off"
-            if csv_file.content_type == "text/csv":
+            if csv_file.content_type in acceptable_content:
                 csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
                 for row in csv_reader:
                     csv_form = CSVForm(row)
