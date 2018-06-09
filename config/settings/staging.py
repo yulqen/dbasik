@@ -8,6 +8,51 @@ DEBUG = True
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# LOGGING
+#
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'datamap_console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/vagrant/code/logs/debug.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'datamap.views': {
+            'handlers': ['file', 'datamap_console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
+
 INSTALLED_APPS.append('django_extensions')
 ALLOWED_HOSTS.append('localhost')
 
