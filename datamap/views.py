@@ -1,5 +1,6 @@
 import csv
 import codecs
+import logging
 
 from django.utils.text import slugify
 from django.contrib import messages
@@ -19,6 +20,9 @@ from .forms import (
 )
 from .models import Datamap, DatamapLine
 from register.models import Tier
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 # datamap view functions
@@ -128,6 +132,7 @@ def upload_datamap(request, slug):
         if form.is_valid():
             dm = get_object_or_404(Datamap, slug=slug)
             csv_file = request.FILES["uploaded_file"]
+            logger.info(f"Filetype {csv_file.content_type} uploaded")
             if "replace_all_entries" in request.POST:
                 replace = form.cleaned_data["replace_all_entries"]
             else:
