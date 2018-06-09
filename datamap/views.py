@@ -182,6 +182,12 @@ def upload_datamap(request, slug):
                         for e in csv_form.errors.items():
                             errors.append(e)
                 return HttpResponseRedirect(reverse("datamaps:datamap_list"))
+            else:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    f"{csv_file.content_type} is not an acceptable CSV type. See documentation.",
+                )
 
         elif form.errors:
             for v in form.errors.values():
