@@ -28,6 +28,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
+# acceptable csv types
+
+ACCEPTABLE_CONTENT = [
+    "text/csv",
+    "application/vnd.ms-excel",
+    "text/comma-separated-values",
+]
+
 # LOGGING
 #
 LOGGING = {

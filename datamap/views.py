@@ -4,6 +4,7 @@ import logging
 
 from django.utils.text import slugify
 from django.contrib import messages
+from django.conf import settings
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response
@@ -124,12 +125,7 @@ def _process(row, dm_instance):
 
 def upload_datamap(request, slug):
 
-    acceptable_content = [
-        "text/csv",
-        "application/vnd.ms-excel",
-        "text/comma-separated-values",
-    ]
-
+    acceptable_content = settings.ACCEPTABLE_CONTENT
     errors = []
 
     if request.method == "POST":
