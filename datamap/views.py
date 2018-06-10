@@ -1,6 +1,7 @@
 import csv
 import codecs
 import logging
+import re
 
 from django.utils.text import slugify
 from django.contrib import messages
@@ -123,10 +124,37 @@ def _process(row, dm_instance):
     dml.save()
 
 
+def _remove_dmlines_for_dm(dm_instance):
+    """Remove all datamapline objects for a particular datamap"""
+    DatamapLine.objects.filter(datamap=dm_instance).delete()
+    logger.info(f"Removed all datamaplines for {dm_instance}")
+
+
+def _parse_integrity_exception(errors: list):
+    """Take a list of errors and parse the useful messages out"""
+    regex = re.compile(r"=\(\d+, (.+), ([A-Z]+\d+)\)")
+    temp_list = [x.args[0].split('\n')[1] for x in errors]
+    message_list = []
+    for i in temp_list:
+        m = re.search(regex, i)
+        if m:
+            mess = " -> ".join([m.group(1), m.group(2)])
+            message_list.append(f"Duplicate key: {mess} - you can't have that in a datamap!")
+    return message_list
+
+
+def _add_integrity_errors_to_messages(request, datamap_obj, message_list):
+    _remove_dmlines_for_dm(datamap_obj)
+    mess = _parse_integrity_exception(message_list)
+    for m in mess:
+        messages.add_message(request, messages.ERROR, m)
+
+
 def upload_datamap(request, slug):
 
     acceptable_content = settings.ACCEPTABLE_CONTENT
     errors = []
+    integrity_error_messages = []
 
     if request.method == "POST":
         form = UploadDatamap(request.POST, request.FILES)
@@ -149,9 +177,16 @@ def upload_datamap(request, slug):
                                 datamap=dm, key=csv_form.cleaned_data["key"]
                             ).delete()
                             try:
+                                # try to save in database
                                 _process(row, dm)
                             except IntegrityError as err:
-                                messages.add_message(request, messages.ERROR, err)
+                                # cannot save due to integrity error
+                                # we're going to collage the error messages and save them for later
+                                integrity_error_messages.append(err)
+                                continue
+                            if integrity_error_messages:
+                                # we have accumulated errors, so now add them to messages
+                                _add_integrity_errors_to_messages(request, dm, integrity_error_messages)
                                 return render(
                                     request,
                                     "datamap/upload_datamap.html",
@@ -159,9 +194,16 @@ def upload_datamap(request, slug):
                                 )
                         else:
                             try:
+                                # try to save in database
                                 _process(row, dm)
                             except IntegrityError as err:
-                                messages.add_message(request, messages.ERROR, err)
+                                # cannot save due to integrity error
+                                # we're going to collage the error messages and save them for later
+                                integrity_error_messages.append(err)
+                                continue
+                            if integrity_error_messages:
+                                # we have accumulated errors, so now add them to messages
+                                _add_integrity_errors_to_messages(request, dm, integrity_error_messages)
                                 return render(
                                     request,
                                     "datamap/upload_datamap.html",
