@@ -121,6 +121,7 @@ def _process(row, dm_instance):
         sheet=row["sheet"],
         cell_ref=row["cell_ref"],
     )
+    logger.debug(f"Saving {dml.key} | {dml.sheet} | {dml.cell_ref} to database")
     dml.save()
 
 
@@ -133,13 +134,15 @@ def _remove_dmlines_for_dm(dm_instance):
 def _parse_integrity_exception(errors: list):
     """Take a list of errors and parse the useful messages out"""
     regex = re.compile(r"=\(\d+, (.+), ([A-Z]+\d+)\)")
-    temp_list = [x.args[0].split('\n')[1] for x in errors]
+    temp_list = [x.args[0].split("\n")[1] for x in errors]
     message_list = []
     for i in temp_list:
         m = re.search(regex, i)
         if m:
             mess = " -> ".join([m.group(1), m.group(2)])
-            message_list.append(f"Duplicate key: {mess} - you can't have that in a datamap!")
+            message_list.append(
+                f"Duplicate key: {mess} - you can't have that in a datamap!"
+            )
     return message_list
 
 
@@ -186,7 +189,9 @@ def upload_datamap(request, slug):
                                 continue
                             if integrity_error_messages:
                                 # we have accumulated errors, so now add them to messages
-                                _add_integrity_errors_to_messages(request, dm, integrity_error_messages)
+                                _add_integrity_errors_to_messages(
+                                    request, dm, integrity_error_messages
+                                )
                                 return render(
                                     request,
                                     "datamap/upload_datamap.html",
@@ -203,7 +208,9 @@ def upload_datamap(request, slug):
                                 continue
                             if integrity_error_messages:
                                 # we have accumulated errors, so now add them to messages
-                                _add_integrity_errors_to_messages(request, dm, integrity_error_messages)
+                                _add_integrity_errors_to_messages(
+                                    request, dm, integrity_error_messages
+                                )
                                 return render(
                                     request,
                                     "datamap/upload_datamap.html",

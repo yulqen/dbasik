@@ -21,7 +21,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(pathname)s %(process)d %(thread)d %(message)s'
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
