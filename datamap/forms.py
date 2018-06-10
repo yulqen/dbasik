@@ -10,18 +10,11 @@ from register.models import Tier
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden
 
-acceptable_types = {
-    "csv": ["text/csv"],
-    "xlsx": ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
-    "xlsm": [
-        "application/vnd.ms-excel.sheet.macroEnabled.12",
-        "application/vnd.ms-excel.sheet.macroenabled.12",
-    ],
-}
+acceptable_types = ["csv"]
 
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=acceptable_types, message="Needs to be a CSV or Excel file."
+    allowed_extensions=acceptable_types, message="Needs to be a valid CSV file type."
 )
 
 
