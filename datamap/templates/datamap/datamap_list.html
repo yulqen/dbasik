@@ -19,7 +19,7 @@
                     <td><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
                     <td> {{ datamap.tier }}</a></td>
                     <td> {{ datamap.active }}</a></td>
-                    <td> <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' datamap.slug %}">Delete</a></td>
+                    <td> <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' datamap.slug %}">DELETE</a></td>
                 </tr>
                 {% endfor %}
             {% else %}
