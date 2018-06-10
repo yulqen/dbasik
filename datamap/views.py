@@ -109,7 +109,12 @@ class DatamapLineUpdate(UpdateView):
 
 class DatamapLineDelete(DeleteView):
     model = DatamapLine
-    success_url = reverse_lazy("datamaps:datamap_list")
+#   success_url = reverse_lazy("datamaps:datamap_list")
+
+    def get_success_url(self):
+        dm_slug = get_object_or_404(DatamapLine, pk=self.kwargs["pk"]).datamap.slug
+        #       return reverse("datamaps:datamapline_detail", kwargs={'pk': self.object.pk})
+        return reverse("datamaps:datamap_detail", kwargs={"slug": dm_slug})
 
 
 def _process(row, dm_instance):
