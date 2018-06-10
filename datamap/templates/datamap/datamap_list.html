@@ -11,6 +11,7 @@
                 <th scope="col" class="col-sm-4">Datamap name</th>
                 <th scope="col" class="col-sm-2">Tier</th>
                 <th scope="col" class="col-sm-2">Active</th>
+                <th scope="col" class="col-sm-1">Action</th>
             </thead>
             {% if object_list %}
                 {% for datamap in object_list %}
@@ -18,6 +19,7 @@
                     <td><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
                     <td> {{ datamap.tier }}</a></td>
                     <td> {{ datamap.active }}</a></td>
+                    <td> <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' datamap.slug %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             {% else %}
