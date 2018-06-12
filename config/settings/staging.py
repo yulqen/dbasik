@@ -35,7 +35,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/vagrant/code/logs/debug.log',
+            'filename': f'{BASE_DIR}/logs/dbasik.log',
             'formatter': 'verbose'
         },
     },

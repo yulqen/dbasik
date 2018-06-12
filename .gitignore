@@ -9,3 +9,5 @@ static/
 assets/
 driver/
 report.html
+logs/
+run/

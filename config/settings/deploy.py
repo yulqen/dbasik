@@ -41,7 +41,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/dbasik/code/logs/dbasik.log',
+            'filename': f'{BASE_DIR}/logs/dbasik.log',
             'formatter': 'verbose'
         },
     },
