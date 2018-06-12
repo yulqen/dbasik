@@ -15,7 +15,11 @@ def firefox_options(firefox_options):
     firefox_options.headless = True
     return firefox_options
 
-
+# FIXME - problems here. This datamaplines_for_single_datamap
+# fixture is likely to be adding to the database locally but it needs to
+# add to the vagrant database, because that is what selenium is using
+# we should do this by loading a fixture.json file into the database first
+# In Pycharm we could use a pre-test command to do it
 def test_upload_datamap_form_title(selenium):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap")
     assert "Upload datamap" in selenium.title
