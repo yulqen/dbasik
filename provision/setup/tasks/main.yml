@@ -83,6 +83,7 @@
   with_items: "{{ python_packages }}"
 
 - name: Create virtualenv directory
+  become: yes
   file:
       group: vagrant
       owner: vagrant
@@ -124,5 +125,6 @@
   django_manage:
     command: migrate
     app_path: "{{ project_path }}"
+    # you have to change this to config.settings.staging for vagrant
     settings: 'config.settings.deploy'
     virtualenv: "{{ virtualenv_root }}/{{ project_name }}"

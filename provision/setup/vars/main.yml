@@ -1,3 +1,5 @@
+# you might have to uninstall apache2 package if you get an error installing
+# nginx-full
 system_packages:
   - acl # fix privilege issue: https://stackoverflow.com/questions/36646880/ansible-2-1-0-using-become-become-user-fails-to-set-permissions-on-temp-file
   - postgresql
