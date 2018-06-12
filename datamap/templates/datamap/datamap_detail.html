@@ -39,6 +39,7 @@
         <div class="buttonHolder">
             <a class="btn btn-primary" href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
             <a class="btn btn-primary" href="{% url 'datamaps:datamap_update' dm.slug %}">Edit</a>
+            <a class="btn btn-primary" href="{% url 'datamaps:uploaddatamap' dm.slug %}">Upload CSV</a>
             <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' dm.slug %}">Delete this datamap</a>
         </div>
     </div>

@@ -21,7 +21,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(pathname)s %(process)d %(thread)d %(message)s'
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -41,7 +41,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/dbasik/code/logs/dbasik.log',
+            'filename': f'{BASE_DIR}/logs/dbasik.log',
             'formatter': 'verbose'
         },
     },
