@@ -31,6 +31,7 @@ system_packages:
 python_packages:
   - pip
   - virtualenv
+  - psycopg2-binary
 
 project_path: /vagrant/code/dbasik_dftgovernance
 project_name: dbasik
