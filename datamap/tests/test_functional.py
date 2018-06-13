@@ -21,12 +21,12 @@ def firefox_options(firefox_options):
 # we should do this by loading a fixture.json file into the database first
 # In Pycharm we could use a pre-test command to do it
 def test_upload_datamap_form_title(selenium):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     assert "Upload datamap" in selenium.title
 
 
 def test_upload_datamap_form_items(selenium):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     assert "Upload datamap" in selenium.title
     assert selenium.find_element_by_id("form-table")
     assert selenium.find_element_by_id("id_target_datamap")
@@ -36,7 +36,7 @@ def test_upload_datamap_form_items(selenium):
 
 
 def test_upload_incorrect_csv(selenium, bad_csv_file):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
     selenium.find_element_by_id("upload-button").click()
     try:
@@ -50,7 +50,7 @@ def test_upload_incorrect_csv(selenium, bad_csv_file):
 
 
 def test_upload_correct_csv(selenium, good_csv_file):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
     selenium.find_element_by_id("upload-button").click()
     redirected_datamap_page = WebDriverWait(selenium, 10).until(
@@ -62,7 +62,7 @@ def test_upload_correct_csv(selenium, good_csv_file):
 
 
 def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
     selenium.find_element_by_id("upload-button").click()
     message = WebDriverWait(selenium, 3).until(
@@ -72,7 +72,7 @@ def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
 
 
 def test_guidance_text_for_csv_upload(selenium):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap")
+    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     assert selenium.find_element_by_id("csv-field-advisory")
 
 
