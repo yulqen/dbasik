@@ -56,8 +56,6 @@ LOGGING = {
 INSTALLED_APPS.append('django_extensions')
 ALLOWED_HOSTS.append('localhost')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
