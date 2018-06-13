@@ -9,5 +9,6 @@ static/
 assets/
 driver/
 report.html
+.vscode/
 logs/
 run/
