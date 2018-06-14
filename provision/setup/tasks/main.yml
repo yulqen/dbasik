@@ -126,5 +126,5 @@
     command: migrate
     app_path: "{{ project_path }}"
     # you have to change this to config.settings.staging for vagrant
-    settings: 'config.settings.deploy'
+    settings: 'config.settings.staging'
     virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
