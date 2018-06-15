@@ -27,21 +27,6 @@ from register.models import Tier
 #        'PASSWORD': 'lemon'
 #    }
 
-@pytest.fixture()
-def clean_vagrant_db():
-    subprocess.run("vagrant ssh -c '/vagrant/code/dbasik_dftgovernance/provision/clean_and_repopulate_database.sh' &",
-                   shell=True,
-                   stdout=subprocess.DEVNULL,
-                   stderr=subprocess.STDOUT
-                   )
-    yield
-    # now we'll kill the django server that has been started by the above script to run the tests
-    subprocess.Popen(["vagrant", "ssh", "-c", "'pkill -f 'manage.py'"],
-                     shell=True,
-                     stdout=subprocess.DEVNULL,
-                     stderr=subprocess.STDOUT
-                     )
-
 
 @pytest.fixture
 def uploaded_csv_file():

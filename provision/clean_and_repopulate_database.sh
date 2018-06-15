@@ -34,7 +34,3 @@ $PYTHON $MANAGE_FILE migrate
 echo "Loading test data into $DB_NAME..."
 cd $PROJECT_DIR
 $PYTHON $MANAGE_FILE loaddata fixtures/data.json
-
-# Start the Django server so the tests can use it
-echo "Restarting Django server for the rest of the tests."
-$PYTHON $MANAGE_FILE runserver 0.0.0.0:8000
