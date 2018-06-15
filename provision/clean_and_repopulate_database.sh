@@ -9,6 +9,10 @@ POSTGRES_USER=postgres
 DB_NAME=dbasik_dftgovernance
 DJANGO_SETTINGS_MODULE=config.settings.staging
 
+# Stop any running Django development server
+echo "Stopping server..."
+pkill -f "manage.py"
+
 # Activate the virtual environment
 cd $PROJECT_DIR
 source /vagrant/virtualenvs/dbasik/bin/activate
@@ -30,3 +34,7 @@ $PYTHON $MANAGE_FILE migrate
 echo "Loading test data into $DB_NAME..."
 cd $PROJECT_DIR
 $PYTHON $MANAGE_FILE loaddata fixtures/data.json
+
+# Start the Django server so the tests can use it
+echo "Restarting Django server for the rest of the tests."
+$PYTHON $MANAGE_FILE runserver 0.0.0.0:8000

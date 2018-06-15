@@ -1,3 +1,4 @@
+import subprocess
 from io import StringIO, BytesIO
 
 import pytest
@@ -25,6 +26,21 @@ from register.models import Tier
 #        'PORT': '5432',
 #        'PASSWORD': 'lemon'
 #    }
+
+@pytest.fixture()
+def clean_vagrant_db():
+    subprocess.Popen(["vagrant", "ssh", "-c", "\"/vagrant/code/dbasik_dftgovernance/provision/clean_and_repopulate_database.sh\""],
+                     shell=True,
+                     stdout=subprocess.DEVNULL,
+                     stderr=subprocess.STDOUT
+                     )
+    yield
+    # now we'll kill the django server that has been started by the above script to run the tests
+    subprocess.Popen(["vagrant", "ssh", "-c", "pkill -f 'manage.py'"],
+                     shell=True,
+                     stdout=subprocess.PIPE,
+                     stderr=subprocess.STDOUT
+                     )
 
 
 @pytest.fixture

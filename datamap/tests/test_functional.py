@@ -20,12 +20,12 @@ def firefox_options(firefox_options):
 # add to the vagrant database, because that is what selenium is using
 # we should do this by loading a fixture.json file into the database first
 # In Pycharm we could use a pre-test command to do it
-def test_upload_datamap_form_title(selenium):
+def test_upload_datamap_form_title(selenium, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     assert "Upload datamap" in selenium.title
 
 
-def test_upload_incorrect_csv(selenium, bad_csv_file):
+def test_upload_incorrect_csv(selenium, bad_csv_file, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
     selenium.find_element_by_id("submit-id-submit").click()
@@ -39,7 +39,7 @@ def test_upload_incorrect_csv(selenium, bad_csv_file):
         print("No... timed out")
 
 
-def test_upload_correct_csv(selenium, good_csv_file):
+def test_upload_correct_csv(selenium, good_csv_file, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
     selenium.find_element_by_id("submit-id-submit").click()
@@ -48,11 +48,10 @@ def test_upload_correct_csv(selenium, good_csv_file):
     )
     # TODO this needs to test for the name of the datamap
     # but we haven't included that yet. So test for it...
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     assert "Test Datamap 1" in redirected_h3.text
 
 
-def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
+def test_upload_big_key_csv(selenium, csv_hundred_plus_key, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
     selenium.find_element_by_id("submit-id-submit").click()
@@ -62,19 +61,19 @@ def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
     assert "Ensure this value has at most 100 characters (it has 106)" in message.text
 
 
-def test_guidance_text_for_csv_upload(selenium):
+def test_guidance_text_for_csv_upload(selenium, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     assert selenium.find_element_by_id("csv-field-advisory")
 
 
-def test_datamap_create_form_items(selenium):
+def test_datamap_create_form_items(selenium, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/create")
     assert selenium.find_element_by_id("id_name")
     assert selenium.find_element_by_id("id_tier")
     assert selenium.find_element_by_id("submit-new-dm")
 
 
-def test_create_new_datamap(selenium):
+def test_create_new_datamap(selenium, clean_vagrant_db):
     rand_title = uuid.uuid4()
     selenium.get("http://localhost:8000/datamaps/create")
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
@@ -87,12 +86,12 @@ def test_create_new_datamap(selenium):
     assert advisory
 
 
-def test_list_of_current_datamaps_on_create_datamap_page(selenium):
+def test_list_of_current_datamaps_on_create_datamap_page(selenium, clean_vagrant_db):
     selenium.get("http://localhost:8000/datamaps/create")
     assert selenium.find_element_by_id("current-datamap-list")
 
 
-def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
+def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium, clean_vagrant_db):
     rand_title = uuid.uuid4()
     selenium.get("http://localhost:8000/datamaps/create")
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
@@ -108,7 +107,7 @@ def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
     assert advisory
 
 
-def test_add_datamapline_line_on_datamap_page(selenium):
+def test_add_datamapline_line_on_datamap_page(selenium, clean_vagrant_db):
     rand_title = uuid.uuid4()
     selenium.get("http://localhost:8000/datamaps/create")
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
@@ -117,7 +116,7 @@ def test_add_datamapline_line_on_datamap_page(selenium):
     assert selenium.find_element_by_id("add-line-to-datamap")
 
 
-def test_manually_add_datamapline(selenium):
+def test_manually_add_datamapline(selenium, clean_vagrant_db):
     rand_title = uuid.uuid4()
     selenium.get("http://localhost:8000/datamaps/create")
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
