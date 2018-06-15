@@ -25,20 +25,10 @@ def test_upload_datamap_form_title(selenium):
     assert "Upload datamap" in selenium.title
 
 
-def test_upload_datamap_form_items(selenium):
-    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
-    assert "Upload datamap" in selenium.title
-    assert selenium.find_element_by_id("form-table")
-    assert selenium.find_element_by_id("id_target_datamap")
-    assert selenium.find_element_by_id("id_uploaded_file")
-    assert selenium.find_element_by_id("id_replace_all_entries")
-    assert selenium.find_element_by_id("upload-button")
-
-
 def test_upload_incorrect_csv(selenium, bad_csv_file):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(bad_csv_file)
-    selenium.find_element_by_id("upload-button").click()
+    selenium.find_element_by_id("submit-id-submit").click()
     try:
         message = WebDriverWait(selenium, 3).until(
             EC.presence_of_element_located((By.ID, "message-test"))
@@ -52,19 +42,20 @@ def test_upload_incorrect_csv(selenium, bad_csv_file):
 def test_upload_correct_csv(selenium, good_csv_file):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
-    selenium.find_element_by_id("upload-button").click()
-    redirected_datamap_page = WebDriverWait(selenium, 10).until(
-        EC.presence_of_element_located((By.ID, "show-datamap-table"))
+    selenium.find_element_by_id("submit-id-submit").click()
+    redirected_h3 = WebDriverWait(selenium, 10).until(
+        EC.presence_of_element_located((By.ID, "datamap-title"))
     )
     # TODO this needs to test for the name of the datamap
     # but we haven't included that yet. So test for it...
-    assert "Datamap:" in redirected_datamap_page.text
+    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    assert "Test Datamap 1" in redirected_h3.text
 
 
 def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
     selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
     selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
-    selenium.find_element_by_id("upload-button").click()
+    selenium.find_element_by_id("submit-id-submit").click()
     message = WebDriverWait(selenium, 3).until(
         EC.presence_of_element_located((By.ID, "message-test"))
     )
