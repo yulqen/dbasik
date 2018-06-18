@@ -40,7 +40,9 @@ LOGGING = {
         },
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 5, # 5MB
+            'backupCount': 5,
             'filename': f'{BASE_DIR}/logs/dbasik.log',
             'formatter': 'verbose'
         },
