@@ -11,6 +11,7 @@ django = "*"
 "psycopg2" = "*"
 django-extensions = "*"
 django-crispy-forms = "*"
+openpyxl = "*"
 
 
 [dev-packages]
@@ -37,3 +38,4 @@ pyflakes = "*"
 pytest-cov = "*"
 werkzeug = "*"
 pylint = "*"
+bpython = "*"
