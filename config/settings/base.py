@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'register.apps.RegisterConfig',
+    'templates.apps.TemplatesConfig',
     'crispy_forms',
 ]
 
