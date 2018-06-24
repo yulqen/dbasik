@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+
+{% load crispy_forms_tags %}
+{% crispy template_update_form.helper %}
+
+{% block title %}Edit template{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            {% crispy form %}
+        </div>
+    </div>
+</div>
+{% endblock %}

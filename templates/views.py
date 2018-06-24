@@ -1,8 +1,35 @@
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.views.generic import ListView, UpdateView, DeleteView, UpdateView, DetailView
 
 from templates.forms import TemplateCreateForm
+from templates.models import Template
+
+
+class TemplateList(ListView):
+    model = Template
+
+
+class TemplateDetail(DetailView):
+    model = Template
+
+
+class TemplateDelete(DeleteView):
+    model = Template
+    success_url = reverse_lazy("templates:template_list")
+
+
+class TemplateUpdate(UpdateView):
+    model = Template
+    form_class = TemplateCreateForm
+    template_name_suffix = "_update"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        existing_objects = Template.objects.all()
+        context['existing_objects'] = existing_objects
+        return context
 
 
 def template_create(request):
@@ -12,7 +39,7 @@ def template_create(request):
         form = TemplateCreateForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/datamaps')
+            return HttpResponseRedirect('/templates')
     else:
         form = TemplateCreateForm()
 

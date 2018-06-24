@@ -1,18 +1,18 @@
 from django.urls import path
 from .views import (
     template_create,
+    TemplateList,
+    TemplateDetail,
+    TemplateUpdate,
+    TemplateDelete,
 )
 
 app_name = "templates"
 
 urlpatterns = [
-#   path("", DatamapList.as_view(), name="datamap_list"),
+    path("", TemplateList.as_view(), name="template_list"),
     path("create/", template_create, name="template_create"),
-#   path("update/<slug:slug>", DatamapUpdate.as_view(), name="datamap_update"),
-#   path("delete/<slug:slug>/", DatamapDelete.as_view(), name="datamap_delete"),
-#   path("datamapline/<int:pk>/update", DatamapLineUpdate.as_view(), name="datamapline_update"),
-#   path("datamapline/<int:pk>/delete", DatamapLineDelete.as_view(), name="datamapline_delete"),
-#   path("uploaddatamap/<slug:slug>/", upload_datamap, name="uploaddatamap"),
-#   path("create-datamapline/<slug:slug>", DatamapLineCreate.as_view(), name="datamapline-create"),
-#   path("<slug:slug>/", datamap_detail, name="datamap_detail"),
+    path("update/<slug:slug>", TemplateUpdate.as_view(), name="template_update"),
+    path("delete/<slug:slug>/", TemplateDelete.as_view(), name="template_delete"),
+    path("<slug:slug>/", TemplateDetail.as_view(), name="template_detail"),
 ]
