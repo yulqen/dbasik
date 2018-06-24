@@ -16,8 +16,8 @@
         <p>Source file: {{ object.source_file }}</p>
     </div>
     <div class="buttonHolder">
-        <a class="btn btn-primary" href="{% url 'templates:template_update' object.slug %}">Edit</a>
-        <a class="btn btn-danger" href="{% url 'templates:template_delete' object.slug %}">Delete</a>
+        <a class="btn btn-primary" href="{% url 'templates:update' object.slug %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'templates:delete' object.slug %}">Delete</a>
     </div>
 
 </div>

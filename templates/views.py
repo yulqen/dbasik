@@ -17,7 +17,7 @@ class TemplateDetail(DetailView):
 
 class TemplateDelete(DeleteView):
     model = Template
-    success_url = reverse_lazy("templates:template_list")
+    success_url = reverse_lazy("templates:list")
 
 
 class TemplateUpdate(UpdateView):

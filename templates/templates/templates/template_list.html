@@ -16,7 +16,7 @@
                 <tr>
                     <td id="template-title"><a href="{% url 'templates:template_detail' template.slug %}">{{ template.name }}</a></td>
                     <td> {{ template.source_file }}</a></td>
-                    <td> <a class="btn btn-danger" href="{% url 'templates:template_delete' template.slug %}">DELETE</a></td>
+                    <td> <a class="btn btn-danger" href="{% url 'templates:delete' template.slug %}">DELETE</a></td>
                 </tr>
                 {% endfor %}
             {% else %}
@@ -24,7 +24,7 @@
             {% endif %}
         </table>
         <div class="container">
-            <a class="btn btn-primary" href="{% url 'templates:template_create' %}">Create a template</a>
+            <a class="btn btn-primary" href="{% url 'templates:create' %}">Create a template</a>
         </div>
     </div>
 

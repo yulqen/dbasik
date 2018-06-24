@@ -10,9 +10,9 @@ from .views import (
 app_name = "templates"
 
 urlpatterns = [
-    path("", TemplateList.as_view(), name="template_list"),
-    path("create/", template_create, name="template_create"),
-    path("update/<slug:slug>", TemplateUpdate.as_view(), name="template_update"),
-    path("delete/<slug:slug>/", TemplateDelete.as_view(), name="template_delete"),
+    path("", TemplateList.as_view(), name="list"),
+    path("create/", template_create, name="create"),
+    path("update/<slug:slug>", TemplateUpdate.as_view(), name="update"),
+    path("delete/<slug:slug>/", TemplateDelete.as_view(), name="delete"),
     path("<slug:slug>/", TemplateDetail.as_view(), name="template_detail"),
 ]

@@ -27,7 +27,7 @@ class TemplateCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        cancel_redirect = reverse("templates:template_list")
+        cancel_redirect = reverse("templates:list")
 
         self.helper = FormHelper(self)
         self.helper.form_class = "form-group"
