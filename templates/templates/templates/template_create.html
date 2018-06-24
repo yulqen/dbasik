@@ -1,12 +1,21 @@
 {% extends "core/base.html" %}
 
 {% load crispy_forms_tags %}
-{% crispy template_create_form.helper %}
+{% crispy template_create template_create_form.helper %}
 
 {% block title %}Create template{% endblock %}
 
 {% block content %}
 <div class="container">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <div class="alert alert-dismissible alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
     <div class="row">
         <div class="col-sm-6">
             {% crispy form %}

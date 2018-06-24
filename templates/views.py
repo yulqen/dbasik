@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, UpdateView, DeleteView, UpdateView, DetailView
+from django.views.generic import ListView, DeleteView, UpdateView, DetailView
 
 from templates.forms import TemplateCreateForm
 from templates.models import Template
@@ -40,6 +41,9 @@ def template_create(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/templates')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            return render(request, 'templates/template_create.html', {'form': form})
     else:
         form = TemplateCreateForm()
 

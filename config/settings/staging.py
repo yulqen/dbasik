@@ -58,6 +58,8 @@ LOGGING = {
 INSTALLED_APPS.append('django_extensions')
 ALLOWED_HOSTS.append('localhost')
 
+CRISPY_FAIL_SILENTLY = not DEBUG
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

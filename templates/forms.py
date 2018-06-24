@@ -2,9 +2,9 @@ from django import forms
 from django.db import IntegrityError
 from django.core.validators import FileExtensionValidator
 from django.urls import reverse
-from django.core.exceptions import ValidationError
+#from django.core.exceptions import ValidationError
+from django.forms import ValidationError
 
-# from django.core.exceptions import ValidationError
 from .models import Template
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden
@@ -24,12 +24,19 @@ class TemplateCreateForm(forms.ModelForm):
         model = Template
         fields = ["name", "description", "source_file"]
 
+    def clean_source_file(self):
+        sf = self.cleaned_data.get('source_file', False)
+        if not sf.content_type == "application/vnd.ms-excel.sheet.macroenabled.12":
+            raise ValidationError("This is not the right type of file!")
+        else:
+            return sf
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         cancel_redirect = reverse("templates:list")
 
-        self.helper = FormHelper(self)
+        self.helper = FormHelper()
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
