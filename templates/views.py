@@ -42,7 +42,9 @@ def template_create(request):
             form.save()
             return HttpResponseRedirect('/templates')
         else:
-            messages.error(request, "You can only upload a macro-enabled Excel file here. ")
+            messages.error(
+                request,
+                "You can only upload a macro-enabled Excel file here (.xlsm). ")
             form = TemplateCreateForm()
     else:
         form = TemplateCreateForm()
