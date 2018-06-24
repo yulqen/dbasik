@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.core.validators import FileExtensionValidator
 from django.urls import reverse
 #from django.core.exceptions import ValidationError
-from django.forms import ValidationError
+from django.forms import ValidationError, FileField
 
 from .models import Template
 from crispy_forms.helper import FormHelper
@@ -17,19 +17,15 @@ file_validator = FileExtensionValidator(
 )
 
 
-
 class TemplateCreateForm(forms.ModelForm):
+
+    # we can simply override the field if we want to
+    # halfway down on Complete forms from models in docs
+    source_file = FileField(validators=[file_validator])
 
     class Meta:
         model = Template
         fields = ["name", "description", "source_file"]
-
-    def clean_source_file(self):
-        sf = self.cleaned_data.get('source_file', False)
-        if not sf.content_type == "application/vnd.ms-excel.sheet.macroenabled.12":
-            raise ValidationError("This is not the right type of file!")
-        else:
-            return sf
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,6 +35,7 @@ class TemplateCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
+        self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Fieldset("Create new Template", "name", "description", "source_file"),
             ButtonHolder(
