@@ -17,7 +17,6 @@ openpyxl = "*"
 [dev-packages]
 
 neovim = "*"
-ptpython = "*"
 pdbpp = "*"
 "flake8" = "*"
 httpie = "*"
@@ -39,3 +38,4 @@ pytest-cov = "*"
 werkzeug = "*"
 pylint = "*"
 bpython = "*"
+ptpython = "*"
