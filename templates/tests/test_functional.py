@@ -10,7 +10,7 @@ from selenium.common.exceptions import TimeoutException
 
 @pytest.fixture
 def firefox_options(firefox_options):
-    firefox_options.binary = "/opt/firefox-quantum/firefox"
+    firefox_options.binary = "/usr/bin/firefox"
     firefox_options.headless = True
     return firefox_options
 
