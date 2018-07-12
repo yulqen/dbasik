@@ -70,13 +70,6 @@
     chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
 
-- name: Copy libpython3.6m.so.1.0 to /usr/lib/x86_64-linux-gnu
-  become: yes
-  copy:
-    remote_src: yes
-    src: "{{ installed_python_path }}/lib/libpython3.6m.so.1.0"
-    dest: /usr/lib/x86_64-linux-gnu/  
-
 - name: Install base Python packages (for system use)
   become: yes
   easy_install: name={{ item }}
@@ -99,13 +92,13 @@
   loop: "{{ requirements_files }}"
   when: pybin.stat.exists
 
-- name: Set up dbasik virtualenv with system python
-  pip:
-      requirements: "{{ item }}"
-      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
-      virtualenv_python: python3
-  loop: "{{ requirements_files }}"
-  when: not pybin.stat.exists
+  #- name: Set up dbasik virtualenv with system python
+  #  pip:
+  #      requirements: "{{ item }}"
+  #      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
+  #      virtualenv_python: python3
+  #  loop: "{{ requirements_files }}"
+  #  when: not pybin.stat.exists
 
 - name: ensure database user is created
   become: yes
