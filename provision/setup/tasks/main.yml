@@ -92,13 +92,13 @@
   loop: "{{ requirements_files }}"
   when: pybin.stat.exists
 
-  #- name: Set up dbasik virtualenv with system python
-  #  pip:
-  #      requirements: "{{ item }}"
-  #      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
-  #      virtualenv_python: python3
-  #  loop: "{{ requirements_files }}"
-  #  when: not pybin.stat.exists
+- name: Set up dbasik virtualenv with system python
+  pip:
+      requirements: "{{ item }}"
+      virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
+      virtualenv_python: python3
+  loop: "{{ requirements_files }}"
+  when: not pybin.stat.exists
 
 - name: ensure database user is created
   become: yes
