@@ -38,6 +38,7 @@ project_path: /vagrant/code/dbasik_dftgovernance
 project_name: dbasik
 downloads_dir: /home/vagrant/Downloads
 virtualenv_root: /vagrant/virtualenvs
+logs_root: "{{ project_path }}/logs"
 requirements_files:
   - "{{ project_path }}/requirements.txt"
   - "{{ project_path }}/requirements_dev.txt"
