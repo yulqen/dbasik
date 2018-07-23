@@ -11,12 +11,12 @@ django = "*"
 "psycopg2" = "*"
 django-extensions = "*"
 django-crispy-forms = "*"
+openpyxl = "*"
 
 
 [dev-packages]
 
 neovim = "*"
-ptpython = "*"
 pdbpp = "*"
 "flake8" = "*"
 httpie = "*"
@@ -37,3 +37,5 @@ pyflakes = "*"
 pytest-cov = "*"
 werkzeug = "*"
 pylint = "*"
+bpython = "*"
+ptpython = "*"

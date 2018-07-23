@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('core.urls')),
     path('datamaps/', include('datamap.urls', namespace="datamaps")),
     path('register/', include('register.urls', namespace="register")),
+    path('templates/', include('templates.urls', namespace="templates")),
 ]

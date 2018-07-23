@@ -4,7 +4,6 @@ system_packages:
   - acl # fix privilege issue: https://stackoverflow.com/questions/36646880/ansible-2-1-0-using-become-become-user-fails-to-set-permissions-on-temp-file
   - postgresql
   - libpq-dev # Required for Ansible to interact with postgres
-  - python-psycopg2 # Required for Ansible to interact with postgres
   - build-essential
   - git
   - python3-dev
