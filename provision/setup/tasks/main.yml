@@ -53,7 +53,12 @@
   when: not pybin.stat.exists
 
 - name: Configure Python source files
-  command: ./configure --prefix="{{ installed_python_path }}" --enable-shared
+  # here we set LDFLAGS so that when compiling python 3.6 on a system
+  # which does not contain the libpython3.6 files in its repo (such as Debian
+  # Stretch), then we point to the downloaded shared file instead of the system
+  # one. LDFLAGS not required on later versions of Debian, but we use it here
+  # for safety
+  command: ./configure --prefix="{{ installed_python_path }}" --enable-shared LDFLAGS="-Wl,--rpath={{ installed_python_path }}/lib"
   args:
     chdir: "{{ downloads_dir }}/Python-{{ required_python_version }}"
   when: not pybin.stat.exists
@@ -97,7 +102,7 @@
   pip:
       requirements: "{{ item }}"
       virtualenv: "{{ virtualenv_root }}/{{ project_name }}"
-      virtualenv_python: "{{ installed_python_path }}/bin/python3.6"
+      virtualenv_python: "{{ installed_python_path }}/bin/python3"
   loop: "{{ requirements_files }}"
   when: pybin.stat.exists
 
