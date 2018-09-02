@@ -1,6 +1,5 @@
 import pytest
 import os
-import uuid
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -35,7 +34,6 @@ def test_create_new_template(selenium, mock_macro_template):
     selenium.find_element_by_id("submit-id-submit").click()
     title = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.ID, "show-datamap-table"))).text
     assert title == "Templates"
-
 
 
 def test_create_new_template_bad_file(selenium, mock_xlsx_template):
