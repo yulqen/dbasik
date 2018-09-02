@@ -5,4 +5,4 @@ clean:
 	provision/clean_and_repopulate_database.sh
 
 test:
-	pytest --driver Firefox --driver-path /home/lemon/scripts/geckodriver --tb=short  -v --ds=config.settings.local --html report.html -sx
+	pytest --driver Firefox --driver-path /home/lemon/bin/geckodriver --tb=short  -v --ds=config.settings.local --html report.html -sx

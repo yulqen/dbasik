@@ -118,7 +118,7 @@ def test_add_datamapline_line_on_datamap_page(selenium):
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
     t = selenium.find_element_by_id("id_tier")
     for option in t.find_elements_by_tag_name('option'):
-        if option.text == "DfT Tier 1":
+        if option.text == "DfT Tier 1"
             option.click()
             break
     selenium.find_element_by_id("submit-id-submit").click()

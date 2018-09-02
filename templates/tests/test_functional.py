@@ -33,21 +33,9 @@ def test_create_new_template(selenium, mock_macro_template):
     selenium.find_element_by_id("id_description").send_keys("TEST TEMPLATE DESCRIPTION")
     selenium.find_element_by_id("id_source_file").send_keys(mock_macro_template)
     selenium.find_element_by_id("submit-id-submit").click()
-    try:
-        WebDriverWait(selenium, 3).until(
-            EC.presence_of_element_located((By.ID, "template-title"))
-        )
-        # we have an id of template-title, so we are on the correct page
-        # iterate through them all to find out target
-        #
-        ts = selenium.find_elements_by_id("template-title")
-        for t in ts:
-            if t.text == "TEST TEMPLATE":
-                assert True
-                return
-        assert False
-    except TimeoutException as e:
-        raise e.msg(f"Cannot find a template-title tag.")
+    title = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.ID, "show-datamap-table"))).text
+    assert title == "Templates"
+
 
 
 def test_create_new_template_bad_file(selenium, mock_xlsx_template):
