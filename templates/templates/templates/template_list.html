@@ -15,7 +15,7 @@
                 {% for template in object_list %}
                 <tr>
                     <td id="template-title"><a href="{% url 'templates:template_detail' template.slug %}">{{ template.name }}</a></td>
-                    <td> {{ template.source_file }}</a></td>
+                    <td> {{ template.source_file }}</td>
                     <td> <a class="btn btn-danger" href="{% url 'templates:delete' template.slug %}">DELETE</a></td>
                 </tr>
                 {% endfor %}
