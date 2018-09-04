@@ -41,22 +41,27 @@ def good_csv_file():
 
 # see https://stackoverflow.com/questions/29378328/django-liveservertestcase-fails-to-load-a-page-when-i-run-multiple-tests#29533884
 # about why we are using a mixin here (comment from CoreDumpError at bottom) - without it, can only run one test in class
-class DatamapIntegrationTests(LiveServerTestCase, TestCase):
+class DatamapIntegrationTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tier1 = Tier.objects.create(name="DfT Tier 1")
-        cls.datamap1 = Datamap.objects.create(name="Test Datamap 1", slug="test-datamap-1", tier=cls.tier1)
         cls.selenium = WebDriver()
-        cls.selenium.implicitly_wait(3)
-        cls.bad_csv_file = bad_csv_file()
-        cls.good_csv_file = good_csv_file()
+        cls.selenium.implicitly_wait(10)
         super().setUpClass()
+
+    def setUp(self):
+        self.tier1 = Tier.objects.create(name="DfT Tier 1")
+        self.datamap1 = Datamap.objects.create(name="Test Datamap 1", slug="test-datamap-1", tier=self.tier1)
+        self.bad_csv_file = bad_csv_file()
+        self.good_csv_file = good_csv_file()
+
+    def tearDown(self):
+        os.remove(self.bad_csv_file)
+        os.remove(self.good_csv_file)
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        os.remove(cls.bad_csv_file)
         super().tearDownClass()
 
     def test_upload_datamap_form_title(self):
@@ -68,7 +73,6 @@ class DatamapIntegrationTests(LiveServerTestCase, TestCase):
         self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.bad_csv_file)
         self.selenium.find_element_by_id("submit-id-submit").click()
         message = WebDriverWait(self.selenium, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
-        print("Message found!")
         self.assertTrue("This field is required" in message.text)
 
     def test_upload_correct_csv(self):
