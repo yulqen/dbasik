@@ -169,16 +169,12 @@ def upload_datamap(request, slug):
             csv_file = request.FILES["uploaded_file"]
             logger.info(f"Filetype {csv_file.content_type} uploaded")
             logger.info(f"Acceptable is: {acceptable_content}")
-            if "replace_all_entries" in request.POST:
-                replace = form.cleaned_data["replace_all_entries"]
-            else:
-                replace = "off"
             if csv_file.content_type in acceptable_content:
                 csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
                 for row in csv_reader:
                     csv_form = CSVForm(row)
                     if csv_form.is_valid():
-                        if replace is True:
+                        if form.cleaned_data["replace_all_entries"] is True:
                             DatamapLine.objects.filter(
                                 datamap=dm, key=csv_form.cleaned_data["key"]
                             ).delete()
