@@ -46,8 +46,6 @@ def test_upload_correct_csv(selenium, good_csv_file):
     redirected_h3 = WebDriverWait(selenium, 10).until(
         EC.presence_of_element_located((By.ID, "datamap-title"))
     )
-    # TODO this needs to test for the name of the datamap
-    # but we haven't included that yet. So test for it...
     assert "Test Datamap 1" in redirected_h3.text
 
 
@@ -118,7 +116,7 @@ def test_add_datamapline_line_on_datamap_page(selenium):
     selenium.find_element_by_id("id_name").send_keys(str(rand_title))
     t = selenium.find_element_by_id("id_tier")
     for option in t.find_elements_by_tag_name('option'):
-        if option.text == "DfT Tier 1"
+        if option.text == "DfT Tier 1":
             option.click()
             break
     selenium.find_element_by_id("submit-id-submit").click()
