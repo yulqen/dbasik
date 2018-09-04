@@ -10,7 +10,11 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 # https://stackoverflow.com/questions/26566799/how-to-wait-until-the-page-is-loaded-with-selenium-for-python
 from datamap.models import Datamap
-from datamap.tests.fixtures import csv_incorrect_headers, csv_correct_headers, csv_containing_hundred_plus_length_key
+from datamap.tests.fixtures import (
+    csv_incorrect_headers,
+    csv_correct_headers,
+    csv_containing_hundred_plus_length_key,
+)
 from register.models import Tier
 
 
@@ -26,9 +30,14 @@ class DatamapIntegrationTests(LiveServerTestCase):
         super().setUpClass()
 
     def setUp(self):
-        self.url_to_uploaddatamap = f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1"
-        Datamap.objects.create(name="Test Datamap 1", slug="test-datamap-1", tier=(
-            Tier.objects.create(name="DfT Tier 1")))
+        self.url_to_uploaddatamap = (
+            f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1"
+        )
+        Datamap.objects.create(
+            name="Test Datamap 1",
+            slug="test-datamap-1",
+            tier=(Tier.objects.create(name="DfT Tier 1")),
+        )
         self.csv_incorrect_headers = csv_incorrect_headers()
         self.csv_correct_headers = csv_correct_headers()
         self.csv_single_long_key = csv_containing_hundred_plus_length_key()
@@ -59,9 +68,13 @@ class DatamapIntegrationTests(LiveServerTestCase):
         Then he is presented with a page associated with the datamap which he has uploaded data to
         """
         self.driver.get(f"{self.url_to_uploaddatamap}")
-        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_correct_headers)
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_correct_headers
+        )
         self.driver.find_element_by_id("submit-id-submit").click()
-        redirected_h3 = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "datamap-title")))
+        redirected_h3 = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, "datamap-title"))
+        )
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
 
     def test_uploaded_csv_with_wrong_headers_is_flagged(self):
@@ -72,9 +85,13 @@ class DatamapIntegrationTests(LiveServerTestCase):
         Then he is presented with a warning that this csv file needs to include the correct keys
         """
         self.driver.get(f"{self.url_to_uploaddatamap}")
-        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_incorrect_headers)
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_incorrect_headers
+        )
         self.driver.find_element_by_id("submit-id-submit").click()
-        message = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
+        message = WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located((By.ID, "message-test"))
+        )
         self.assertTrue("This field is required" in message.text)
 
     def test_upload_big_key_csv(self):
@@ -85,9 +102,13 @@ class DatamapIntegrationTests(LiveServerTestCase):
         Then he is presented with a warning that this csv file needs to include the correct length of keys
         """
         self.driver.get(f"{self.url_to_uploaddatamap}")
-        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_single_long_key)
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_single_long_key
+        )
         self.driver.find_element_by_id("submit-id-submit").click()
-        message = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.TAG_NAME, "legend")))
+        message = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located((By.TAG_NAME, "legend"))
+        )
         self.assertTrue("Upload Datamap" in message.text)
 
     def test_create_new_datamap(self):
@@ -100,17 +121,17 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.driver.get(f"{self.live_server_url}/datamaps/create")
         self.driver.find_element_by_id("id_name").send_keys(str(rand_title))
         t = self.driver.find_element_by_id("id_tier")
-        for option in t.find_elements_by_tag_name('option'):
+        for option in t.find_elements_by_tag_name("option"):
             if option.text == "DfT Tier 1":
                 option.click()
                 break
         self.driver.find_element_by_id("submit-id-submit").click()
         friendly_title = WebDriverWait(self.driver, 3).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "/html/body/div/div/div[1]/h3")
-            )
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[1]/h3"))
         )
         self.assertTrue("Getting data into a datamap" in friendly_title.text)
+
+
 #
 #
 # def test_list_of_current_datamaps_on_create_datamap_page(selenium):
