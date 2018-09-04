@@ -1,47 +1,22 @@
 import os
-import tempfile
 
-from django.test import LiveServerTestCase, TestCase
-import uuid
+from django.test import LiveServerTestCase
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 # https://stackoverflow.com/questions/26566799/how-to-wait-until-the-page-is-loaded-with-selenium-for-python
 from datamap.models import Datamap
+from datamap.tests.fixtures import csv_incorrect_headers, csv_correct_headers
 from register.models import Tier
 
 
-def bad_csv_file():
-    tmpdir = tempfile.gettempdir()
-    uf = os.path.join(tmpdir, "bad_datamap.csv")
-    with open(uf, "w") as f:
-        f.write("bad_key,bad_sheet,bad_cell_ref\n")
-        f.write("First row col 1,First row col 2,A15\n")
-        f.write("Second row col 1,Second row col 2,B15\n")
-        f.write("Third row col 1,Third row col 2,C15\n")
-        f.write("Fourth row col 1,Fourth row col 2,D15\n")
-    return uf
-
-
-def good_csv_file():
-    tmpdir = tempfile.gettempdir()
-    uf = os.path.join(tmpdir, "good_datamap.csv")
-    with open(uf, "w") as f:
-        f.write("key,sheet,cell_ref\n")
-        f.write("First row col 1,First row col 2,A15\n")
-        f.write("Second row col 1,Second row col 2,B15\n")
-        f.write("Third row col 1,Third row col 2,C15\n")
-        f.write("Fourth row col 1,Fourth row col 2,D15\n")
-    return uf
-
-
-# see https://stackoverflow.com/questions/29378328/django-liveservertestcase-fails-to-load-a-page-when-i-run-multiple-tests#29533884
-# about why we are using a mixin here (comment from CoreDumpError at bottom) - without it, can only run one test in class
 class DatamapIntegrationTests(LiveServerTestCase):
+    """
+    Run tests on web pages related to creating Datamap objects in the system.
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -50,37 +25,38 @@ class DatamapIntegrationTests(LiveServerTestCase):
         super().setUpClass()
 
     def setUp(self):
-        self.tier1 = Tier.objects.create(name="DfT Tier 1")
-        self.datamap1 = Datamap.objects.create(name="Test Datamap 1", slug="test-datamap-1", tier=self.tier1)
-        self.bad_csv_file = bad_csv_file()
-        self.good_csv_file = good_csv_file()
+        self.url_to_uploaddatamap = f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1"
+        Datamap.objects.create(name="Test Datamap 1", slug="test-datamap-1", tier=(
+            Tier.objects.create(name="DfT Tier 1")))
+        self.csv_incorrect_headers = csv_incorrect_headers()
+        self.csv_correct_headers = csv_correct_headers()
 
     def tearDown(self):
-        os.remove(self.bad_csv_file)
-        os.remove(self.good_csv_file)
+        os.remove(self.csv_incorrect_headers)
+        os.remove(self.csv_correct_headers)
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_upload_datamap_form_title(self):
-        self.selenium.get(f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
+    def test_confirm_upload_datamap_in_title_tag(self):
+        self.selenium.get(f"{self.url_to_uploaddatamap}")
         self.assertTrue("Upload datamap" in self.selenium.title)
 
-    def test_upload_incorrect_csv(self):
-        self.selenium.get(f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
-        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.bad_csv_file)
-        self.selenium.find_element_by_id("submit-id-submit").click()
-        message = WebDriverWait(self.selenium, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
-        self.assertTrue("This field is required" in message.text)
-
-    def test_upload_correct_csv(self):
-        self.selenium.get(f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
-        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.good_csv_file)
+    def test_uploaded_csv_with_correct_headers_is_processed(self):
+        self.selenium.get(f"{self.url_to_uploaddatamap}")
+        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_correct_headers)
         self.selenium.find_element_by_id("submit-id-submit").click()
         redirected_h3 = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.ID, "datamap-title")))
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
+
+    def test_uploaded_csv_with_wrong_headers_is_flagged(self):
+        self.selenium.get(f"{self.url_to_uploaddatamap}")
+        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_incorrect_headers)
+        self.selenium.find_element_by_id("submit-id-submit").click()
+        message = WebDriverWait(self.selenium, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
+        self.assertTrue("This field is required" in message.text)
 #
 #
 # def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
