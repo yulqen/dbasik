@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.test import LiveServerTestCase
 
@@ -66,22 +67,22 @@ class DatamapIntegrationTests(LiveServerTestCase):
         message = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.TAG_NAME, "legend")))
         self.assertTrue("Upload Datamap" in message.text)
 
-    # def test_create_new_datamap(selenium):
-    #    rand_title = uuid.uuid4()
-    #    selenium.get("http://localhost:8000/datamaps/create")
-    #    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-    #    t = selenium.find_element_by_id("id_tier")
-    #    for option in t.find_elements_by_tag_name('option'):
-    #        if option.text == "DfT Tier 1":
-    #            option.click()
-    #            break
-    #    selenium.find_element_by_id("submit-id-submit").click()
-    #    friendly_title = WebDriverWait(selenium, 3).until(
-    #        EC.presence_of_element_located(
-    #            (By.XPATH, "/html/body/div/div/div[1]/h3")
-    #        )  # this appears on dm upload page
-    #    )
-    #    assert friendly_title.text == "Getting data into a datamap"
+    def test_create_new_datamap(self):
+        rand_title = uuid.uuid4()
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
+        self.driver.find_element_by_id("id_name").send_keys(str(rand_title))
+        t = self.driver.find_element_by_id("id_tier")
+        for option in t.find_elements_by_tag_name('option'):
+            if option.text == "DfT Tier 1":
+                option.click()
+                break
+        self.driver.find_element_by_id("submit-id-submit").click()
+        friendly_title = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "/html/body/div/div/div[1]/h3")
+            )
+        )
+        self.assertTrue("Getting data into a datamap" in friendly_title.text)
 #
 #
 # def test_list_of_current_datamaps_on_create_datamap_page(selenium):
