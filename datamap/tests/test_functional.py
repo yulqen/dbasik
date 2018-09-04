@@ -27,6 +27,18 @@ def bad_csv_file():
     return uf
 
 
+def good_csv_file():
+    tmpdir = tempfile.gettempdir()
+    uf = os.path.join(tmpdir, "good_datamap.csv")
+    with open(uf, "w") as f:
+        f.write("key,sheet,cell_ref\n")
+        f.write("First row col 1,First row col 2,A15\n")
+        f.write("Second row col 1,Second row col 2,B15\n")
+        f.write("Third row col 1,Third row col 2,C15\n")
+        f.write("Fourth row col 1,Fourth row col 2,D15\n")
+    return uf
+
+
 # see https://stackoverflow.com/questions/29378328/django-liveservertestcase-fails-to-load-a-page-when-i-run-multiple-tests#29533884
 # about why we are using a mixin here (comment from CoreDumpError at bottom) - without it, can only run one test in class
 class DatamapIntegrationTests(LiveServerTestCase, TestCase):
@@ -38,6 +50,7 @@ class DatamapIntegrationTests(LiveServerTestCase, TestCase):
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(3)
         cls.bad_csv_file = bad_csv_file()
+        cls.good_csv_file = good_csv_file()
         super().setUpClass()
 
     @classmethod
@@ -58,14 +71,12 @@ class DatamapIntegrationTests(LiveServerTestCase, TestCase):
         print("Message found!")
         self.assertTrue("This field is required" in message.text)
 
-# def test_upload_correct_csv(selenium, good_csv_file):
-#    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
-#    selenium.find_element_by_id("id_uploaded_file").send_keys(good_csv_file)
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    redirected_h3 = WebDriverWait(selenium, 10).until(
-#        EC.presence_of_element_located((By.ID, "datamap-title"))
-#    )
-#    assert "Test Datamap 1" in redirected_h3.text
+    def test_upload_correct_csv(self):
+        self.selenium.get(f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
+        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.good_csv_file)
+        self.selenium.find_element_by_id("submit-id-submit").click()
+        redirected_h3 = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.ID, "datamap-title")))
+        self.assertTrue("Test Datamap 1" in redirected_h3.text)
 #
 #
 # def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
