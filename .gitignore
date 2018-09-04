@@ -14,3 +14,5 @@ logs/
 run/
 media/
 *.lock*
+db.sqlite3
+test-db.sqlite3
