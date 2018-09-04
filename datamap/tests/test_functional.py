@@ -20,8 +20,8 @@ class DatamapIntegrationTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.selenium = WebDriver()
-        cls.selenium.implicitly_wait(10)
+        cls.driver = WebDriver()
+        cls.driver.implicitly_wait(10)
         super().setUpClass()
 
     def setUp(self):
@@ -38,51 +38,50 @@ class DatamapIntegrationTests(LiveServerTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.selenium.quit()
+        cls.driver.quit()
         super().tearDownClass()
 
     def test_confirm_upload_datamap_in_title_tag(self):
-        self.selenium.get(f"{self.url_to_uploaddatamap}")
-        self.assertTrue("Upload datamap" in self.selenium.title)
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.assertTrue("Upload datamap" in self.driver.title)
 
     def test_uploaded_csv_with_correct_headers_is_processed(self):
-        self.selenium.get(f"{self.url_to_uploaddatamap}")
-        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_correct_headers)
-        self.selenium.find_element_by_id("submit-id-submit").click()
-        redirected_h3 = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.ID, "datamap-title")))
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_correct_headers)
+        self.driver.find_element_by_id("submit-id-submit").click()
+        redirected_h3 = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, "datamap-title")))
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
 
     def test_uploaded_csv_with_wrong_headers_is_flagged(self):
-        self.selenium.get(f"{self.url_to_uploaddatamap}")
-        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_incorrect_headers)
-        self.selenium.find_element_by_id("submit-id-submit").click()
-        message = WebDriverWait(self.selenium, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_incorrect_headers)
+        self.driver.find_element_by_id("submit-id-submit").click()
+        message = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
         self.assertTrue("This field is required" in message.text)
 
     def test_upload_big_key_csv(self):
-        self.selenium.get(f"{self.url_to_uploaddatamap}")
-        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_single_long_key)
-        self.selenium.find_element_by_id("submit-id-submit").click()
-        message = WebDriverWait(self.selenium, 3).until(EC.presence_of_element_located((By.TAG_NAME, "legend")))
-        assert "Upload Datamap" in message.text
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_single_long_key)
+        self.driver.find_element_by_id("submit-id-submit").click()
+        message = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.TAG_NAME, "legend")))
+        self.assertTrue("Upload Datamap" in message.text)
 
-#
-# def test_create_new_datamap(selenium):
-#    rand_title = uuid.uuid4()
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-#    t = selenium.find_element_by_id("id_tier")
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == "DfT Tier 1":
-#            option.click()
-#            break
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    friendly_title = WebDriverWait(selenium, 3).until(
-#        EC.presence_of_element_located(
-#            (By.XPATH, "/html/body/div/div/div[1]/h3")
-#        )  # this appears on dm upload page
-#    )
-#    assert friendly_title.text == "Getting data into a datamap"
+    # def test_create_new_datamap(selenium):
+    #    rand_title = uuid.uuid4()
+    #    selenium.get("http://localhost:8000/datamaps/create")
+    #    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
+    #    t = selenium.find_element_by_id("id_tier")
+    #    for option in t.find_elements_by_tag_name('option'):
+    #        if option.text == "DfT Tier 1":
+    #            option.click()
+    #            break
+    #    selenium.find_element_by_id("submit-id-submit").click()
+    #    friendly_title = WebDriverWait(selenium, 3).until(
+    #        EC.presence_of_element_located(
+    #            (By.XPATH, "/html/body/div/div/div[1]/h3")
+    #        )  # this appears on dm upload page
+    #    )
+    #    assert friendly_title.text == "Getting data into a datamap"
 #
 #
 # def test_list_of_current_datamaps_on_create_datamap_page(selenium):
