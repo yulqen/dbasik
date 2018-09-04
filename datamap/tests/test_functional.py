@@ -43,10 +43,21 @@ class DatamapIntegrationTests(LiveServerTestCase):
         super().tearDownClass()
 
     def test_confirm_upload_datamap_in_title_tag(self):
+        """
+        Given a non-logged-in user with a desire to upload a csv file in order to create datamap
+        When he goes to the page in the site where you upload a csv file
+        Then he is presented with the correct page
+        """
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.assertTrue("Upload datamap" in self.driver.title)
 
     def test_uploaded_csv_with_correct_headers_is_processed(self):
+        """
+        Given a non-logged-in user with a desire to upload a csv file to create a datamap,
+        and a csv-file formatted correctly
+        When he submits the csv using the form
+        Then he is presented with a page associated with the datamap which he has uploaded data to
+        """
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_correct_headers)
         self.driver.find_element_by_id("submit-id-submit").click()
@@ -54,6 +65,12 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
 
     def test_uploaded_csv_with_wrong_headers_is_flagged(self):
+        """
+        Given a non-logged-in user with a desire to upload a csv file to create a datamap,
+        and a csv-file formatted IN-correctly
+        When he submits the csv using the form
+        Then he is presented with a warning that this csv file needs to include the correct keys
+        """
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_incorrect_headers)
         self.driver.find_element_by_id("submit-id-submit").click()
@@ -61,6 +78,12 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("This field is required" in message.text)
 
     def test_upload_big_key_csv(self):
+        """
+        Given a non-logged-in user with a desire to upload a csv file to create a datamap,
+        and a csv-file containing a key that is too long
+        When he submits the csv using the form
+        Then he is presented with a warning that this csv file needs to include the correct length of keys
+        """
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(self.csv_single_long_key)
         self.driver.find_element_by_id("submit-id-submit").click()
@@ -68,6 +91,11 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("Upload Datamap" in message.text)
 
     def test_create_new_datamap(self):
+        """
+        Given a non-logged-in user with a desire to create a datamap
+        When he correctly submits the form to create the datamap
+        Then he is presented a new page that invites him to upload a csv file
+        """
         rand_title = uuid.uuid4()
         self.driver.get(f"{self.live_server_url}/datamaps/create")
         self.driver.find_element_by_id("id_name").send_keys(str(rand_title))
