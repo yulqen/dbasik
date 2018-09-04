@@ -12,6 +12,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 class DatamapIntegrationTests(LiveServerTestCase):
 
+    # TODO replace with factory-boy stuff
     fixtures = ['fixtures/datamap_functional.json']
 
     @classmethod
@@ -26,7 +27,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         super().tearDownClass()
 
     def test_upload_datamap_form_title(self):
-        self.selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
+        self.selenium.get(f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
         assert "Upload datamap" in self.selenium.title
 
 
