@@ -9,7 +9,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 # https://stackoverflow.com/questions/26566799/how-to-wait-until-the-page-is-loaded-with-selenium-for-python
 from datamap.models import Datamap
-from datamap.tests.fixtures import csv_incorrect_headers, csv_correct_headers
+from datamap.tests.fixtures import csv_incorrect_headers, csv_correct_headers, csv_containing_hundred_plus_length_key
 from register.models import Tier
 
 
@@ -30,6 +30,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
             Tier.objects.create(name="DfT Tier 1")))
         self.csv_incorrect_headers = csv_incorrect_headers()
         self.csv_correct_headers = csv_correct_headers()
+        self.csv_single_long_key = csv_containing_hundred_plus_length_key()
 
     def tearDown(self):
         os.remove(self.csv_incorrect_headers)
@@ -57,17 +58,14 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.selenium.find_element_by_id("submit-id-submit").click()
         message = WebDriverWait(self.selenium, 5).until(EC.presence_of_element_located((By.ID, "message-test")))
         self.assertTrue("This field is required" in message.text)
-#
-#
-# def test_upload_big_key_csv(selenium, csv_hundred_plus_key):
-#    selenium.get("http://localhost:8000/datamaps/uploaddatamap/test-datamap-1-dft-tier-1")
-#    selenium.find_element_by_id("id_uploaded_file").send_keys(csv_hundred_plus_key)
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    message = WebDriverWait(selenium, 3).until(
-#        EC.presence_of_element_located((By.TAG_NAME, "legend"))
-#    )
-#    assert "Upload Datamap" in message.text
-#
+
+    def test_upload_big_key_csv(self):
+        self.selenium.get(f"{self.url_to_uploaddatamap}")
+        self.selenium.find_element_by_id("id_uploaded_file").send_keys(self.csv_single_long_key)
+        self.selenium.find_element_by_id("submit-id-submit").click()
+        message = WebDriverWait(self.selenium, 3).until(EC.presence_of_element_located((By.TAG_NAME, "legend")))
+        assert "Upload Datamap" in message.text
+
 #
 # def test_create_new_datamap(selenium):
 #    rand_title = uuid.uuid4()
