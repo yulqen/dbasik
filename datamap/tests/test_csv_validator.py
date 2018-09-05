@@ -1,11 +1,12 @@
 import csv
+
 from django.test import TestCase
 
-from datamap.models import Datamap
-from datamap.tests.fixtures import csv_correct_headers
 from register.models import Tier
-from datamap.forms import CSVForm
+from .fixtures import csv_correct_headers
+from ..forms import CSVForm
 from ..helpers import DatamapLinesFromCSVFactory
+from ..models import Datamap
 
 
 class CSVValidatorTests(TestCase):
