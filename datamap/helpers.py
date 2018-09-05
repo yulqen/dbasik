@@ -1,7 +1,5 @@
 import csv
 
-from django.db import IntegrityError
-
 from datamap.forms import CSVForm
 from datamap.models import DatamapLine, Datamap
 
@@ -11,23 +9,22 @@ class DatamapLinesFromCSVFactory:
         self.csv = csv_file
         self.datamap = datamap
         self._dmls = []
-
-    def _process_line(self, line: dict):
-        form = CSVForm(**line)
-
+        self.errors = []
 
     def process(self):
         with open(self.csv, "r") as f:
             reader = csv.DictReader(f)
             for line in reader:
-                try:
-                    self._dmls.append(DatamapLine.objects.create(datamap=self.datamap, **line))
-                except ValueError:
-                    raise
-
+                form = CSVForm(line)
+                if form.is_valid():
+                    self._dmls.append(
+                        DatamapLine.objects.create(
+                            datamap=self.datamap, **form.cleaned_data
+                        )
+                    )
+                else:
+                    self.errors = form.errors
         return self
 
     def __getitem__(self, item):
         return self._dmls[item]
-
-
