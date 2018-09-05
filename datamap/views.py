@@ -10,8 +10,9 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
+from datamap.helpers import DatamapLinesFromCSVFactory
 from .forms import (
     UploadDatamap,
     DatamapForm,
@@ -154,6 +155,24 @@ def _add_integrity_errors_to_messages(request, datamap_obj, message_list):
     mess = _parse_integrity_exception(message_list)
     for m in mess:
         messages.add_message(request, messages.ERROR, m)
+
+
+class UploadDatamapView(FormView):
+    template_name = "datamap/upload_datamap.html"
+    form_class = UploadDatamap
+    success_url = reverse_lazy("datamaps:datamap_list")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def post(self, request, *args, **kwargs):
+        dm = Datamap.objects.get(slug=kwargs['slug'])
+        form = self.get_form()
+        if form.is_valid():
+            factory = DatamapLinesFromCSVFactory(dm, request.FILES['uploaded_file'])
+            factory.process()
+            return self.form_valid(form)
+
 
 
 def upload_datamap(request, slug):
