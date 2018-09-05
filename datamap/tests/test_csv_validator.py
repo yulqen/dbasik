@@ -1,13 +1,13 @@
 import csv
+from typing import Union
 
-from django.db import IntegrityError
 from django.test import TestCase
 
 from register.models import Tier
 from .fixtures import csv_correct_headers, csv_incorrect_headers
 from ..forms import CSVForm
 from ..helpers import DatamapLinesFromCSVFactory
-from ..models import Datamap
+from ..models import Datamap, DatamapLine
 
 
 class CSVValidatorTests(TestCase):
@@ -20,11 +20,25 @@ class CSVValidatorTests(TestCase):
             slug="test-datamap",
             tier=Tier.objects.create(name="Tier 1"),
         )
-
-    def factory_constructor(self, csv_file: str):
-        factory = DatamapLinesFromCSVFactory(
-            datamap=self.dm, csv_file=csv_file
+        cls.dm_with_dmls = Datamap.objects.create(
+            name="Old datamap with dmls",
+            slug="old-datamap-with-dmls",
+            tier=Tier.objects.create(name="Tier 1"),
         )
+        # create a bunch of DatamapLine objects for cls.dm_with_dmls
+        for dml in range(10):
+            DatamapLine.objects.create(
+                datamap=cls.dm_with_dmls,
+                key=f"Key {dml} for {cls.dm_with_dmls.__class__}",
+                sheet=f"Sheetname for {cls.dm_with_dmls.__class__}",
+                cell_ref=f"A{dml}",
+            )
+
+    def factory_constructor(self, csv_file: str, datamap: Union[None, Datamap] = None):
+        if datamap:
+            factory = DatamapLinesFromCSVFactory(csv_file=csv_file, datamap=datamap)
+        else:
+            factory = DatamapLinesFromCSVFactory(csv_file=csv_file, datamap=self.dm)
         return factory
 
     def test_form_processes_single_line_from_good_csv(self):
@@ -48,3 +62,12 @@ class CSVValidatorTests(TestCase):
         factory.process()
         self.assertTrue(len(factory.errors.keys()) == 3)
 
+    def test_dmls_in_system_are_replaced_by_good_csv(self):
+        factory = self.factory_constructor(self.good_csv_file, self.dm_with_dmls)
+        self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
+        self.assertTrue(
+            self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0
+        )
+        factory.process(replace=True)
+        self.assertTrue(factory[0].datamap.name, "Test Datamap with dmls")
+        self.assertEqual(factory[0].key, "First row col 1")

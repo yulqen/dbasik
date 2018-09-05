@@ -11,12 +11,14 @@ class DatamapLinesFromCSVFactory:
         self._dmls = []
         self.errors = []
 
-    def process(self):
+    def process(self, replace: bool = False):
         with open(self.csv, "r") as f:
             reader = csv.DictReader(f)
             for line in reader:
                 form = CSVForm(line)
                 if form.is_valid():
+                    if replace:
+                        DatamapLine.objects.filter(datamap=self.datamap).delete()
                     self._dmls.append(
                         DatamapLine.objects.create(
                             datamap=self.datamap, **form.cleaned_data
