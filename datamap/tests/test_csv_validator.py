@@ -34,7 +34,7 @@ class CSVValidatorTests(TestCase):
                 cell_ref=f"A{dml}",
             )
 
-    def factory_constructor(self, csv_file: str, datamap: Union[None, Datamap] = None):
+    def _temp_factory_constructor(self, csv_file: str, datamap: Union[None, Datamap] = None):
         if datamap:
             factory = DatamapLinesFromCSVFactory(csv_file=csv_file, datamap=datamap)
         else:
@@ -52,22 +52,22 @@ class CSVValidatorTests(TestCase):
                 assert False
 
     def test_dml_factory_with_good_csv(self):
-        factory = self.factory_constructor(self.good_csv_file)
+        factory = self._temp_factory_constructor(self.good_csv_file)
         datamaplines = factory.process()
         self.assertTrue(datamaplines[0].datamap.name, "Test Datamap")
         self.assertTrue(datamaplines[0].key, "First row col 1")
 
     def test_errors_available_when_bad_key_csv_sent(self):
-        factory = self.factory_constructor(self.bad_csv_file)
+        factory = self._temp_factory_constructor(self.bad_csv_file)
         factory.process()
         self.assertTrue(len(factory.errors.keys()) == 3)
 
     def test_dmls_in_system_are_replaced_by_good_csv(self):
-        factory = self.factory_constructor(self.good_csv_file, self.dm_with_dmls)
+        factory = self._temp_factory_constructor(self.good_csv_file, self.dm_with_dmls)
         self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
         self.assertTrue(
             self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0
         )
         factory.process(replace=True)
-        self.assertTrue(factory[0].datamap.name, "Test Datamap with dmls")
+        self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
         self.assertEqual(factory[0].key, "First row col 1")
