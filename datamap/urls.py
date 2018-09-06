@@ -5,7 +5,6 @@ from .views import (
     DatamapUpdate,
     DatamapDelete,
     datamap_detail,
-    upload_datamap,
     DatamapLineCreate,
     DatamapLineUpdate,
     DatamapLineDelete,

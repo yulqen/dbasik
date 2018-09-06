@@ -1,15 +1,11 @@
-import csv
-import codecs
 import logging
 import re
 
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.contrib import messages
-from django.conf import settings
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
@@ -19,8 +15,6 @@ from .forms import (
     DatamapForm,
     DatamapLineForm,
     DatamapLineEditForm,
-    DatamapLineDeleteForm,
-    CSVForm,
 )
 from .models import Datamap, DatamapLine
 from register.models import Tier
@@ -190,92 +184,92 @@ class UploadDatamapView(FormView):
 
 
 
-def upload_datamap(request, slug):
-
-    acceptable_content = settings.ACCEPTABLE_CONTENT
-    errors = []
-    integrity_error_messages = []
-
-    if request.method == "POST":
-        form = UploadDatamap(request.POST, request.FILES)
-        if form.is_valid():
-            dm = get_object_or_404(Datamap, slug=slug)
-            csv_file = request.FILES["uploaded_file"]
-            logger.info(f"Filetype {csv_file.content_type} uploaded")
-            logger.info(f"Acceptable is: {acceptable_content}")
-            if csv_file.content_type in acceptable_content:
-                csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
-                for row in csv_reader:
-                    csv_form = CSVForm(row)
-                    if csv_form.is_valid():
-                        if form.cleaned_data["replace_all_entries"] is True:
-                            DatamapLine.objects.filter(
-                                datamap=dm, key=csv_form.cleaned_data["key"]
-                            ).delete()
-                            try:
-                                # try to save in database
-                                _process(row, dm)
-                            except IntegrityError as err:
-                                # cannot save due to integrity error
-                                # we're going to collage the error messages and save them for later
-                                integrity_error_messages.append(err)
-                                continue
-                            if integrity_error_messages:
-                                # we have accumulated errors, so now add them to messages
-                                _add_integrity_errors_to_messages(
-                                    request, dm, integrity_error_messages
-                                )
-                                return render(
-                                    request,
-                                    "datamap/upload_datamap.html",
-                                    {"form": form},
-                                )
-                        else:
-                            try:
-                                # try to save in database
-                                _process(row, dm)
-                            except IntegrityError as err:
-                                # cannot save due to integrity error
-                                # we're going to collage the error messages and save them for later
-                                integrity_error_messages.append(err)
-                                continue
-                            if integrity_error_messages:
-                                # we have accumulated errors, so now add them to messages
-                                _add_integrity_errors_to_messages(
-                                    request, dm, integrity_error_messages
-                                )
-                                return render(
-                                    request,
-                                    "datamap/upload_datamap.html",
-                                    {"form": form},
-                                )
-                    else:
-                        for field, error in csv_form.errors.items():
-                            messages.add_message(
-                                request,
-                                messages.ERROR,
-                                "Field: {} Errors: {}".format(field, ", ".join(error)),
-                            )
-                        DatamapLine.objects.filter(datamap=dm).delete()
-                        return render(
-                            request, "datamap/upload_datamap.html", {"form": form}
-                        )
-                    if not csv_form.is_valid():
-                        for e in csv_form.errors.items():
-                            errors.append(e)
-                return HttpResponseRedirect(reverse("datamaps:datamap_list"))
-            else:
-                messages.add_message(
-                    request,
-                    messages.ERROR,
-                    f"{csv_file.content_type} is not an acceptable CSV type. See documentation.",
-                )
-
-        elif form.errors:
-            for v in form.errors.values():
-                messages.add_message(request, messages.INFO, v)
-
-    else:
-        form = UploadDatamap()
-
-    return render(request, "datamap/upload_datamap.html", {"form": form})
+# def upload_datamap(request, slug):
+#
+#     acceptable_content = settings.ACCEPTABLE_CONTENT
+#     errors = []
+#     integrity_error_messages = []
+#
+#     if request.method == "POST":
+#         form = UploadDatamap(request.POST, request.FILES)
+#         if form.is_valid():
+#             dm = get_object_or_404(Datamap, slug=slug)
+#             csv_file = request.FILES["uploaded_file"]
+#             logger.info(f"Filetype {csv_file.content_type} uploaded")
+#             logger.info(f"Acceptable is: {acceptable_content}")
+#             if csv_file.content_type in acceptable_content:
+#                 csv_reader = csv.DictReader(codecs.iterdecode(csv_file, "utf-8"))
+#                 for row in csv_reader:
+#                     csv_form = CSVForm(row)
+#                     if csv_form.is_valid():
+#                         if form.cleaned_data["replace_all_entries"] is True:
+#                             DatamapLine.objects.filter(
+#                                 datamap=dm, key=csv_form.cleaned_data["key"]
+#                             ).delete()
+#                             try:
+#                                 # try to save in database
+#                                 _process(row, dm)
+#                             except IntegrityError as err:
+#                                 # cannot save due to integrity error
+#                                 # we're going to collage the error messages and save them for later
+#                                 integrity_error_messages.append(err)
+#                                 continue
+#                             if integrity_error_messages:
+#                                 # we have accumulated errors, so now add them to messages
+#                                 _add_integrity_errors_to_messages(
+#                                     request, dm, integrity_error_messages
+#                                 )
+#                                 return render(
+#                                     request,
+#                                     "datamap/upload_datamap.html",
+#                                     {"form": form},
+#                                 )
+#                         else:
+#                             try:
+#                                 # try to save in database
+#                                 _process(row, dm)
+#                             except IntegrityError as err:
+#                                 # cannot save due to integrity error
+#                                 # we're going to collage the error messages and save them for later
+#                                 integrity_error_messages.append(err)
+#                                 continue
+#                             if integrity_error_messages:
+#                                 # we have accumulated errors, so now add them to messages
+#                                 _add_integrity_errors_to_messages(
+#                                     request, dm, integrity_error_messages
+#                                 )
+#                                 return render(
+#                                     request,
+#                                     "datamap/upload_datamap.html",
+#                                     {"form": form},
+#                                 )
+#                     else:
+#                         for field, error in csv_form.errors.items():
+#                             messages.add_message(
+#                                 request,
+#                                 messages.ERROR,
+#                                 "Field: {} Errors: {}".format(field, ", ".join(error)),
+#                             )
+#                         DatamapLine.objects.filter(datamap=dm).delete()
+#                         return render(
+#                             request, "datamap/upload_datamap.html", {"form": form}
+#                         )
+#                     if not csv_form.is_valid():
+#                         for e in csv_form.errors.items():
+#                             errors.append(e)
+#                 return HttpResponseRedirect(reverse("datamaps:datamap_list"))
+#             else:
+#                 messages.add_message(
+#                     request,
+#                     messages.ERROR,
+#                     f"{csv_file.content_type} is not an acceptable CSV type. See documentation.",
+#                 )
+#
+#         elif form.errors:
+#             for v in form.errors.values():
+#                 messages.add_message(request, messages.INFO, v)
+#
+#     else:
+#         form = UploadDatamap()
+#
+#     return render(request, "datamap/upload_datamap.html", {"form": form})
