@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import List
 
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
@@ -10,12 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
 from datamap.helpers import DatamapLinesFromCSVFactory
-from .forms import (
-    UploadDatamap,
-    DatamapForm,
-    DatamapLineForm,
-    DatamapLineEditForm,
-)
+from .forms import UploadDatamap, DatamapForm, DatamapLineForm, DatamapLineEditForm
 from .models import Datamap, DatamapLine
 from register.models import Tier
 
@@ -124,13 +120,13 @@ def _process(row, dm_instance):
     dml.save()
 
 
-def _remove_dmlines_for_dm(dm_instance):
+def _remove_dmlines_for_dm(dm_instance: Datamap):
     """Remove all datamapline objects for a particular datamap"""
     DatamapLine.objects.filter(datamap=dm_instance).delete()
     logger.info(f"Removed all datamaplines for {dm_instance}")
 
 
-def _parse_integrity_exception(errors: list):
+def _parse_integrity_exception(errors: List):
     """Take a list of errors and parse the useful messages out"""
     regex = re.compile(r"=\(\d+, (.+), ([A-Z]+\d+)\)")
     temp_list = [x.args[0].split("\n")[1] for x in errors]
@@ -145,7 +141,9 @@ def _parse_integrity_exception(errors: list):
     return message_list
 
 
-def _add_integrity_errors_to_messages(request, datamap_obj, message_list):
+def _add_integrity_errors_to_messages(
+    request, datamap_obj: Datamap, message_list: List
+):
     _remove_dmlines_for_dm(datamap_obj)
     mess = _parse_integrity_exception(message_list)
     for m in mess:
@@ -161,17 +159,24 @@ class UploadDatamapView(FormView):
         super().__init__(**kwargs)
 
     def post(self, request, *args, **kwargs):
-        dm = Datamap.objects.get(slug=kwargs['slug'])
+        dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
         if form.is_valid():
-            factory = DatamapLinesFromCSVFactory(dm, request.FILES['uploaded_file'])
+            factory = DatamapLinesFromCSVFactory(dm, request.FILES["uploaded_file"])
             try:
                 factory.process()
             except IntegrityError:
                 # TODO fix this, it doesn't show the IntegrityError
+                # Problem is, there are two types of error I need to handle:
+                #   - form errors (validation on form fields)
+                #   - other errors, such as IntegrityError, which is thrown
+                # at the database level.
+                # Django patterns already handle ValidationErrors via form.is_valid()
+                # and form.valid_form() and form.invalid_form(), so I need to use those
+                # but the IntegrityErrors are something I need to handle separately.
+                # TODO research ways to write own Exception handlers in Django
                 form.add_error(None, ValidationError("Baws!"))
             except ValueError:
-                # TODO fix this, the message isn't appearing back on the form page
                 for field, error in factory.errors.items():
                     messages.add_message(
                         request,
@@ -180,8 +185,6 @@ class UploadDatamapView(FormView):
                     )
                 return self.form_invalid(form)
             return self.form_valid(form)
-
-
 
 
 # def upload_datamap(request, slug):
