@@ -107,9 +107,9 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.driver.find_element_by_id("submit-id-submit").click()
         message = WebDriverWait(self.driver, 3).until(
-            EC.presence_of_element_located((By.TAG_NAME, "legend"))
+            EC.presence_of_element_located((By.ID, "message-test"))
         )
-        self.assertTrue("Upload Datamap" in message.text)
+        self.assertTrue("Field: key Errors: Ensure this value has at most 100 characters" in message.text)
 
     def test_create_new_datamap(self):
         """

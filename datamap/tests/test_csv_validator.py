@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from register.models import Tier
 from .fixtures import csv_correct_headers, csv_incorrect_headers, csv_repeating_lines
+from .fixtures import csv_containing_hundred_plus_length_key as csv_long_key
 from ..forms import CSVForm
 from ..helpers import DatamapLinesFromCSVFactory
 from ..models import Datamap, DatamapLine
@@ -17,6 +18,7 @@ class CSVValidatorTests(TestCase):
         cls.good_csv_file: str = csv_correct_headers()
         cls.bad_csv_file: str = csv_incorrect_headers()
         cls.csv_with_repeating_lines: str = csv_repeating_lines()
+        cls.long_key_csv: str = csv_long_key()
         cls.dm = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap",
@@ -77,8 +79,8 @@ class CSVValidatorTests(TestCase):
 
     def test_errors_available_when_bad_key_csv_sent(self):
         factory = self._temp_factory_constructor(self.bad_csv_file)
-        factory.process()
-        self.assertTrue(len(factory.errors.keys()) == 3)
+        with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
+            factory.process()
 
     def test_dmls_in_system_are_replaced_by_good_csv(self):
         factory = self._temp_factory_constructor(self.good_csv_file, self.dm_with_dmls)
@@ -99,5 +101,10 @@ class CSVValidatorTests(TestCase):
         """
         factory = self._temp_factory_constructor(self.csv_with_repeating_lines, self.dm_with_dmls)
         with self.assertRaises(IntegrityError):
+            factory.process()
+
+    def test_for_invalid_csv_line(self):
+        factory = self._temp_factory_constructor(self.long_key_csv, self.dm)
+        with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
             factory.process()
 

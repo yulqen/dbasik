@@ -28,6 +28,8 @@ class DatamapLinesFromCSVFactory:
                 )
             else:
                 self.errors = form.errors
+                raise ValueError("Invalid CSV value")
+        self.csv.close()
         return self
 
     def __getitem__(self, item):

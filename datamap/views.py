@@ -176,7 +176,17 @@ class UploadDatamapView(FormView):
             except IntegrityError:
                 # TODO fix this, it doesn't show the IntegrityError
                 form.add_error(None, ValidationError("Baws!"))
+            except ValueError:
+                # TODO fix this, the message isn't appearing back on the form page
+                for field, error in factory.errors.items():
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "Field: {} Errors: {}".format(field, ", ".join(error)),
+                    )
+                return self.form_invalid(form)
             return self.form_valid(form)
+
 
 
 
