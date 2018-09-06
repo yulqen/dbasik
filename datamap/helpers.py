@@ -1,4 +1,5 @@
 import csv
+from typing import Union, TextIO, BinaryIO
 
 from django.core.files import File
 
@@ -7,7 +8,7 @@ from datamap.models import DatamapLine, Datamap
 
 
 class DatamapLinesFromCSVFactory:
-    def __init__(self, datamap: Datamap, csv_file: File):
+    def __init__(self, datamap: Datamap, csv_file: Union[BinaryIO, File]):
         self.csv = csv_file
         self.datamap = datamap
         self._dmls = []

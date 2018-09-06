@@ -1,10 +1,11 @@
 import csv
 from typing import Union
 
+from django.db import IntegrityError
 from django.test import TestCase
 
 from register.models import Tier
-from .fixtures import csv_correct_headers, csv_incorrect_headers
+from .fixtures import csv_correct_headers, csv_incorrect_headers, csv_repeating_lines
 from ..forms import CSVForm
 from ..helpers import DatamapLinesFromCSVFactory
 from ..models import Datamap, DatamapLine
@@ -15,6 +16,7 @@ class CSVValidatorTests(TestCase):
     def setUpTestData(cls):
         cls.good_csv_file: str = csv_correct_headers()
         cls.bad_csv_file: str = csv_incorrect_headers()
+        cls.csv_with_repeating_lines: str = csv_repeating_lines()
         cls.dm = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap",
@@ -26,19 +28,35 @@ class CSVValidatorTests(TestCase):
             tier=Tier.objects.create(name="Tier 1"),
         )
         # create a bunch of DatamapLine objects for cls.dm_with_dmls
-        for dml in range(10):
+        for x in range(10):
             DatamapLine.objects.create(
                 datamap=cls.dm_with_dmls,
-                key=f"Key {dml} for {cls.dm_with_dmls.__class__}",
+                key=f"Key {x} for {cls.dm_with_dmls.__class__}",
                 sheet=f"Sheetname for {cls.dm_with_dmls.__class__}",
-                cell_ref=f"A{dml}",
+                cell_ref=f"A{x}",
+            )
+        cls.dm_with_repeating_lines = Datamap.objects.create(
+            name="Repeating datamap with dmls",
+            slug="repeating-datamap-with-dmls",
+            tier=Tier.objects.create(name="Tier 1"),
+        )
+        # create a bunch of DatamapLine objects for cls.dm_with_repeating_lines
+        for x in range(10):
+            DatamapLine.objects.create(
+                datamap=cls.dm_with_repeating_lines,
+                key=f"Key {x} for {cls.dm_with_repeating_lines.__class__}",
+                sheet=f"Sheetname for {cls.dm_with_repeating_lines.__class__}",
+                cell_ref=f"A{x}",
             )
 
-    def _temp_factory_constructor(self, csv_file: str, datamap: Union[None, Datamap] = None):
+    def _temp_factory_constructor(
+        self, csv_file: str, datamap: Union[None, Datamap] = None
+    ):
+        f = open(csv_file, "rb")
         if datamap:
-            factory = DatamapLinesFromCSVFactory(csv_file=csv_file, datamap=datamap)
+            factory = DatamapLinesFromCSVFactory(csv_file=f, datamap=datamap)
         else:
-            factory = DatamapLinesFromCSVFactory(csv_file=csv_file, datamap=self.dm)
+            factory = DatamapLinesFromCSVFactory(csv_file=f, datamap=self.dm)
         return factory
 
     def test_form_processes_single_line_from_good_csv(self):
@@ -71,3 +89,15 @@ class CSVValidatorTests(TestCase):
         factory.process(replace=True)
         self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
         self.assertEqual(factory[0].key, "First row col 1")
+
+    def test_for_integrity_error(self):
+        """
+        Need to check for django.db.utils.IntegrityError: UNIQUE constraint failed:
+        datamap_datamapline.datamap_id, datamap_datamapline.sheet, datamap_datamapline.cell_ref,
+        which was being thrown using datamap_dbasik.csv test file.
+        :return:
+        """
+        factory = self._temp_factory_constructor(self.csv_with_repeating_lines, self.dm_with_dmls)
+        with self.assertRaises(IntegrityError):
+            factory.process()
+

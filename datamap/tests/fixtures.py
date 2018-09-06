@@ -4,6 +4,21 @@ import tempfile
 TEMPDIR = tempfile.gettempdir()
 
 
+def csv_repeating_lines() -> str:
+    """
+    Generate path to csv for use in tests. Contains headers
+    which repeat and will not be allowed into a Datamap table
+    due to unique constraints.
+    """
+    uf: str = os.path.join(TEMPDIR, "csv_repeating_lines.csv")
+    with open(uf, "w") as f:
+        f.write("key,sheet,cell_ref\n")
+        f.write("First row col 1,First row col 2,A15\n")
+        f.write("First row col 1,First row col 2,A15\n")
+        f.write("First row col 1,First row col 2,A15\n")
+    return uf
+
+
 def csv_incorrect_headers() -> str:
     """
     Generate path to csv for use in tests. Contains headers which

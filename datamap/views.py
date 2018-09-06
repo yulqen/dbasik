@@ -3,6 +3,7 @@ import codecs
 import logging
 import re
 
+from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.contrib import messages
 from django.conf import settings
@@ -170,7 +171,11 @@ class UploadDatamapView(FormView):
         form = self.get_form()
         if form.is_valid():
             factory = DatamapLinesFromCSVFactory(dm, request.FILES['uploaded_file'])
-            factory.process()
+            try:
+                factory.process()
+            except IntegrityError:
+                # TODO fix this, it doesn't show the IntegrityError
+                form.add_error(None, ValidationError("Baws!"))
             return self.form_valid(form)
 
 
