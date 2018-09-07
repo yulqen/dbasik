@@ -36,3 +36,12 @@ class DatamapLinesFromCSVFactory:
 
     def __getitem__(self, item):
         return self._dmls[item]
+
+
+def _save_in_database_or_throw_integrity_error(dm: Datamap, **kwargs):
+    try:
+        DatamapLine.objects.create(datamap=dm, **kwargs)
+    except IntegrityError:
+        vars = kwargs.items()
+        error_str = f"{([item[0], item[1]) for item in tuple(kwargs.items())}]}"
+        raise IntegrityError(error_str)
