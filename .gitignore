@@ -16,3 +16,4 @@ media/
 db.sqlite3
 test-db.sqlite3
 Test Results - CSV_Form_Validator_Tests.html
+.idea/
