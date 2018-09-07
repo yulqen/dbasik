@@ -22,7 +22,7 @@ class DatamapLinesFromCSVFactory:
             form = CSVForm(line)
             if form.is_valid():
                 try:
-                    dml = _save_datamapline_in_database_or_throw_integrity_error(self.datamap, **form.cleaned_data)
+                    dml = _save_or_except(self.datamap, **form.cleaned_data)
                     self._dmls.append(dml)
                 except IntegrityError as e:
                     self.errors.append(e)
@@ -37,10 +37,22 @@ class DatamapLinesFromCSVFactory:
         return self._dmls[item]
 
 
-def _save_datamapline_in_database_or_throw_integrity_error(
-        dm: Datamap,
-        **kwargs
-) -> DatamapLine:
+def _save_or_except(dm: Datamap, **kwargs) -> DatamapLine:
+    """
+    Attempts to save a Datamapline object to a Datamap object.
+    kwargs must contain correct keys for adding a Datamapline.
+    The function throws an IntegrityError with a helpful message
+    if a DatamapLine already exists for that Datamap with those
+    parameters.
+
+    If the database save is success, the DatamapLine object is returned.
+    :param dm:
+    :type dm: datamap.models.Datamap
+    :param kwargs:
+    :type dict:
+    :return: DatamapLine
+    :rtype: DatamapLine
+    """
     try:
         dml = DatamapLine.objects.create(datamap=dm, **kwargs)
         return dml

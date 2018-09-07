@@ -4,7 +4,7 @@ from typing import Union
 from django.db import IntegrityError
 from django.test import TestCase
 
-from datamap.helpers import _save_datamapline_in_database_or_throw_integrity_error
+from datamap.helpers import _save_or_except
 from register.models import Tier
 from .fixtures import csv_correct_headers, csv_incorrect_headers, csv_repeating_lines
 from .fixtures import csv_containing_hundred_plus_length_key as csv_long_key
@@ -113,7 +113,7 @@ class CSVValidatorTests(TestCase):
             IntegrityError,
             "key: Key 1 cell_ref: A1 already appears in Datamap: Test Datamap",
         ):
-            _save_datamapline_in_database_or_throw_integrity_error(
+            _save_or_except(
                 dm, key="Key 1", cell_ref="A1"
             )
 
