@@ -38,13 +38,17 @@ class DatamapLinesFromCSVFactory:
         return self._dmls[item]
 
 
-def _save_in_database_or_throw_integrity_error(dm: Datamap, **kwargs):
+def _save_datamapline_in_database_or_throw_integrity_error(dm: Datamap, **kwargs):
     try:
         DatamapLine.objects.create(datamap=dm, **kwargs)
     except IntegrityError:
-        err_lst = []
-        err_stmt = []
-        for x in kwargs.items(): err_lst.append(x)
-        for x in err_lst: err_stmt.append(f"{x[0]}: {x[1]}")
-        err = " ".join([x for x in err_stmt])
-        raise IntegrityError(f"{err} already appears in Datamap: {dm.name}")
+        err_str = _parse_kwargs_to_error_string(kwargs)
+        raise IntegrityError(f"{err_str} already appears in Datamap: {dm.name}")
+
+
+def _parse_kwargs_to_error_string(kwargs: dict) -> str:
+    err_lst = []
+    err_stmt = []
+    for x in kwargs.items(): err_lst.append(x)
+    for x in err_lst: err_stmt.append(f"{x[0]}: {x[1]}")
+    return " ".join([x for x in err_stmt])
