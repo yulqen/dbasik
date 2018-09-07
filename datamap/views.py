@@ -166,16 +166,14 @@ class UploadDatamapView(FormView):
             try:
                 factory.process()
             except IntegrityError:
-                # TODO fix this, it doesn't show the IntegrityError
-                # Problem is, there are two types of error I need to handle:
-                #   - form errors (validation on form fields)
-                #   - other errors, such as IntegrityError, which is thrown
-                # at the database level.
-                # Django patterns already handle ValidationErrors via form.is_valid()
-                # and form.valid_form() and form.invalid_form(), so I need to use those
-                # but the IntegrityErrors are something I need to handle separately.
-                # TODO research ways to write own Exception handlers in Django
-                form.add_error(None, ValidationError("Baws!"))
+                for error in factory.errors:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "Errors: {}".format(error),
+                    )
+                return self.form_invalid(form)
+
             except ValueError:
                 for field, error in factory.errors.items():
                     messages.add_message(

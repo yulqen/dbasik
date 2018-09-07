@@ -16,18 +16,16 @@ class DatamapLinesFromCSVFactory:
         self._dmls = []
         self.errors = []
 
-    def process(self, replace: bool = False):
+    def process(self):
         reader = csv.DictReader(x.decode('utf-8') for x in self.csv.readlines())
         for line in reader:
             form = CSVForm(line)
             if form.is_valid():
-                if replace:
-                    DatamapLine.objects.filter(datamap=self.datamap).delete()
-                self._dmls.append(
-                    DatamapLine.objects.create(
-                        datamap=self.datamap, **form.cleaned_data
-                    )
-                )
+                try:
+                    _save_datamapline_in_database_or_throw_integrity_error(self.datamap, **form.cleaned_data)
+                except IntegrityError as e:
+                    self.errors.append(e)
+                    raise IntegrityError
             else:
                 self.errors = form.errors
                 raise ValueError("Invalid CSV value")

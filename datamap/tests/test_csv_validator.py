@@ -89,7 +89,7 @@ class CSVValidatorTests(TestCase):
         self.assertTrue(
             self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0
         )
-        factory.process(replace=True)
+        factory.process()
         self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
         self.assertEqual(factory[0].key, "First row col 1")
 

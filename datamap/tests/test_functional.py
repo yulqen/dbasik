@@ -14,6 +14,7 @@ from datamap.tests.fixtures import (
     csv_incorrect_headers,
     csv_correct_headers,
     csv_containing_hundred_plus_length_key,
+    csv_repeating_lines,
 )
 from register.models import Tier
 
@@ -41,6 +42,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.csv_incorrect_headers = csv_incorrect_headers()
         self.csv_correct_headers = csv_correct_headers()
         self.csv_single_long_key = csv_containing_hundred_plus_length_key()
+        self.csv_repeating_lines = csv_repeating_lines()
 
     def tearDown(self):
         os.remove(self.csv_incorrect_headers)
@@ -110,6 +112,18 @@ class DatamapIntegrationTests(LiveServerTestCase):
             EC.presence_of_element_located((By.ID, "message-test"))
         )
         self.assertTrue("Field: key Errors: Ensure this value has at most 100 characters" in message.text)
+
+    def test_upload_csv_with_repeating_lines_is_flagged(self):
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_repeating_lines
+        )
+        self.driver.find_element_by_id("submit-id-submit").click()
+        message = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located((By.ID, "message-test"))
+        )
+        self.assertTrue("Errors: key: First row col 1 sheet: First row col 2 "
+                        "cell_ref: A15 already appears in Datamap: Test Datamap 1" in message.text)
 
     def test_create_new_datamap(self):
         """
