@@ -111,7 +111,7 @@ class CSVValidatorTests(TestCase):
         DatamapLine.objects.create(datamap=dm, key="Key 1", cell_ref="A1")
         with self.assertRaisesMessage(
             IntegrityError,
-            "key: Key 1, cell_ref: A1 already appears in Datamap: Test Datamap",
+            "key: Key 1 cell_ref: A1 already appears in Datamap: Test Datamap",
         ):
             _save_in_database_or_throw_integrity_error(
                 dm, key="Key 1", cell_ref="A1"

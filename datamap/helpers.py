@@ -42,6 +42,9 @@ def _save_in_database_or_throw_integrity_error(dm: Datamap, **kwargs):
     try:
         DatamapLine.objects.create(datamap=dm, **kwargs)
     except IntegrityError:
-        vars = kwargs.items()
-        error_str = f"{([item[0], item[1]) for item in tuple(kwargs.items())}]}"
-        raise IntegrityError(error_str)
+        err_lst = []
+        err_stmt = []
+        for x in kwargs.items(): err_lst.append(x)
+        for x in err_lst: err_stmt.append(f"{x[0]}: {x[1]}")
+        err = " ".join([x for x in err_stmt])
+        raise IntegrityError(f"{err} already appears in Datamap: {dm.name}")
