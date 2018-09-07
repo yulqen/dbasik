@@ -22,7 +22,8 @@ class DatamapLinesFromCSVFactory:
             form = CSVForm(line)
             if form.is_valid():
                 try:
-                    _save_datamapline_in_database_or_throw_integrity_error(self.datamap, **form.cleaned_data)
+                    dml = _save_datamapline_in_database_or_throw_integrity_error(self.datamap, **form.cleaned_data)
+                    self._dmls.append(dml)
                 except IntegrityError as e:
                     self.errors.append(e)
                     raise IntegrityError
@@ -36,9 +37,13 @@ class DatamapLinesFromCSVFactory:
         return self._dmls[item]
 
 
-def _save_datamapline_in_database_or_throw_integrity_error(dm: Datamap, **kwargs):
+def _save_datamapline_in_database_or_throw_integrity_error(
+        dm: Datamap,
+        **kwargs
+) -> DatamapLine:
     try:
-        DatamapLine.objects.create(datamap=dm, **kwargs)
+        dml = DatamapLine.objects.create(datamap=dm, **kwargs)
+        return dml
     except IntegrityError:
         err_str = _parse_kwargs_to_error_string(kwargs)
         raise IntegrityError(f"{err_str} already appears in Datamap: {dm.name}")
