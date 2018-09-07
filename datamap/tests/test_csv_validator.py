@@ -4,6 +4,7 @@ from typing import Union
 from django.db import IntegrityError
 from django.test import TestCase
 
+from datamap.helpers import _save_in_database_or_throw_integrity_error
 from register.models import Tier
 from .fixtures import csv_correct_headers, csv_incorrect_headers, csv_repeating_lines
 from .fixtures import csv_containing_hundred_plus_length_key as csv_long_key
@@ -99,12 +100,24 @@ class CSVValidatorTests(TestCase):
         which was being thrown using datamap_dbasik.csv test file.
         :return:
         """
-        factory = self._temp_factory_constructor(self.csv_with_repeating_lines, self.dm_with_dmls)
+        factory = self._temp_factory_constructor(
+            self.csv_with_repeating_lines, self.dm_with_dmls
+        )
         with self.assertRaises(IntegrityError):
             factory.process()
+
+    def test_save_in_database_or_throw_integrity_error(self):
+        dm = Datamap.objects.create(name="Test Datamap", tier=Tier.objects.create(name="Tier 1"), slug="test-datamap")
+        DatamapLine.objects.create(datamap=dm, key="Key 1", cell_ref="A1")
+        with self.assertRaisesMessage(
+            IntegrityError,
+            "key: Key 1, cell_ref: A1 already appears in Datamap: Test Datamap",
+        ):
+            _save_in_database_or_throw_integrity_error(
+                dm, key="Key 1", cell_ref="A1"
+            )
 
     def test_for_invalid_csv_line(self):
         factory = self._temp_factory_constructor(self.long_key_csv, self.dm)
         with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
             factory.process()
-
