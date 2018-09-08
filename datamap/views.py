@@ -10,7 +10,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
-from datamap.helpers import DatamapLinesFromCSVFactory
+from datamap.helpers import DatamapLinesFromCSV
 from .forms import UploadDatamap, DatamapForm, DatamapLineForm, DatamapLineEditForm
 from .models import Datamap, DatamapLine
 from register.models import Tier
@@ -162,15 +162,13 @@ class UploadDatamapView(FormView):
         dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
         if form.is_valid():
-            factory = DatamapLinesFromCSVFactory(dm, request.FILES["uploaded_file"])
+            factory = DatamapLinesFromCSV(dm, request.FILES["uploaded_file"])
             try:
                 factory.process()
             except IntegrityError:
                 for error in factory.errors:
                     messages.add_message(
-                        request,
-                        messages.ERROR,
-                        "Errors: {}".format(error),
+                        request, messages.ERROR, "Errors: {}".format(error)
                     )
                 return self.form_invalid(form)
 

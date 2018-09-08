@@ -9,7 +9,7 @@ from datamap.forms import CSVForm
 from datamap.models import DatamapLine, Datamap
 
 
-class DatamapLinesFromCSVFactory:
+class DatamapLinesFromCSV:
     def __init__(self, datamap: Datamap, csv_file: Union[BinaryIO, File]):
         self.csv = csv_file
         self.datamap = datamap
@@ -37,6 +37,10 @@ class DatamapLinesFromCSVFactory:
         return self._dmls[item]
 
 
+    def __len__(self):
+        return len(self._dmls)
+
+
 def _save_or_except(dm: Datamap, **kwargs) -> DatamapLine:
     """
     Attempts to save a Datamapline object to a Datamap object.
@@ -54,11 +58,13 @@ def _save_or_except(dm: Datamap, **kwargs) -> DatamapLine:
     :rtype: DatamapLine
     """
     try:
-        dml = DatamapLine.objects.create(datamap=dm, **kwargs)
-        return dml
+        DatamapLine.objects.create(datamap=dm, **kwargs)
     except IntegrityError:
         err_str = _parse_kwargs_to_error_string(kwargs)
         raise IntegrityError(f"{err_str} already appears in Datamap: {dm.name}")
+    DatamapLine.objects.filter(datamap=dm).delete()
+    dml = DatamapLine.objects.create(datamap=dm, **kwargs)
+    return dml
 
 
 def _parse_kwargs_to_error_string(kwargs: dict) -> str:

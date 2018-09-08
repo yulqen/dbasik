@@ -9,7 +9,7 @@ from register.models import Tier
 from .fixtures import csv_correct_headers, csv_incorrect_headers, csv_repeating_lines
 from .fixtures import csv_containing_hundred_plus_length_key as csv_long_key
 from ..forms import CSVForm
-from ..helpers import DatamapLinesFromCSVFactory
+from ..helpers import DatamapLinesFromCSV
 from ..models import Datamap, DatamapLine
 
 
@@ -52,15 +52,15 @@ class CSVValidatorTests(TestCase):
                 cell_ref=f"A{x}",
             )
 
-    def _temp_factory_constructor(
+    def _setup(
         self, csv_file: str, datamap: Union[None, Datamap] = None
     ):
         f = open(csv_file, "rb")
         if datamap:
-            factory = DatamapLinesFromCSVFactory(csv_file=f, datamap=datamap)
+            datamaplines_from_csv = DatamapLinesFromCSV(csv_file=f, datamap=datamap)
         else:
-            factory = DatamapLinesFromCSVFactory(csv_file=f, datamap=self.dm)
-        return factory
+            datamaplines_from_csv = DatamapLinesFromCSV(csv_file=f, datamap=self.dm)
+        return datamaplines_from_csv
 
     def test_form_processes_single_line_from_good_csv(self):
         with open(self.good_csv_file, "r") as csv_file:
@@ -73,25 +73,32 @@ class CSVValidatorTests(TestCase):
                 assert False
 
     def test_dml_factory_with_good_csv(self):
-        factory = self._temp_factory_constructor(self.good_csv_file)
-        datamaplines = factory.process()
+        datamaplines_from_csv = self._setup(self.good_csv_file)
+        datamaplines = datamaplines_from_csv.process()
         self.assertTrue(datamaplines[0].datamap.name, "Test Datamap")
         self.assertTrue(datamaplines[0].key, "First row col 1")
 
+    def test_correct_number_of_dmls_in_dm_matching_csv(self):
+        datamaplines_from_csv = self._setup(self.good_csv_file)
+        datamaplines = datamaplines_from_csv.process()
+        with open(self.good_csv_file, 'r') as f:
+            len_csv = len(f.readlines())
+        self.assertEqual(len(datamaplines), len_csv - 1)
+
     def test_errors_available_when_bad_key_csv_sent(self):
-        factory = self._temp_factory_constructor(self.bad_csv_file)
+        datamaplines_from_csv = self._setup(self.bad_csv_file)
         with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
-            factory.process()
+            datamaplines_from_csv.process()
 
     def test_dmls_in_system_are_replaced_by_good_csv(self):
-        factory = self._temp_factory_constructor(self.good_csv_file, self.dm_with_dmls)
-        self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
+        datamaplines_from_csv = self._setup(self.good_csv_file, self.dm_with_dmls)
+        self.assertEqual(self.dm_with_dmls.name, "Old datamap with dmls")
         self.assertTrue(
             self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0
         )
-        factory.process()
-        self.assertTrue(self.dm_with_dmls.name, "Test Datamap with dmls")
-        self.assertEqual(factory[0].key, "First row col 1")
+        datamaplines_from_csv.process()
+        self.assertEqual(self.dm_with_dmls.name, "Old datamap with dmls")
+        self.assertEqual(datamaplines_from_csv[0].key, "First row col 1")
 
     def test_for_integrity_error(self):
         """
@@ -100,11 +107,11 @@ class CSVValidatorTests(TestCase):
         which was being thrown using datamap_dbasik.csv test file.
         :return:
         """
-        factory = self._temp_factory_constructor(
+        datamaplines_from_csv = self._setup(
             self.csv_with_repeating_lines, self.dm_with_dmls
         )
         with self.assertRaises(IntegrityError):
-            factory.process()
+            datamaplines_from_csv.process()
 
     def test_save_in_database_or_throw_integrity_error(self):
         dm = Datamap.objects.create(name="Test Datamap", tier=Tier.objects.create(name="Tier 1"), slug="test-datamap")
@@ -118,6 +125,18 @@ class CSVValidatorTests(TestCase):
             )
 
     def test_for_invalid_csv_line(self):
-        factory = self._temp_factory_constructor(self.long_key_csv, self.dm)
+        datamaplines_from_csv = self._setup(self.long_key_csv, self.dm)
         with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
-            factory.process()
+            datamaplines_from_csv.process()
+
+    def test_database_stays_same_even_after_bad_csv(self):
+        datamaplines_from_csv = self._setup(self.bad_csv_file, self.dm_with_dmls)
+        self.assertEqual(self.dm_with_dmls.name, "Old datamap with dmls")
+        self.assertTrue(
+            self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0
+        )
+        with self.assertRaisesMessage(ValueError, "Invalid CSV value"):
+            datamaplines_from_csv.process()
+        self.assertEqual(self.dm_with_dmls.name, "Old datamap with dmls")
+        self.assertTrue(
+            self.dm_with_dmls.datamapline_set.get(key__istartswith="Key 0 for "), 0)
