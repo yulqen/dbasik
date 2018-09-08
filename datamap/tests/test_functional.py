@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 # https://stackoverflow.com/questions/26566799/how-to-wait-until-the-page-is-loaded-with-selenium-for-python
-from datamap.models import Datamap
+from datamap.models import Datamap, DatamapLine
 from datamap.tests.fixtures import (
     csv_incorrect_headers,
     csv_correct_headers,
@@ -35,7 +35,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.url_to_uploaddatamap = (
             f"{self.live_server_url}/datamaps/uploaddatamap/test-datamap-1-dft-tier-1"
         )
-        Datamap.objects.create(
+        self.datamap = Datamap.objects.create(
             name="Test Datamap 1",
             slug="test-datamap-1",
             tier=(Tier.objects.create(name="DfT Tier 1")),
@@ -80,7 +80,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
 
-    def test_uploaded_csv_with_wrong_headers_is_flagged(self):
+    def test_uploaded_csv_with_wrong_headers_displays_error(self):
         """
         Given a non-logged-in user with a desire to upload a csv file to create a datamap,
         and a csv-file formatted IN-correctly
@@ -97,7 +97,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.assertTrue("This field is required" in message.text)
 
-    def test_upload_big_key_csv(self):
+    def test_upload_big_key_csv_displays_error(self):
         """
         Given a non-logged-in user with a desire to upload a csv file to create a datamap,
         and a csv-file containing a key that is too long
@@ -114,7 +114,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.assertTrue("Field: key Errors: Ensure this value has at most 100 characters" in message.text)
 
-    def test_upload_csv_with_repeating_lines_is_flagged(self):
+    def test_upload_csv_with_repeating_lines_displays_error(self):
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_repeating_lines
@@ -147,6 +147,22 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("Getting data into a datamap" in friendly_title.text)
 
     def test_all_dmls_are_on_dm_detail_page(self):
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_correct_headers
+        )
+        self.driver.find_element_by_id("submit-id-submit").click()
+        e = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_all_elements_located((By.ID, "key-cell"))
+        )
+        self.assertEqual("First row col 1", e[0].text)
+        self.assertEqual("Second row col 1", e[1].text)
+        self.assertEqual("Third row col 1", e[2].text)
+        self.assertEqual("Fourth row col 1", e[3].text)
+
+    def test_existing_dmls_are_removed_first(self):
+        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1")
+        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2")
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_correct_headers

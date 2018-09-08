@@ -164,6 +164,7 @@ class UploadDatamapView(FormView):
         dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
         if form.is_valid():
+            DatamapLine.objects.filter(datamap=dm).delete()
             factory = DatamapLinesFromCSV(dm, request.FILES["uploaded_file"])
             try:
                 factory.process()
