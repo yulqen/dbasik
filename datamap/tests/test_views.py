@@ -15,7 +15,7 @@ class CsvUploadViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.csv_file: str = csv_correct_headers()
-        Datamap.objects.create(
+        cls.datamap = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap-test-tier",
             tier=Tier.objects.create(name="Test Tier"),
@@ -44,5 +44,5 @@ class CsvUploadViewTest(TestCase):
                 {'replace_all_entries': 1,
                  'uploaded_file': csv_f}
             )
-        self.assertRedirects(response, reverse("datamaps:datamap_list"))
+        self.assertRedirects(response, reverse("datamaps:datamap_detail", args=[self.datamap.slug]))
 

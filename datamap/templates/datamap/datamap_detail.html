@@ -21,7 +21,7 @@
             <tbody>
                 {% for line in dm_lines %}
                 <tr>
-                    <td><a href="{% url 'datamaps:datamapline_update' line.id %}">{{ line.key }}</a></td>
+                    <td><a href="{% url 'datamaps:datamapline_update' line.id %}" id="key-cell">{{ line.key }}</a></td>
                     <td>{{ line.data_type }}</td>
                     <td>{{ line.max_length }}</td>
                     <td>{{ line.required }}</td>

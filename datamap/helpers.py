@@ -58,13 +58,11 @@ def _save_or_except(dm: Datamap, **kwargs) -> DatamapLine:
     :rtype: DatamapLine
     """
     try:
-        DatamapLine.objects.create(datamap=dm, **kwargs)
+        dml = DatamapLine.objects.create(datamap=dm, **kwargs)
+        return dml
     except IntegrityError:
         err_str = _parse_kwargs_to_error_string(kwargs)
         raise IntegrityError(f"{err_str} already appears in Datamap: {dm.name}")
-    DatamapLine.objects.filter(datamap=dm).delete()
-    dml = DatamapLine.objects.create(datamap=dm, **kwargs)
-    return dml
 
 
 def _parse_kwargs_to_error_string(kwargs: dict) -> str:

@@ -1,4 +1,5 @@
 import os
+import time
 import uuid
 
 from django.test import LiveServerTestCase
@@ -75,7 +76,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.driver.find_element_by_id("submit-id-submit").click()
         redirected_h3 = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, "datamap-title"))
+            EC.presence_of_element_located((By.ID, "show-datamap-table"))
         )
         self.assertTrue("Test Datamap 1" in redirected_h3.text)
 
@@ -144,6 +145,21 @@ class DatamapIntegrationTests(LiveServerTestCase):
             EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[1]/h3"))
         )
         self.assertTrue("Getting data into a datamap" in friendly_title.text)
+
+    def test_all_dmls_are_on_dm_detail_page(self):
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_correct_headers
+        )
+        self.driver.find_element_by_id("submit-id-submit").click()
+        e = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_all_elements_located((By.ID, "key-cell"))
+        )
+        self.assertEqual("First row col 1", e[0].text)
+        self.assertEqual("Second row col 1", e[1].text)
+        self.assertEqual("Third row col 1", e[2].text)
+        self.assertEqual("Fourth row col 1", e[3].text)
+
 
 
 #
