@@ -168,15 +168,21 @@ class UploadDatamapView(FormView):
     def post(self, request, *args, **kwargs):
         dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
+        self._existing_dmls_cache = []
         self._tmp_registered_dml_ids = []
         if form.is_valid():
             reader = csv.DictReader(
                 x.decode("utf-8") for x in request.FILES["uploaded_file"].readlines()
             )
+            _timeround = 0
             for line in reader:
                 form = CSVForm(line)
                 if form.is_valid():
                     try:
+                        if _timeround == 0:
+                            for dml in dm.datamapline_set.all():
+                                self._existing_dmls_cache.append(dml)
+                            DatamapLine.objects.filter(datamap=dm).delete()
                         dml = DatamapLine.objects.create(
                             datamap=dm,
                             key=line["key"],
@@ -188,14 +194,18 @@ class UploadDatamapView(FormView):
                         err_str = _parse_kwargs_to_error_string(dm, line)
                         messages.add_message(request, messages.ERROR, err_str)
                         [DatamapLine.objects.get(id=dm_id).delete() for dm_id in self._tmp_registered_dml_ids]
+                        for x in self._existing_dmls_cache:
+                            x.save()
                         self._tmp_registered_dml_ids = []
-                        return self.form_invalid(form)
+                        self._existing_dmls_cache = []
+                        return self.form_valid(form)
                     except ValueError:
                         self.send_errors_to_messages(form, request)
-                        return self.form_invalid(form)
+                        return self.form_valid(form)
                 else:
                     self.send_errors_to_messages(form, request)
-                    return self.form_invalid(form)
+                    return self.form_valid(form)
+                _timeround += 1
             return self.form_valid(form)
 
         else:

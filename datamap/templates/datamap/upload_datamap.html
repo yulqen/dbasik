@@ -9,34 +9,34 @@
 <div class="container">
 
     <div class="card mb-3">
-       <h3 class="card-header">Getting data into a datamap</h3> 
-       <div class="card-body">
-           <p>Rather than have to type out hundreds of lines of text to create your datamap, 
-               you can upload a properly configured CSV file.</p>
-           <p>Use the form below to select a csv file from your computer to upload into the system.</p>
-           <h3 class="text-muted">Required CSV format</h3>
-           <p>You can create a CSV file in MS Excel, Notepad (or any other text editor) or Libreoffice Calc.</p>
-           It must include the following three headers <strong>key</strong>, <strong>sheet</strong> and <strong>cell_ref</strong>.
-           The rest is up to you.
-           <p>Don't worry about the <em>Replace all entries</em> checkbox for now - just leave it ticked :-)</p>
-       </div>
+        <h3 class="card-header">Getting data into a datamap</h3>
+        <div class="card-body">
+            <p>Rather than have to type out hundreds of lines of text to create your datamap,
+                you can upload a properly configured CSV file.</p>
+            <p>Use the form below to select a csv file from your computer to upload into the system.</p>
+            <h3 class="text-muted">Required CSV format</h3>
+            <p>You can create a CSV file in MS Excel, Notepad (or any other text editor) or Libreoffice Calc.</p>
+            It must include the following three headers <strong>key</strong>, <strong>sheet</strong> and <strong>cell_ref</strong>.
+            The rest is up to you.
+            <p>Don't worry about the <em>Replace all entries</em> checkbox for now - just leave it ticked :-)</p>
+        </div>
     </div>
 
-   <div class="row">
-       <div class="col">
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <div id="message-test" class="alert alert-dismissible alert-danger">
-                {{ message }}
+    <div class="row">
+        <div class="col">
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <div id="message-test" class="alert alert-dismissible alert-danger">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="container border">
+                {% crispy form %}
             </div>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <div class="container border">
-            {% crispy form %}
         </div>
-       </div>
-   </div>
+    </div>
 </div>
 {% endblock %}

@@ -37,7 +37,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
         self.datamap = Datamap.objects.create(
             name="Test Datamap 1",
-            slug="test-datamap-1",
+            slug="test-datamap-1-dft-tier-1",
             tier=(Tier.objects.create(name="DfT Tier 1")),
         )
         self.csv_incorrect_headers = csv_incorrect_headers()
@@ -147,7 +147,6 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("Getting data into a datamap" in friendly_title.text)
 
     def test_all_dmls_are_on_dm_detail_page(self):
-        DatamapLine.objects.all().delete()
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_correct_headers
