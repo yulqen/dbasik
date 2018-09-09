@@ -3,15 +3,15 @@ import logging
 import re
 from typing import List
 
-from django.core.exceptions import ValidationError
-from django.utils.text import slugify
 from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
-from datamap.helpers import DatamapLinesFromCSV, _parse_kwargs_to_error_string
+from datamap.helpers import _parse_kwargs_to_error_string
+from register.models import Tier
 from .forms import (
     UploadDatamap,
     DatamapForm,
@@ -20,7 +20,6 @@ from .forms import (
     CSVForm,
 )
 from .models import Datamap, DatamapLine
-from register.models import Tier
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -77,9 +76,6 @@ def datamap_detail(request, slug):
 
 class DatamapList(ListView):
     model = Datamap
-
-
-# datamapline view functions
 
 
 class DatamapLineCreate(CreateView):
@@ -185,33 +181,26 @@ class UploadDatamapView(FormView):
                             sheet=line["sheet"],
                             cell_ref=line["cell_ref"],
                         )
-                    except IntegrityError as e:
+                    except IntegrityError:
                         err_str = _parse_kwargs_to_error_string(dm, line)
                         messages.add_message(request, messages.ERROR, err_str)
                         return self.form_invalid(form)
                     except ValueError:
-                        for field, error in form.errors.items():
-                            messages.add_message(
-                                request,
-                                messages.ERROR,
-                                "Field: {} Errors: {}".format(field, ", ".join(error)),
-                            )
+                        self.send_errors_to_messages(form, request)
                         return self.form_invalid(form)
                 else:
-                    for field, error in form.errors.items():
-                        messages.add_message(
-                            request,
-                            messages.ERROR,
-                            "Field: {} Errors: {}".format(field, ", ".join(error)),
-                        )
+                    self.send_errors_to_messages(form, request)
                     return self.form_invalid(form)
             return self.form_valid(form)
 
         else:
-            for field, error in form.errors.items():
-                messages.add_message(
-                    request,
-                    messages.ERROR,
-                    "Field: {} Errors: {}".format(field, ", ".join(error)),
-                )
-                return self.form_invalid(form)
+            self.send_errors_to_messages(form, request)
+            return self.form_invalid(form)
+
+    def send_errors_to_messages(self, form, request):
+        for field, error in form.errors.items():
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "Field: {} Errors: {}".format(field, ", ".join(error)),
+            )
