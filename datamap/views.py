@@ -49,7 +49,6 @@ class DatamapCreate(CreateView):
     model = Datamap
     template_name_suffix = "_create"
     form_class = DatamapForm
-    #   success_url = reverse_lazy("datamaps:uploaddatamap", )
 
     def get_success_url(self, **kwargs):
         name_field = self.request.POST["name"]
@@ -153,6 +152,7 @@ def _add_integrity_errors_to_messages(
         messages.add_message(request, messages.ERROR, m)
 
 
+# noinspection Pylint
 class UploadDatamapView(FormView):
     template_name = "datamap/upload_datamap.html"
     form_class = UploadDatamap
@@ -163,10 +163,12 @@ class UploadDatamapView(FormView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.errors = []
+        self._tmp_registered_dml_ids = []
 
     def post(self, request, *args, **kwargs):
         dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
+        self._tmp_registered_dml_ids = []
         if form.is_valid():
             reader = csv.DictReader(
                 x.decode("utf-8") for x in request.FILES["uploaded_file"].readlines()
@@ -175,15 +177,18 @@ class UploadDatamapView(FormView):
                 form = CSVForm(line)
                 if form.is_valid():
                     try:
-                        DatamapLine.objects.create(
+                        dml = DatamapLine.objects.create(
                             datamap=dm,
                             key=line["key"],
                             sheet=line["sheet"],
                             cell_ref=line["cell_ref"],
                         )
+                        self._tmp_registered_dml_ids.append(dml.id)
                     except IntegrityError:
                         err_str = _parse_kwargs_to_error_string(dm, line)
                         messages.add_message(request, messages.ERROR, err_str)
+                        [DatamapLine.objects.get(id=dm_id).delete() for dm_id in self._tmp_registered_dml_ids]
+                        self._tmp_registered_dml_ids = []
                         return self.form_invalid(form)
                     except ValueError:
                         self.send_errors_to_messages(form, request)

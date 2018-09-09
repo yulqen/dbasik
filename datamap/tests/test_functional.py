@@ -147,6 +147,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertTrue("Getting data into a datamap" in friendly_title.text)
 
     def test_all_dmls_are_on_dm_detail_page(self):
+        DatamapLine.objects.all().delete()
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_correct_headers
