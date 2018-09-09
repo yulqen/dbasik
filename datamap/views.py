@@ -1,3 +1,4 @@
+import csv
 import logging
 import re
 from typing import List
@@ -10,8 +11,14 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
-from datamap.helpers import DatamapLinesFromCSV
-from .forms import UploadDatamap, DatamapForm, DatamapLineForm, DatamapLineEditForm
+from datamap.helpers import DatamapLinesFromCSV, _parse_kwargs_to_error_string
+from .forms import (
+    UploadDatamap,
+    DatamapForm,
+    DatamapLineForm,
+    DatamapLineEditForm,
+    CSVForm,
+)
 from .models import Datamap, DatamapLine
 from register.models import Tier
 
@@ -155,33 +162,56 @@ class UploadDatamapView(FormView):
     form_class = UploadDatamap
 
     def get_success_url(self):
-        return reverse_lazy("datamaps:datamap_detail", args=[self.kwargs['slug']])
+        return reverse_lazy("datamaps:datamap_detail", args=[self.kwargs["slug"]])
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.errors = []
 
     def post(self, request, *args, **kwargs):
         dm = Datamap.objects.get(slug=kwargs["slug"])
         form = self.get_form()
         if form.is_valid():
-            DatamapLine.objects.filter(datamap=dm).delete()
-            factory = DatamapLinesFromCSV(dm, request.FILES["uploaded_file"])
-            try:
-                factory.process()
-            except IntegrityError:
-                for error in factory.errors:
-                    messages.add_message(
-                        request, messages.ERROR, "Errors: {}".format(error)
-                    )
-                return self.form_invalid(form)
-
-            except ValueError:
-                for field, error in factory.errors.items():
-                    messages.add_message(
-                        request,
-                        messages.ERROR,
-                        "Field: {} Errors: {}".format(field, ", ".join(error)),
-                    )
-                return self.form_invalid(form)
+            reader = csv.DictReader(
+                x.decode("utf-8") for x in request.FILES["uploaded_file"].readlines()
+            )
+            for line in reader:
+                form = CSVForm(line)
+                if form.is_valid():
+                    try:
+                        DatamapLine.objects.create(
+                            datamap=dm,
+                            key=line["key"],
+                            sheet=line["sheet"],
+                            cell_ref=line["cell_ref"],
+                        )
+                    except IntegrityError as e:
+                        err_str = _parse_kwargs_to_error_string(dm, line)
+                        messages.add_message(request, messages.ERROR, err_str)
+                        return self.form_invalid(form)
+                    except ValueError:
+                        for field, error in form.errors.items():
+                            messages.add_message(
+                                request,
+                                messages.ERROR,
+                                "Field: {} Errors: {}".format(field, ", ".join(error)),
+                            )
+                        return self.form_invalid(form)
+                else:
+                    for field, error in form.errors.items():
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            "Field: {} Errors: {}".format(field, ", ".join(error)),
+                        )
+                    return self.form_invalid(form)
             return self.form_valid(form)
 
+        else:
+            for field, error in form.errors.items():
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Field: {} Errors: {}".format(field, ", ".join(error)),
+                )
+                return self.form_invalid(form)

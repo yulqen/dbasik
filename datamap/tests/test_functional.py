@@ -123,8 +123,8 @@ class DatamapIntegrationTests(LiveServerTestCase):
         message = WebDriverWait(self.driver, 3).until(
             EC.presence_of_element_located((By.ID, "message-test"))
         )
-        self.assertTrue("Errors: key: First row col 1 sheet: First row col 2 "
-                        "cell_ref: A15 already appears in Datamap: Test Datamap 1" in message.text)
+        self.assertEqual("Database Error: key: First row col 1 sheet: First row col 2 "
+                        "cell_ref: A15 already appears in Datamap: Test Datamap 1", message.text)
 
     def test_create_new_datamap(self):
         """
@@ -175,6 +175,20 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertEqual("Second row col 1", e[1].text)
         self.assertEqual("Third row col 1", e[2].text)
         self.assertEqual("Fourth row col 1", e[3].text)
+
+    def test_existing_dmls_are_removed_first_and_rolled_back_on_exception(self):
+        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1")
+        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2")
+        self.driver.get(f"{self.url_to_uploaddatamap}")
+        self.driver.find_element_by_id("id_uploaded_file").send_keys(
+            self.csv_incorrect_headers
+        )
+        self.driver.find_element_by_id("submit-id-submit").click()
+        e = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_all_elements_located((By.ID, "key-cell"))
+        )
+        self.assertEqual("TEST KEY 1", e[0].text)
+        self.assertEqual("TEST KEY 2", e[1].text)
 
 
 
