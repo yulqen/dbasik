@@ -124,7 +124,6 @@ class DatamapLineForm(forms.ModelForm):
 class UploadDatamap(forms.Form):
 
     uploaded_file = forms.FileField(validators=[file_validator])
-    replace_all_entries = forms.BooleanField(initial=True, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -135,7 +134,7 @@ class UploadDatamap(forms.Form):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Upload Datamap", "uploaded_file", "replace_all_entries"),
+            Fieldset("Upload Datamap", "uploaded_file"),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
