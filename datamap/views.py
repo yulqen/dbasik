@@ -160,15 +160,15 @@ class UploadDatamapView(FormView):
     template_name = "datamap/upload_datamap.html"
     form_class = UploadDatamap
 
-    def get_success_url(self):
-        return reverse_lazy("datamaps:datamap_detail", args=[self.kwargs["slug"]])
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.datamap: Datamap = None
         self.errors: list = []
         self._ids_of_just_created_datamaplines: list = []
         self._temporary_datamapline_objects: list = []
+
+    def get_success_url(self):
+        return reverse_lazy("datamaps:datamap_detail", args=[self.kwargs["slug"]])
 
     def post(self, request, *args, **kwargs):
         form: Form = self.get_form()
