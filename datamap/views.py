@@ -1,16 +1,18 @@
 import csv
 import logging
 import re
+from collections import OrderedDict
 from typing import List
 
 from django.contrib import messages
 from django.db import IntegrityError
+from django.forms import Form
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
-from datamap.helpers import _parse_kwargs_to_error_string
 from register.models import Tier
 from .forms import (
     UploadDatamap,
@@ -162,60 +164,135 @@ class UploadDatamapView(FormView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.errors = []
-        self._tmp_registered_dml_ids = []
+        self.datamap: Datamap = None
+        self.errors: list = []
+        self._tmp_registered_dml_ids: list = []
+        self._existing_dmls_cache: list = []
 
     def post(self, request, *args, **kwargs):
-        dm = Datamap.objects.get(slug=kwargs["slug"])
-        form = self.get_form()
-        self._existing_dmls_cache = []
-        self._tmp_registered_dml_ids = []
+        form: Form = self.get_form()
+        self.datamap = Datamap.objects.get(slug=kwargs["slug"])
         if form.is_valid():
-            reader = csv.DictReader(
-                x.decode("utf-8") for x in request.FILES["uploaded_file"].readlines()
-            )
-            _timeround = 0
-            for line in reader:
-                form = CSVForm(line)
-                if form.is_valid():
-                    try:
-                        if _timeround == 0:
-                            for dml in dm.datamapline_set.all():
-                                self._existing_dmls_cache.append(dml)
-                            DatamapLine.objects.filter(datamap=dm).delete()
-                        dml = DatamapLine.objects.create(
-                            datamap=dm,
-                            key=line["key"],
-                            sheet=line["sheet"],
-                            cell_ref=line["cell_ref"],
-                        )
-                        self._tmp_registered_dml_ids.append(dml.id)
-                    except IntegrityError:
-                        err_str = _parse_kwargs_to_error_string(dm, line)
-                        messages.add_message(request, messages.ERROR, err_str)
-                        [DatamapLine.objects.get(id=dm_id).delete() for dm_id in self._tmp_registered_dml_ids]
-                        for x in self._existing_dmls_cache:
-                            x.save()
-                        self._tmp_registered_dml_ids = []
-                        self._existing_dmls_cache = []
-                        return self.form_valid(form)
-                    except ValueError:
-                        self.send_errors_to_messages(form, request)
-                        return self.form_valid(form)
-                else:
-                    self.send_errors_to_messages(form, request)
-                    return self.form_valid(form)
-                _timeround += 1
-            return self.form_valid(form)
-
+            return self.process_csv(request, form)
         else:
-            self.send_errors_to_messages(form, request)
+            self._send_errors_to_messages(request, form)
             return self.form_invalid(form)
 
-    def send_errors_to_messages(self, form, request):
+    def process_csv(self, request, main_form: Form) -> HttpResponseRedirect:
+        """
+        Processes the CSV form sent in by the form on the Upload Datamap
+        page. If not exceptions are thrown, the main_form object passed
+        in is used to return valid or invalid to the FormView.
+
+        If a line in the CSV form is not valid, ValueError is thrown
+        from this method and form_invalid is returned to FormView and
+        a message is passed to the template.
+
+        If a line in the CSV form results in an IntegrityError, because
+        there is an existing identical line in the database, this method
+        throws the IntegrityError and returns form_invalid to FormView
+        and a message is passed to the template.
+
+        Will attempt to roll back the DatamapLine table upon exception.
+
+        :param request:
+        :type request: django.core.handlers.wsgi.WSGIRequest
+        :param main_form:
+        :type main_form: datamap.forms.UploadDatamap
+        :return: django.http.response.HttpResponseRedirect
+        :rtype: django.http.response.HttpResponseRedirect
+        """
+        uploaded_file_data = request.FILES["uploaded_file"].readlines()
+        reader = csv.DictReader(x.decode("utf-8") for x in uploaded_file_data)
+        _timeround = 0
+        for line in reader:
+            csv_form = CSVForm(line)
+            if csv_form.is_valid():
+                try:
+                    self._create_new_dml_with_line_from_csv(_timeround, line)
+                except IntegrityError:
+                    self._add_database_error_to_messages(request, line)
+                    return self.form_valid(main_form)
+                except ValueError:
+                    self._send_errors_to_messages(request, csv_form)
+                    return self.form_valid(main_form)
+            else:
+                self._send_errors_to_messages(request, csv_form)
+                return self.form_valid(main_form)
+            _timeround += 1
+        return self.form_valid(main_form)
+
+    def _add_database_error_to_messages(self, request, line: OrderedDict) -> None:
+        """
+        Constructs a message to be used by the view template based on a single
+        OrderedDict, line.
+        :param request:
+        :type request: django.core.handlers.wsgi.WSGIRequest
+        :param line:
+        :type line: collections.OrderedDict
+        :return:
+        :rtype: None
+        """
+        err_str = self._parse_kwargs_to_error_string(line)
+        messages.add_message(request, messages.ERROR, err_str)
+        [
+            DatamapLine.objects.get(id=dm_id).delete()
+            for dm_id in self._tmp_registered_dml_ids
+        ]
+        for x in self._existing_dmls_cache:
+            x.save()
+        self._tmp_registered_dml_ids = []
+        self._existing_dmls_cache = []
+
+    def _create_new_dml_with_line_from_csv(
+        self, _timeround: int, line: OrderedDict
+    ) -> None:
+        """
+        Creates a new DatamapLine object in the database. If
+        _turnaround value is 0, the existing objects are retained
+        in an instance variable for rollback upon exception.
+        :param _timeround:
+        :type _timeround: int
+        :param line:
+        :type line: collections.OrderedDict
+        :return:
+        :rtype: None
+        """
+        if _timeround == 0:
+            for dml in self.datamap.datamapline_set.all():
+                self._existing_dmls_cache.append(dml)
+            DatamapLine.objects.filter(datamap=self.datamap).delete()
+        dml = DatamapLine.objects.create(
+            datamap=self.datamap,
+            key=line["key"],
+            sheet=line["sheet"],
+            cell_ref=line["cell_ref"],
+        )
+        self._tmp_registered_dml_ids.append(dml.id)
+
+    def _send_errors_to_messages(self, request, form) -> None:
+        """
+        Helper function to put a string in a Message object for
+        later processing in the view template.
+        :param request:
+        :type request: django.core.handlers.wsgi.WSGIRequest
+        :param form:
+        :type form: datamap.forms.CSVForm
+        :return:
+        :rtype: None
+        """
         for field, error in form.errors.items():
             messages.add_message(
                 request,
                 messages.ERROR,
                 "Field: {} Errors: {}".format(field, ", ".join(error)),
             )
+
+    def _parse_kwargs_to_error_string(self, kwargs: dict) -> str:
+        err_lst = []
+        err_stmt = []
+        for x in kwargs.items():
+            err_lst.append(x)
+        for x in err_lst:
+            err_stmt.append(f"{x[0]}: {x[1]}")
+        return f"Database Error: {' '.join([x for x in err_stmt])} already appears in Datamap: {self.datamap}"
