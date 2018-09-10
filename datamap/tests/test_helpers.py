@@ -4,35 +4,38 @@ from django.test import TestCase
 
 from datamap.models import Datamap
 from register.models import Tier
+
 from ..helpers import parse_kwargs_to_error_string
 
 
 class TestDatamapViewHelpers(TestCase):
+
     @classmethod
     def setUpTestData(cls):
+        cls.csv_dict_items_correct = OrderedDict(key="Key 1", sheet="Sheet", cell_ref="A1")
+        cls.csv_dict_items_incorrect_1 = OrderedDict(cell_ref="A1", key="Key 1", sheet="Sheet")
+        cls.csv_dict_items_incorrect_2 = OrderedDict(key="Key 1", cell_ref="A1", sheet="Sheet")
         cls.datamap = Datamap.objects.create(
             name="Test Datamap",
-            slug="test-datmap",
+            slug="test-datamap",
             tier=Tier.objects.create(name="Test Tier"),
+        )
+        cls.expected_message = (
+            "Database Error: key: Key 1 sheet: Sheet cell_ref: "
+            "A1 already appears in Datamap: Test Datamap"
+        )
+        cls.exception_message = (
+            "Expects csv_dict_items parameter to be a dict with "
+            "ordered keys: key, sheet, cell_ref"
         )
 
     def test_parse_to_error_string(self):
-        kwargs = OrderedDict(key="Key 1", sheet="Sheet", cell_ref="A1")
         self.assertEqual(
-            "Database Error: key: Key 1 sheet: Sheet cell_ref: A1 already appears in Datamap: Test Datamap",
-            parse_kwargs_to_error_string(self.datamap, kwargs),
+            self.expected_message, parse_kwargs_to_error_string(self.datamap, self.csv_dict_items_correct)
         )
 
     def test_parse_wrong_order_dict_to_error_string(self):
-        csv_dict_items = OrderedDict(key="Key 1", cell_ref="A1", sheet="Sheet")
-        csv_dict_items_alt = OrderedDict(cell_ref="A1", key="Key 1", sheet="Sheet")
-        with self.assertRaisesMessage(
-            ValueError,
-            "Expects csv_dict_items parameter to be a dict with ordered keys: key, sheet, cell_ref",
-        ):
-            parse_kwargs_to_error_string(self.datamap, csv_dict_items)
-        with self.assertRaisesMessage(
-                ValueError,
-                "Expects csv_dict_items parameter to be a dict with ordered keys: key, sheet, cell_ref",
-        ):
-            parse_kwargs_to_error_string(self.datamap, csv_dict_items_alt)
+        with self.assertRaisesMessage(ValueError, self.exception_message):
+            parse_kwargs_to_error_string(self.datamap, self.csv_dict_items_incorrect_1)
+        with self.assertRaisesMessage(ValueError, self.exception_message):
+            parse_kwargs_to_error_string(self.datamap, self.csv_dict_items_incorrect_2)
