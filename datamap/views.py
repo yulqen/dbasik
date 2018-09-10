@@ -13,6 +13,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 
+from datamap.helpers import parse_kwargs_to_error_string
 from register.models import Tier
 from .forms import (
     UploadDatamap,
@@ -233,7 +234,7 @@ class UploadDatamapView(FormView):
         :return:
         :rtype: None
         """
-        err_str = self._parse_kwargs_to_error_string(line)
+        err_str = parse_kwargs_to_error_string(self.datamap, line)
         messages.add_message(request, messages.ERROR, err_str)
         [
             DatamapLine.objects.get(id=dm_id).delete()
@@ -287,12 +288,3 @@ class UploadDatamapView(FormView):
                 messages.ERROR,
                 "Field: {} Errors: {}".format(field, ", ".join(error)),
             )
-
-    def _parse_kwargs_to_error_string(self, kwargs: dict) -> str:
-        err_lst = []
-        err_stmt = []
-        for x in kwargs.items():
-            err_lst.append(x)
-        for x in err_lst:
-            err_stmt.append(f"{x[0]}: {x[1]}")
-        return f"Database Error: {' '.join([x for x in err_stmt])} already appears in Datamap: {self.datamap}"
