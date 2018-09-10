@@ -112,49 +112,6 @@ class DatamapLineDelete(DeleteView):
         return reverse("datamaps:datamap_detail", kwargs={"slug": dm_slug})
 
 
-def _process(row, dm_instance):
-    """Save datamap line to database.
-    """
-    dml = DatamapLine(
-        datamap=dm_instance,
-        key=row["key"],
-        sheet=row["sheet"],
-        cell_ref=row["cell_ref"],
-    )
-    logger.debug(f"Saving {dml.key} | {dml.sheet} | {dml.cell_ref} to database")
-    dml.save()
-
-
-def _remove_dmlines_for_dm(dm_instance: Datamap):
-    """Remove all datamapline objects for a particular datamap"""
-    DatamapLine.objects.filter(datamap=dm_instance).delete()
-    logger.info(f"Removed all datamaplines for {dm_instance}")
-
-
-def _parse_integrity_exception(errors: List):
-    """Take a list of errors and parse the useful messages out"""
-    regex = re.compile(r"=\(\d+, (.+), ([A-Z]+\d+)\)")
-    temp_list = [x.args[0].split("\n")[1] for x in errors]
-    message_list = []
-    for i in temp_list:
-        m = re.search(regex, i)
-        if m:
-            mess = " -> ".join([m.group(1), m.group(2)])
-            message_list.append(
-                f"Duplicate key: {mess} - you can't have that in a datamap!"
-            )
-    return message_list
-
-
-def _add_integrity_errors_to_messages(
-    request, datamap_obj: Datamap, message_list: List
-):
-    _remove_dmlines_for_dm(datamap_obj)
-    mess = _parse_integrity_exception(message_list)
-    for m in mess:
-        messages.add_message(request, messages.ERROR, m)
-
-
 # noinspection Pylint
 class UploadDatamapView(FormView):
     template_name = "datamap/upload_datamap.html"
