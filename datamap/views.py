@@ -167,8 +167,8 @@ class UploadDatamapView(FormView):
         super().__init__(**kwargs)
         self.datamap: Datamap = None
         self.errors: list = []
-        self._tmp_registered_dml_ids: list = []
-        self._existing_dmls_cache: list = []
+        self._ids_of_just_created_datamaplines: list = []
+        self._temporary_datamapline_objects: list = []
 
     def post(self, request, *args, **kwargs):
         form: Form = self.get_form()
@@ -236,14 +236,30 @@ class UploadDatamapView(FormView):
         """
         err_str = parse_kwargs_to_error_string(self.datamap, line)
         messages.add_message(request, messages.ERROR, err_str)
+        self._rollback_database()
+
+    def _rollback_database(self) -> None:
+        """
+        Deletes all DatamapLine objects in list of just-created objects.
+        :return: None
+        :rtype: None
+        """
         [
             DatamapLine.objects.get(id=dm_id).delete()
-            for dm_id in self._tmp_registered_dml_ids
+            for dm_id in self._ids_of_just_created_datamaplines
         ]
-        for x in self._existing_dmls_cache:
+        for x in self._temporary_datamapline_objects:
             x.save()
-        self._tmp_registered_dml_ids = []
-        self._existing_dmls_cache = []
+        self._reset_caches()
+
+    def _reset_caches(self) -> None:
+        """
+        Sets temporary cache lists back to empty lists.
+        :return:
+        :rtype:
+        """
+        self._ids_of_just_created_datamaplines = []
+        self._temporary_datamapline_objects = []
 
     def _create_new_dml_with_line_from_csv(
         self, _timeround: int, line: OrderedDict
@@ -261,7 +277,7 @@ class UploadDatamapView(FormView):
         """
         if _timeround == 0:
             for dml in self.datamap.datamapline_set.all():
-                self._existing_dmls_cache.append(dml)
+                self._temporary_datamapline_objects.append(dml)
             DatamapLine.objects.filter(datamap=self.datamap).delete()
         dml = DatamapLine.objects.create(
             datamap=self.datamap,
@@ -269,7 +285,7 @@ class UploadDatamapView(FormView):
             sheet=line["sheet"],
             cell_ref=line["cell_ref"],
         )
-        self._tmp_registered_dml_ids.append(dml.id)
+        self._ids_of_just_created_datamaplines.append(dml.id)
 
     def _send_errors_to_messages(self, request, form) -> None:
         """
