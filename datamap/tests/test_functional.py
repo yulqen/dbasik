@@ -112,7 +112,10 @@ class DatamapIntegrationTests(LiveServerTestCase):
         message = WebDriverWait(self.driver, 3).until(
             EC.presence_of_element_located((By.ID, "message-test"))
         )
-        self.assertTrue("Field: key Errors: Ensure this value has at most 100 characters" in message.text)
+        self.assertTrue(
+            "Field: key Errors: Ensure this value has at most 100 characters"
+            in message.text
+        )
 
     def test_upload_csv_with_repeating_lines_displays_error(self):
         self.driver.get(f"{self.url_to_uploaddatamap}")
@@ -123,8 +126,11 @@ class DatamapIntegrationTests(LiveServerTestCase):
         message = WebDriverWait(self.driver, 3).until(
             EC.presence_of_element_located((By.ID, "message-test"))
         )
-        self.assertEqual("Database Error: key: First row col 1 sheet: First row col 2 "
-                        "cell_ref: A15 already appears in Datamap: Test Datamap 1", message.text)
+        self.assertEqual(
+            "Database Error: key: First row col 1 sheet: First row col 2 "
+            "cell_ref: A15 already appears in Datamap: Test Datamap 1",
+            message.text,
+        )
 
     def test_create_new_datamap(self):
         """
@@ -161,8 +167,12 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertEqual("Fourth row col 1", e[3].text)
 
     def test_existing_dmls_are_removed_first(self):
-        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1")
-        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2")
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2"
+        )
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_correct_headers
@@ -177,8 +187,12 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertEqual("Fourth row col 1", e[3].text)
 
     def test_existing_dmls_are_removed_first_and_rolled_back_on_exception(self):
-        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1")
-        DatamapLine.objects.create(datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2")
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="TEST KEY 1", sheet="TEST SHEET 1", cell_ref="A1"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="TEST KEY 2", sheet="TEST SHEET 2", cell_ref="A2"
+        )
         self.driver.get(f"{self.url_to_uploaddatamap}")
         self.driver.find_element_by_id("id_uploaded_file").send_keys(
             self.csv_incorrect_headers
@@ -190,15 +204,20 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.assertEqual("TEST KEY 1", e[0].text)
         self.assertEqual("TEST KEY 2", e[1].text)
 
+    def test_list_of_current_datamaps_on_create_datamap_page(self):
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
+        self.assertEqual(
+            self.driver.find_element_by_id("card-title").text,
+            "Current datamaps in system",
+        )
+
+    def test_test_datamap_name_appears_in_sidebar(self):
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
+        self.assertEqual(
+            "Test Datamap 1", self.driver.find_element_by_id("datamap-in-system").text
+        )
 
 
-#
-#
-# def test_list_of_current_datamaps_on_create_datamap_page(selenium):
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    assert selenium.find_element(
-#        By.CLASS_NAME, "card-title").text == "Current datamaps in system"
-#
 #
 # def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
 #    rand_title = uuid.uuid4()
