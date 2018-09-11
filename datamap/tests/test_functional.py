@@ -212,37 +212,38 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
 
     def test_test_datamap_name_appears_in_sidebar(self):
-        self.driver.get(f"{self.live_server_url}/datamaps/create")
         self.assertEqual(
             "Test Datamap 1", self.driver.find_element_by_id("datamap-in-system").text
         )
 
+    def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(self):
+        rand_title = uuid.uuid4()
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
+        self.driver.find_element_by_id("id_name").send_keys(str(rand_title))
+        t = self.driver.find_element_by_id("id_tier")
+        for option in t.find_elements_by_tag_name("option"):
+            if option.text == "DfT Tier 1":
+                option.click()
+                break
+        self.driver.find_element_by_id("submit-id-submit").click()
 
-#
-# def test_attempt_to_create_same_dm_name_pf_family_combo_rejected(selenium):
-#    rand_title = uuid.uuid4()
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-#    t = selenium.find_element_by_id("id_tier")
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == "DfT Tier 1":
-#            option.click()
-#            break
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-#    t = selenium.find_element_by_id("id_tier")
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == "DfT Tier 1":
-#            option.click()
-#            break
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    advisory = WebDriverWait(selenium, 3).until(
-#        EC.presence_of_element_located(
-#            (By.XPATH, "/html/body/div/div/div/div[1]/form/div[1]/ul/li")
-#        )  # this appears on dm upload page
-#    )
-#    assert advisory.text == "Datamap with this Name and Tier already exists."
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
+        self.driver.find_element_by_id("id_name").send_keys(str(rand_title))
+        t = self.driver.find_element_by_id("id_tier")
+        for option in t.find_elements_by_tag_name("option"):
+            if option.text == "DfT Tier 1":
+                option.click()
+                break
+        self.driver.find_element_by_id("submit-id-submit").click()
+
+        advisory = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "/html/body/div/div/div/div[1]/form/div[1]/ul/li")
+            )
+        )
+        self.assertEqual(advisory.text, "Datamap with this Name and Tier already exists.")
+
+
 #
 #
 # def test_add_datamapline_line_on_datamap_page(selenium):
