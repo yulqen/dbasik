@@ -2,7 +2,7 @@ import os
 import time
 import uuid
 
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, tag
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,6 +20,7 @@ from datamap.tests.fixtures import (
 from register.models import Tier
 
 
+@tag("slow", "integration")
 class DatamapIntegrationTests(LiveServerTestCase):
     """
     Run tests on web pages related to creating Datamap objects in the system.
@@ -212,6 +213,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         )
 
     def test_test_datamap_name_appears_in_sidebar(self):
+        self.driver.get(f"{self.live_server_url}/datamaps/create")
         self.assertEqual(
             "Test Datamap 1", self.driver.find_element_by_id("datamap-in-system").text
         )
@@ -241,59 +243,24 @@ class DatamapIntegrationTests(LiveServerTestCase):
                 (By.XPATH, "/html/body/div/div/div/div[1]/form/div[1]/ul/li")
             )
         )
-        self.assertEqual(advisory.text, "Datamap with this Name and Tier already exists.")
+        self.assertEqual(
+            advisory.text, "Datamap with this Name and Tier already exists."
+        )
 
+    def test_manually_add_datamapline(self):
+        self.driver.get(
+            f"{self.live_server_url}/datamaps/create-datamapline/test-datamap-1-dft-tier-1"
+        )
+        header = self.driver.find_element_by_id("header").text
+        self.assertEqual(header, "Create/Edit DatamapLine for Test Datamap 1")
+        self.driver.find_element_by_id("id_key").send_keys("100 KEY")
+        self.driver.find_element_by_id("id_max_length").send_keys("100")
+        self.driver.find_element_by_id("id_sheet").send_keys("SHEET NAME")
 
-#
-#
-# def test_add_datamapline_line_on_datamap_page(selenium):
-#    rand_title = uuid.uuid4()
-#    datamap_name_char_limit = 25 # from model
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-#    t = selenium.find_element_by_id("id_tier")
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == "DfT Tier 1":
-#            option.click()
-#            break
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    # because the create datamap form currently limits to name to
-#    # 25 chars, we need to chop the uuid here to 25 to get the correct
-#    # url
-#    selenium.get(
-#        f"http://localhost:8000/datamaps/{str(rand_title)[:datamap_name_char_limit]}-dft-tier-1"
-#    )
-#    assert selenium.find_element_by_id("add-line-to-datamap-button")
-#
-#
-# def test_manually_add_datamapline(selenium):
-#    rand_title = uuid.uuid4()
-#    datamap_name_char_limit = 25 # from model
-#    selenium.get("http://localhost:8000/datamaps/create")
-#    selenium.find_element_by_id("id_name").send_keys(str(rand_title))
-#    t = selenium.find_element_by_id("id_tier")
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == "DfT Tier 1":
-#            option.click()
-#            break
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    selenium.get(
-#        f"http://localhost:8000/datamaps/create-datamapline/{str(rand_title)[:datamap_name_char_limit]}-dft-tier-1"
-#    )
-#    t = selenium.find_element_by_id("id_datamap")
-#
-#    for option in t.find_elements_by_tag_name('option'):
-#        if option.text == str(rand_title)[:datamap_name_char_limit]:
-#            option.click()
-#            break
-#    selenium.find_element_by_id("id_key").send_keys("100 KEY")
-#    selenium.find_element_by_id("id_max_length").send_keys("100")
-#    selenium.find_element_by_id("id_sheet").send_keys("SHEET NAME")
-#
-#    selenium.find_element_by_id("id_cell_ref").send_keys("CELL_REF")
-#    selenium.find_element_by_id("submit-id-submit").click()
-#    header = WebDriverWait(selenium, 30).until(
-#        EC.presence_of_element_located(
-#            (By.ID, "show-datamap-table"))  # this appears on dm upload page
-#    )
-#    assert str(rand_title)[:datamap_name_char_limit] in header.text
+        self.driver.find_element_by_id("id_cell_ref").send_keys("CELL_REF")
+        self.driver.find_element_by_id("submit-id-submit").click()
+        WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located((By.TAG_NAME, "title"))
+        )
+        dml_list = [title.text for title in self.driver.find_elements_by_id("key-cell")]
+        self.assertTrue("100 KEY" in dml_list)

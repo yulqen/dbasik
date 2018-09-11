@@ -95,11 +95,11 @@ class DatamapLineForm(forms.ModelForm):
 
     class Meta:
         model = DatamapLine
-        fields = ["datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"]
+        fields = ["key", "datamap", "data_type", "max_length", "required", "sheet", "cell_ref"]
 
     def __init__(self, datamap_id, *args, **kwargs):
-        self.datamap_id = datamap_id
         super().__init__(*args, **kwargs)
+        self.datamap_id = datamap_id
 
         cancel_redirect = reverse("datamaps:datamap_list")
 
@@ -107,7 +107,7 @@ class DatamapLineForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
+            Fieldset("Enter details:", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
             Hidden("datamap", self.datamap_id),
             ButtonHolder(
                 Submit("submit", "Submit"),

@@ -3,13 +3,14 @@
 {% load crispy_forms_tags %}
 {% crispy datamapline_update datamapline_update.helper %}
 
-{% block title %}Create a new DatamapLine{% endblock %}
+{% block title %}Create/Edit DatamapLine for {{ datamap.name }}{% endblock %}
 
 {% block content %}
 
 <div class="container">
     <div class="row">
         <div class="col">
+            <h2 id="header">Create/Edit DatamapLine for {{ datamap.name }}</h2>
             {% crispy form %}
         </div>
     </div>

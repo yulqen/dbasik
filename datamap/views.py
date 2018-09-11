@@ -85,10 +85,16 @@ class DatamapLineCreate(CreateView):
     model = DatamapLine
     form_class = DatamapLineForm
 
+    def get_context_data(self, **kwargs):
+        dm = Datamap.objects.get(slug=self.kwargs['slug'])
+        kwargs['datamap'] = dm
+        return super().get_context_data(**kwargs)
+
+
     def get_form_kwargs(self):
-        kargs = super().get_form_kwargs()
-        kargs["datamap_id"] = Datamap.objects.get(slug=self.kwargs["slug"]).id
-        return kargs
+        kwargs = super().get_form_kwargs()
+        kwargs["datamap_id"] = Datamap.objects.get(slug=self.kwargs["slug"]).id
+        return kwargs
 
     def get_success_url(self):
         return reverse("datamaps:datamap_detail", args=[self.kwargs["slug"]])
