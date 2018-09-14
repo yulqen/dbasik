@@ -6,36 +6,74 @@
 
 {% block content %}
 
-<div class="container">
+    <div class="container">
 
-    <div class="card mb-3">
-        <h3 class="card-header">Getting data into a datamap</h3>
-        <div class="card-body">
-            <p>Rather than have to type out hundreds of lines of text to create your datamap,
-                you can upload a properly configured CSV file.</p>
-            <p>Use the form below to select a csv file from your computer to upload into the system.</p>
-            <h3 class="text-muted">Required CSV format</h3>
-            <p>You can create a CSV file in MS Excel, Notepad (or any other text editor) or Libreoffice Calc.</p>
-            It must include the following three headers <strong>key</strong>, <strong>sheet</strong> and <strong>cell_ref</strong>.
-            The rest is up to you.
+        <div class="card mb-3">
+            <h3 class="card-header">Getting data into a datamap</h3>
+            <div class="card-body">
+                <p>Rather than have to type out hundreds of lines of text to create your datamap,
+                    you can upload a properly configured CSV file.</p>
+                <p>Use the form below to select a csv file from your computer to upload into the system.</p>
+                <h3 class="m-3 text-muted">Required CSV format</h3>
+                <p>You can create a CSV file in MS Excel, Notepad (or any other text editor) or Libreoffice Calc.</p>
+                It must include the following three headers <strong>key</strong>, <strong>sheet</strong> and <strong>cell_ref</strong>.
+                The rest is up to you.
+                <h4 class="m-3 text-muted">Example:</h4>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">key</th>
+                        <th scope="col">sheet</th>
+                        <th scope="col">cell_ref</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Project Name</td>
+                        <td>Summary</td>
+                        <td>A10</td>
+                    </tr>
+                    <tr>
+                        <td>SRO Name</td>
+                        <td>Summary</td>
+                        <td>B10</td>
+                    </tr>
+                    <tr>
+                        <td>SRO Age</td>
+                        <td>Summary</td>
+                        <td>C10</td>
+                    </tr>
+                    <tr>
+                        <td>Total Cost</td>
+                        <td>Finances</td>
+                        <td>J10</td>
+                    </tr>
+                    <tr>
+                        <td>Total Profit</td>
+                        <td>Finances</td>
+                        <td>I24</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col">
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <div id="message-test" class="alert alert-dismissible alert-danger">
-                    {{ message }}
+        <div class="row">
+            <div class="col">
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div id="message-test" class="alert alert-dismissible alert-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="container border">
+                    {% crispy form %}
                 </div>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <div class="container border">
-                {% crispy form %}
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

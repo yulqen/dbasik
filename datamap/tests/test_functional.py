@@ -257,7 +257,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
         self.driver.find_element_by_id("id_max_length").send_keys("100")
         self.driver.find_element_by_id("id_sheet").send_keys("SHEET NAME")
 
-        self.driver.find_element_by_id("id_cell_ref").send_keys("CELL_REF")
+        self.driver.find_element_by_id("id_cell_ref").send_keys("A10")
         self.driver.find_element_by_id("submit-id-submit").click()
         WebDriverWait(self.driver, 30).until(
             EC.presence_of_element_located((By.TAG_NAME, "title"))

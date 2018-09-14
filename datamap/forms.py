@@ -1,21 +1,12 @@
 from django import forms
-from django.db import IntegrityError
-from django.core.validators import FileExtensionValidator
+from django.forms import CharField
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 
 # from django.core.exceptions import ValidationError
+from datamap.validators import file_validator, cell_ref_validator
 from .models import Datamap, DatamapLine
-from register.models import Tier
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden
-
-acceptable_types = ["csv"]
-
-
-file_validator = FileExtensionValidator(
-    allowed_extensions=acceptable_types, message="Needs to be a valid CSV file type."
-)
 
 
 class CSVForm(forms.ModelForm):
@@ -23,13 +14,19 @@ class CSVForm(forms.ModelForm):
     Used to verify an uploaded CSV file, line-by-line.
     """
 
+    cell_ref = CharField(max_length=10, validators=[cell_ref_validator])
+
     class Meta:
         model = DatamapLine
-        exclude = ["datamap", "data_type", "max_length", "required"]  # this is the ForeignKey
+        exclude = [
+            "datamap",
+            "data_type",
+            "max_length",
+            "required",
+        ]  # this is the ForeignKey
 
 
 class DatamapForm(forms.ModelForm):
-
     class Meta:
         model = Datamap
         fields = ["name", "tier", "active"]
@@ -57,10 +54,17 @@ class DatamapForm(forms.ModelForm):
 
 
 class DatamapLineEditForm(forms.ModelForm):
-
     class Meta:
         model = DatamapLine
-        fields = ["datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"]
+        fields = [
+            "datamap",
+            "key",
+            "data_type",
+            "max_length",
+            "required",
+            "sheet",
+            "cell_ref",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -71,7 +75,16 @@ class DatamapLineEditForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit DatamapLine", "datamap", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
+            Fieldset(
+                "Create/Edit DatamapLine",
+                "datamap",
+                "key",
+                "data_type",
+                "max_length",
+                "required",
+                "sheet",
+                "cell_ref",
+            ),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
@@ -85,17 +98,23 @@ class DatamapLineEditForm(forms.ModelForm):
 
 
 class DatamapLineDeleteForm(forms.ModelForm):
-
     class Meta:
         model = DatamapLine
         fields = ["datamap", "key", "sheet", "cell_ref"]
 
 
 class DatamapLineForm(forms.ModelForm):
-
     class Meta:
         model = DatamapLine
-        fields = ["key", "datamap", "data_type", "max_length", "required", "sheet", "cell_ref"]
+        fields = [
+            "key",
+            "datamap",
+            "data_type",
+            "max_length",
+            "required",
+            "sheet",
+            "cell_ref",
+        ]
 
     def __init__(self, datamap_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -107,7 +126,15 @@ class DatamapLineForm(forms.ModelForm):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Enter details:", "key", "data_type", "max_length", "required", "sheet", "cell_ref"),
+            Fieldset(
+                "Enter details:",
+                "key",
+                "data_type",
+                "max_length",
+                "required",
+                "sheet",
+                "cell_ref",
+            ),
             Hidden("datamap", self.datamap_id),
             ButtonHolder(
                 Submit("submit", "Submit"),

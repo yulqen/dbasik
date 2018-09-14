@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 
+from datamap.validators import cell_ref_validator
 from register.models import Tier
 
 import uuid
@@ -45,7 +46,7 @@ class DatamapLine(models.Model):
     required = models.BooleanField(default=True)
     max_length = models.IntegerField(blank=True, null=True)
     sheet = models.CharField(max_length=50)
-    cell_ref = models.CharField(max_length=10)
+    cell_ref = models.CharField(max_length=10, validators=[cell_ref_validator], verbose_name="Cell Reference")
 
     class Meta:
         unique_together = ("datamap", "sheet", "cell_ref")
