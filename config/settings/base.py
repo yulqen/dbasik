@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'datamap.apps.DatamapConfig',
+    'behave_django',
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'register.apps.RegisterConfig',

@@ -18,6 +18,7 @@ mypy = "==0.620"
 typing = "==3.6.6"
 selenium = "==3.14.0"
 jedi = "==0.12.1"
+behave-django = "*"
 
 [dev-packages]
 neovim = "*"
