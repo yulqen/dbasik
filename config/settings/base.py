@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'register.apps.RegisterConfig',
     'templates.apps.TemplatesConfig',
+    'excelparser.apps.ExcelparserConfig',
     'crispy_forms',
 ]
 

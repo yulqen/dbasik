@@ -1,4 +1,5 @@
 import datetime
+import unittest
 
 from django.test import TestCase
 
@@ -18,7 +19,11 @@ class ExcelParserIntegrationTests(TestCase):
         DatamapLineFactory(key="SRO Retirement Date", sheet="Test Sheet", cell_ref="B4")
         self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
 
+    def test_can_get_to_populated_template_upload_page(self):
+        response = self.client.get('/excelparser/process-populated')
+        self.assertEqual(response.status_code, 200)
 
+    @unittest.skip("Not ready for this yet")
     def test_parsed_spreadsheet_for_single_project(self):
         parsed_spreadsheet = ParseSpreadsheet(project=self.project, fq=self.financial_quarter, datamap=self.datamap)
         self.assertEqual(parsed_spreadsheet['Project Name'], "Testable Project")

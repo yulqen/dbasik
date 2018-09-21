@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView
@@ -50,3 +50,5 @@ def template_create(request):
         form = TemplateCreateForm()
 
     return render(request, "templates/template_create.html", {"form": form})
+
+

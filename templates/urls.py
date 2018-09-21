@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import (
     template_create,
     TemplateList,
@@ -6,6 +7,7 @@ from .views import (
     TemplateUpdate,
     TemplateDelete,
 )
+from excelparser.views import ProcessPopulatedTemplate
 
 app_name = "templates"
 
