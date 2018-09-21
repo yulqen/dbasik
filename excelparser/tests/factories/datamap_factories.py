@@ -29,3 +29,7 @@ class DatamapLineFactory(factory.django.DjangoModelFactory):
     key = "Test key"
     sheet = "Test sheet"
     cell_ref = "Test Cell_Ref"
+
+
+class ProjectFactory(object):
+    pass
