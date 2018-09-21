@@ -1,49 +1,53 @@
 import datetime
-import unittest
 
 from django.test import TestCase
 
-from excelparser.helpers import Quarter, FinancialYear
-from excelparser.tests.factories.datamap_factories import ProjectFactory
-from .factories.datamap_factories import DatamapFactory, DatamapLineFactory
+from excelparser.helpers.financial_year import Quarter, FinancialYear
 
 
-class TestFinancialYear(TestCase):
+class FinancialYearQuarterTests(TestCase):
+
+    def setUp(self):
+        self.fy = FinancialYear(2010)
+
+    def test_create_fy_quarter(self):
+        q = Quarter(3, 2010)
+        self.assertEqual(q.fy, self.fy)
+        self.assertEqual(q.start_date, datetime.date(2010, 10, 1))
+
+    def test_incorrect_quarter(self):
+        with self.assertRaisesMessage(ValueError, "A quarter must be either 1, 2, 3 or 4"):
+            q = Quarter(5, 2010)
+
+
+class FinancialYearTests(TestCase):
+
+    def setUp(self):
+        self.fy = FinancialYear(2010)
 
     def test_financial_year_creation(self):
-        fy = FinancialYear(2010)
-        self.assertEqual(fy.year, 2010)
-        self.assertEqual(fy.end_date, datetime.date(2011, 3, 31))
+        self.assertEqual(self.fy.year, 2010)
+        self.assertEqual(self.fy.end_date, datetime.date(2011, 3, 31))
 
     def test_financial_year_objects_are_equal(self):
         fy1 = FinancialYear(2010)
         fy2 = FinancialYear(2010)
         self.assertEqual(fy1, fy2)
 
-    @unittest.skip("Cannot pass yet")
+    def test_compare_financial_year_with_different_object(self):
+        with self.assertRaisesMessage(ValueError,
+                                      "Can only compare FinancialYear object with another FinancialYear object"):
+            self.fy == 1
+        with self.assertRaisesMessage(ValueError,
+                                      "Can only compare FinancialYear object with another FinancialYear object"):
+            self.fy == "2010"
+
     def test_financial_quarter_creation(self):
-        fy = FinancialYear(2010)
         q = Quarter(1, 2010)
-        self.assertEqual(q.fy, fy)
+        self.assertEqual(q.fy, self.fy)
 
-
-
-class ExcelParserIntegrationTests(TestCase):
-
-    def setUp(self):
-        self.financial_quarter = Quarter(2018, 4)
-        self.project = ProjectFactory()
-        self.datamap = DatamapFactory()
-        DatamapLineFactory(key="Project Name", sheet="Test Sheet", cell_ref="B1")
-        DatamapLineFactory(key="Total Cost", sheet="Test Sheet", cell_ref="B2")
-        DatamapLineFactory(key="SRO", sheet="Test Sheet", cell_ref="B3")
-        DatamapLineFactory(key="SRO Retirement Date", sheet="Test Sheet", cell_ref="B4")
-        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
-
-
-    def test_parsed_spreadsheet_for_single_project(self):
-        parsed_spreadsheet = ParseSpreadsheet(project=self.project, fq=self.financial_quarter, datamap=self.datamap)
-        self.assertEqual(parsed_spreadsheet['Project Name'], "Testable Project")
-        self.assertEqual(parsed_spreadsheet['Total Cost'], 45.2)
-        self.assertEqual(parsed_spreadsheet['SRO'], "John Milton")
-        self.assertEqual(parsed_spreadsheet['SRO Retirement Date'], datetime.date(2022, 2, 23))
+    def test_correct_financialyear_creation(self):
+        with self.assertRaisesMessage(ValueError, "A year must be an integer between 1950 and 2100"):
+            fy = FinancialYear(20)
+        with self.assertRaisesMessage(ValueError, "A year must be an integer between 1950 and 2100"):
+            fy = FinancialYear("2012")
