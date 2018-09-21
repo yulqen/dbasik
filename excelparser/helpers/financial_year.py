@@ -36,7 +36,7 @@ class Quarter:
         4: (3, 'March', 31),
     }
 
-    def __init__(self, quarter: int, year: int) -> None:
+    def __init__(self, year: int, quarter: int) -> None:
 
         if isinstance(quarter, int) and (quarter >= 1 and quarter <= 4):
             self.quarter = quarter
@@ -55,7 +55,7 @@ class Quarter:
         return f"Q{self.quarter} {str(self.year)[2:]}/{str(self.year + 1)[2:]}"
 
     def __repr__(self):
-        return f"Quarter({self.quarter}, {self.year})"
+        return f"Quarter({self.year}, {self.quarter})"
 
     @property
     def fy(self):
@@ -119,7 +119,7 @@ class FinancialYear:
         return f"FY{str(self.year)}/{str(self.year + 1)[2:]}"
 
     def _generate_quarters(self) -> None:
-        self.quarters = [Quarter(x, self.year) for x in range(1, 5)]
+        self.quarters = [Quarter(self.year, x) for x in range(1, 5)]
 
     def __repr__(self):
         return f"FinancialYear({self.year})"

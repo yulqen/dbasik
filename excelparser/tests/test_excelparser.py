@@ -11,13 +11,13 @@ class FinancialYearQuarterTests(TestCase):
         self.fy = FinancialYear(2010)
 
     def test_create_fy_quarter(self):
-        q = Quarter(3, 2010)
+        q = Quarter(2010, 3)
         self.assertEqual(q.fy, self.fy)
         self.assertEqual(q.start_date, datetime.date(2010, 10, 1))
 
     def test_incorrect_quarter(self):
         with self.assertRaisesMessage(ValueError, "A quarter must be either 1, 2, 3 or 4"):
-            q = Quarter(5, 2010)
+            q = Quarter(2010, 5)
 
 
 class FinancialYearTests(TestCase):
@@ -43,7 +43,7 @@ class FinancialYearTests(TestCase):
             self.fy == "2010"
 
     def test_financial_quarter_creation(self):
-        q = Quarter(1, 2010)
+        q = Quarter(2010, 1)
         self.assertEqual(q.fy, self.fy)
 
     def test_correct_financialyear_creation(self):
