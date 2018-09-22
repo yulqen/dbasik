@@ -24,7 +24,6 @@ class UploadPopulatedTemplateTests(TestCase):
         )
 
     def test_help_text_on_each_field(self):
-        self.assertTrue(
-            self.form.fields["datamap"].help_text
-            == "Please select an existing Datamap. <a href='#'>Create new Datamap</a>"
+        self.assertEqual(
+            self.form.fields["datamap"].help_text, "Please select an existing Datamap. <a href='/datamaps/create/'>Create new Datamap</a>"
         )

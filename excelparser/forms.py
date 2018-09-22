@@ -19,13 +19,13 @@ file_validator = FileExtensionValidator(
 class ProcessPopulatedTemplateForm(forms.Form):
     # we can simply override the field if we want to
     # halfway down on Complete forms from models in docs
-    datamap_url = reverse("datamaps:datamap-create", current_app="datamaps", urlconf=datamap_urls)
+    datamap_url = reverse("datamap-create", current_app="excelparser", urlconf=datamap_urls)
     source_file = FileField(validators=[file_validator])
     project = ModelChoiceField(queryset=Project.objects.all())
     datamap = ModelChoiceField(
         queryset=Datamap.objects.all(),
         label="Datamap",
-        help_text=mark_safe(f"Please select an existing Datamap. <a href='{datamap_url}'>Create new Datamap</a>"),
+        help_text=mark_safe(f"Please select an existing Datamap. <a href='/datamaps{datamap_url}'>Create new Datamap</a>"),
     )
     financial_quarter = ChoiceField(
         choices=[("test", "TEST")], label="Financial Quarter"
