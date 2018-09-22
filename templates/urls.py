@@ -7,8 +7,6 @@ from .views import (
     TemplateUpdate,
     TemplateDelete,
 )
-from excelparser.views import ProcessPopulatedTemplate
-
 app_name = "templates"
 
 urlpatterns = [
