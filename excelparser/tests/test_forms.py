@@ -27,3 +27,7 @@ class UploadPopulatedTemplateTests(TestCase):
         self.assertEqual(
             self.form.fields["datamap"].help_text, "Please select an existing Datamap. <a href='/datamaps/create/'>Create new Datamap</a>"
         )
+        self.assertEqual(
+            self.form.fields["project"].help_text, "Please select an existing Project. <a href='/register/project/create'> Create new Project </a>"
+        )
+
