@@ -30,10 +30,6 @@ STATIC_URL = '/static/'
 
 # acceptable csv types
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
 
 ACCEPTABLE_CONTENT = [
     "text/csv",
@@ -70,9 +66,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'datamap.apps.DatamapConfig',
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
@@ -151,6 +144,6 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-LOGIN_URL = reverse_lazy('account_login')
+LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
