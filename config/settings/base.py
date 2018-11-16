@@ -145,5 +145,6 @@ SITE_ID = 1
 
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
 LOGIN_URL = reverse_lazy('login')
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

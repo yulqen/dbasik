@@ -11,7 +11,7 @@
     {% block extra_head_tags %}{% endblock %}
 </head>
 
-{% block bootstrap-navbar %}"
+{% block bootstrap-navbar %}
 
     <div class="m-b-1">
         <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -67,7 +67,7 @@
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             {# URL provided by django-allauth/account/urls.py #}
-                            {#                        <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>#}
+                            {#<a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>#}
                             <a class="nav-link" href="{% url 'dashboard' %}">{% trans "My Profile" %}</a>
                         </li>
                         <li class="nav-item">
@@ -107,5 +107,4 @@
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
 </div>
-</body>
 </html>

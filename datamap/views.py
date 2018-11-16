@@ -1,10 +1,9 @@
 import csv
 import logging
-import re
 from collections import OrderedDict
-from typing import List
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.forms import Form
 from django.http import HttpResponseRedirect
@@ -76,7 +75,7 @@ def datamap_detail(request, slug):
     return render(request, "datamap/datamap_detail.html", context)
 
 
-class DatamapList(ListView):
+class DatamapList(LoginRequiredMixin, ListView):
     model = Datamap
 
 
