@@ -33,6 +33,44 @@ class AppModel(models.Model):
 # app classes#
 ##############
 
+class FinancialQuarterManager(models.Manager):
+
+    def create_financial_quarter(self, quarter_identifier: int, year: int):
+        quarter = self.create(quarter=quarter_identifier, year=year)
+        if quarter_identifier == 1:
+            quarter.start_date = date(year, 4, 1)
+            quarter.end_date = date(year, 6, 30)
+            quarter.label = f"Q{quarter_identifier} {year}"
+        elif quarter_identifier == 2:
+            quarter.start_date = date(year, 7, 1)
+            quarter.end_date = date(year, 9, 30)
+            quarter.label = f"Q{quarter_identifier} {year}"
+        elif quarter_identifier == 3:
+            quarter.start_date = date(year, 10, 1)
+            quarter.end_date = date(year, 12, 31)
+            quarter.label = f"Q{quarter_identifier} {year}"
+        elif quarter_identifier == 4:
+            quarter.start_date = date(year + 1, 1, 1)
+            quarter.end_date = date(year + 1, 3, 31)
+            quarter.label = f"Q{quarter_identifier} {year}"
+        else:
+            raise ValueError("quarter attribute must be 1, 2, 3 or 4")
+
+        return quarter
+
+
+class FinancialQuarter(AppModel):
+    quarter = models.IntegerField()
+    year = models.IntegerField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    label = models.CharField(max_length=30)
+
+    objects = FinancialQuarterManager()
+
+    def __str__(self):
+        return f"{self.label} "
+
 
 class ProjectType(AppModel):
     name = models.CharField(max_length=50, blank=False, unique=True)
