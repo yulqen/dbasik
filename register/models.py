@@ -212,7 +212,7 @@ class Project(AppModel):
 #   agency_delivery_partner = models.ForeignKey(
 #       Organisation, on_delete=models.CASCADE, blank=True, null=True
 #   )
-    start_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True, )
     planned_end_date = models.DateField(blank=True, null=True)
     baseline_wlc = models.FloatField(blank=True, null=True)
 

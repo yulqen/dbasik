@@ -148,3 +148,6 @@ LOGIN_URL = reverse_lazy('login')
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Date format
+USE_L10N = False
