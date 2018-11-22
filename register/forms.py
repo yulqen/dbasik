@@ -1,12 +1,14 @@
 from django import forms
+from django.forms import ModelChoiceField
 from django.urls import reverse
-from .import models
+
+from register.models import Tier, ProjectType, ProjectStage
+from . import models
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button
 
 
 class ProjectStageForm(forms.ModelForm):
-
     class Meta:
         model = models.ProjectStage
         fields = ['name', 'description']
@@ -33,7 +35,6 @@ class ProjectStageForm(forms.ModelForm):
 
 
 class TierForm(forms.ModelForm):
-
     class Meta:
         model = models.Tier
         fields = ['name', 'description']
@@ -60,7 +61,6 @@ class TierForm(forms.ModelForm):
 
 
 class ProjectTypeForm(forms.ModelForm):
-
     class Meta:
         model = models.ProjectType
         fields = ['name', 'description']
@@ -87,7 +87,6 @@ class ProjectTypeForm(forms.ModelForm):
 
 
 class StrategicAlignmentForm(forms.ModelForm):
-
     class Meta:
         model = models.StrategicAlignment
         fields = ['name', 'description']
@@ -114,6 +113,22 @@ class StrategicAlignmentForm(forms.ModelForm):
 
 
 class ProjectForm(forms.ModelForm):
+    tier = ModelChoiceField(
+        queryset=Tier.objects.all(),
+        help_text="Please select an existing Tier. <a href='/register/tier/create' target='_blank'> Create new Tier </a>"
+    )
+
+    project_type = ModelChoiceField(
+        queryset=ProjectType.objects.all(),
+        help_text="Please select an existing Project Type. <a href='/register/projecttype/create' target='_blank'> Create new Project Type </a>"
+    )
+
+    stage = ModelChoiceField(
+        queryset=ProjectStage.objects.all(),
+        help_text="Please select an existing Project Stage. <a href='/register/projectstage/create' target='_blank'> Create new Project Stage </a>"
+    )
+
+
 
     class Meta:
         model = models.Project

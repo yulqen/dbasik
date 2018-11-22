@@ -3,3 +3,4 @@ django-crispy-forms
 django-extensions
 behave-django
 factory_boy
+selenium
