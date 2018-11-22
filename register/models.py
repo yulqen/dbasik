@@ -1,9 +1,15 @@
-from django.db import models
 from datetime import date
-from users.models import Employee, DfTGroup, Organisation
 
-from django_extensions.db.fields import AutoSlugField
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
+from django_extensions.db.fields import AutoSlugField
+
+from users.models import DfTGroup
+from users.models import Employee
+from users.models import Organisation
+
 
 ###############
 # superclasses#
@@ -33,43 +39,37 @@ class AppModel(models.Model):
 # app classes#
 ##############
 
-class FinancialQuarterManager(models.Manager):
-
-    def create_financial_quarter(self, quarter_identifier: int, year: int):
-        quarter = self.create(quarter=quarter_identifier, year=year)
-        if quarter_identifier == 1:
-            quarter.start_date = date(year, 4, 1)
-            quarter.end_date = date(year, 6, 30)
-            quarter.label = f"Q{quarter_identifier} {year}"
-        elif quarter_identifier == 2:
-            quarter.start_date = date(year, 7, 1)
-            quarter.end_date = date(year, 9, 30)
-            quarter.label = f"Q{quarter_identifier} {year}"
-        elif quarter_identifier == 3:
-            quarter.start_date = date(year, 10, 1)
-            quarter.end_date = date(year, 12, 31)
-            quarter.label = f"Q{quarter_identifier} {year}"
-        elif quarter_identifier == 4:
-            quarter.start_date = date(year + 1, 1, 1)
-            quarter.end_date = date(year + 1, 3, 31)
-            quarter.label = f"Q{quarter_identifier} {year}"
-        else:
-            raise ValueError("quarter attribute must be 1, 2, 3 or 4")
-
-        return quarter
-
-
 class FinancialQuarter(AppModel):
     quarter = models.IntegerField()
     year = models.IntegerField()
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    label = models.CharField(max_length=30)
-
-    objects = FinancialQuarterManager()
+    label = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
-        return f"{self.label} "
+        return self.label
+
+
+@receiver(post_save, sender=FinancialQuarter)
+def calculate_start_end_date_receiver(sender, instance, created, **kwargs):
+    if created:
+        if instance.quarter == 1:
+            instance.start_date = date(instance.year, 4, 1)
+            instance.end_date = date(instance.year, 6, 30)
+            instance.label = f"Q{instance.quarter} {instance.year}"
+        elif instance.quarter == 2:
+            instance.start_date = date(instance.year, 7, 1)
+            instance.end_date = date(instance.year, 9, 30)
+            instance.label = f"Q{instance.quarter} {instance.year}"
+        elif instance.quarter == 3:
+            instance.start_date = date(instance.year, 10, 1)
+            instance.end_date = date(instance.year, 12, 31)
+            instance.label = f"Q{instance.quarter} {instance.year}"
+        elif instance.quarter == 4:
+            instance.start_date = date(instance.year + 1, 1, 1)
+            instance.end_date = date(instance.year + 1, 3, 31)
+            instance.label = f"Q{instance.quarter} {instance.year}"
+        instance.save()
 
 
 class ProjectType(AppModel):
