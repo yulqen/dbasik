@@ -26,10 +26,10 @@
                     <td><strong>Stage:</td></strong><td>{{ object.stage }}</td>  
                 </tr>
                 <tr>
-                    <td><strong>Start Date:</td></strong><td>{{ object.start_date }}</td>  
+                    <td><strong>Start Date:</td></strong><td>{{ object.start_date|date:"j M Y" }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Planned End Date:</td></strong><td>{{ object.planned_end_date }}</td>  
+                    <td><strong>Planned End Date:</td></strong><td>{{ object.planned_end_date|date:"j M Y" }}</td>
                 </tr>
                 <tr>
                     <td><strong>Some more descriptive data:</td></strong><td>

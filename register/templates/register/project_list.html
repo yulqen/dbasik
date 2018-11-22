@@ -23,8 +23,8 @@
                 <td>{{ item.tier }}</td>
                 <td>{{ item.project_type }}</td>
                 <td>{{ item.stage}}</td>
-                <td>{{ item.start_date }}</td>
-                <td>{{ item.planned_end_date }}</td>
+                <td>{{ item.start_date|date:"j M Y" }}</td>
+                <td>{{ item.planned_end_date|date:"j M Y" }}</td>
             </tr>
             {% endfor %}
 

@@ -84,7 +84,6 @@ class TierUpdate(UpdateView):
         return context
 
 
-
 class ProjectStageCreate(CreateView):
     model = ProjectStage
     template_name_suffix = "_create"
