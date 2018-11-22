@@ -42,7 +42,7 @@ class AppModel(models.Model):
 class FinancialQuarter(AppModel):
     quarter = models.IntegerField()
     year = models.IntegerField()
-    start_date = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True, unique=True)
     end_date = models.DateField(blank=True, null=True)
     label = models.CharField(max_length=30, blank=True)
 
