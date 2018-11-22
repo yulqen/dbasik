@@ -9,7 +9,7 @@ class Command(BaseCommand):
     
     You have to include each year you want as the paramater:
     
-    python manage.py create_financial_quaraters 2010 2011 2012 2013
+    python manage.py create_financial_quarters 2010 2011 2012 2013
     """
 
     def add_arguments(self, parser):
