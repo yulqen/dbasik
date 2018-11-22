@@ -49,6 +49,9 @@ class FinancialQuarter(AppModel):
     def __str__(self):
         return self.label
 
+    class Meta:
+        ordering = ['start_date']
+
 
 @receiver(post_save, sender=FinancialQuarter)
 def calculate_start_end_date_receiver(sender, instance, created, **kwargs):

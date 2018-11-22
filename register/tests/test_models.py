@@ -19,10 +19,3 @@ class ModelTests(TestCase):
         fq.save()
         self.assertEqual(fq.end_date, date(2010, 6, 30))
 
-    @unittest.skip("Not ready for this yet")
-    def test_series_financial_objects(self):
-        fq1 = FinancialQuarter(quarter=1, year=2010)
-        fq2 = FinancialQuarter(quarter=2, year=2010)
-        fq1.save()
-        fq2.save()
-        self.assertTrue(fq2 > fq2)

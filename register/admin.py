@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 
 from register.models import Classification
 from register.models import Constraint
@@ -21,7 +22,11 @@ from users.models import DfTDivision
 from users.models import DfTGroup
 from users.models import Employee
 
-admin.site.register(FinancialQuarter)
+
+class FinancialQuarterAdmin(ModelAdmin):
+     list_display = ('label', 'start_date', 'end_date')
+
+admin.site.register(FinancialQuarter, FinancialQuarterAdmin)
 admin.site.register(Project)
 admin.site.register(Tier)
 admin.site.register(ProjectType)
@@ -42,3 +47,5 @@ admin.site.register(PortfolioInitialisation)
 admin.site.register(DfTGroup)
 admin.site.register(DfTDivision)
 admin.site.register(Employee)
+
+
