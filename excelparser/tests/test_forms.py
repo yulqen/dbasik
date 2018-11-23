@@ -1,5 +1,9 @@
-from django.test import TestCase
+import datetime
 
+from django.test import TestCase
+from excelparser.helpers.financial_year import check_date_in_quarter
+
+from register.models import FinancialQuarter
 from ..forms import ProcessPopulatedTemplateForm
 
 
@@ -32,3 +36,17 @@ class UploadPopulatedTemplateTests(TestCase):
             self.form.fields["project"].help_text,
             "Please select an existing Project. <a href='/register/project/create'> Create new Project </a>",
         )
+
+
+class TestFinancialQuarterDates(TestCase):
+    def setUp(self):
+        self.fq1 = FinancialQuarter.objects.create(quarter=1, year=2010)
+        self.within_quarter = datetime.date(2010, 4, 4)
+        self.outwith_quarter = datetime.date(2010, 7, 1)
+
+    def test_whether_a_date_is_in_a_quarter(self):
+        self.assertTrue(check_date_in_quarter(self.within_quarter, self.fq1))
+
+    def test_date_outside_quarter(self):
+        self.assertFalse(check_date_in_quarter(self.outwith_quarter, self.fq1))
+

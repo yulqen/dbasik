@@ -1,6 +1,8 @@
 import datetime
 from typing import Any
 
+from register.models import FinancialQuarter
+
 
 def _start_date(q, y):
     if q == 4:
@@ -22,18 +24,19 @@ class Quarter:
         quarter (int): e.g.1, 2, 3 or 4
         year (int): e.g. 2013
     """
+
     _start_months = {
-        1: (4, 'April'),
-        2: (7, 'July'),
-        3: (10, 'October'),
-        4: (1, 'January')
+        1: (4, "April"),
+        2: (7, "July"),
+        3: (10, "October"),
+        4: (1, "January"),
     }
 
     _end_months = {
-        1: (6, 'June', 30),
-        2: (9, 'September', 30),
-        3: (12, 'December', 31),
-        4: (3, 'March', 31),
+        1: (6, "June", 30),
+        2: (9, "September", 30),
+        3: (12, "December", 31),
+        4: (3, "March", 31),
     }
 
     def __init__(self, year: int, quarter: int) -> None:
@@ -46,7 +49,9 @@ class Quarter:
         if isinstance(year, int) and (year in range(1950, 2100)):
             self.year = year
         else:
-            raise ValueError("Year must be between 1950 and 2100 - surely that will do?")
+            raise ValueError(
+                "Year must be between 1950 and 2100 - surely that will do?"
+            )
 
         self.start_date = _start_date(self.quarter, self.year)
         self.end_date = _end_date(self.quarter, self.year)
@@ -85,7 +90,9 @@ class FinancialYear:
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, FinancialYear):
-            raise ValueError("Can only compare FinancialYear object with another FinancialYear object")
+            raise ValueError(
+                "Can only compare FinancialYear object with another FinancialYear object"
+            )
         if other.year == self.year:
             return True
         else:
@@ -123,3 +130,12 @@ class FinancialYear:
 
     def __repr__(self):
         return f"FinancialYear({self.year})"
+
+
+def check_date_in_quarter(
+    date: datetime.date, financial_quarter: FinancialQuarter
+) -> bool:
+    if financial_quarter.start_date < date < financial_quarter.end_date:
+        return True
+    else:
+        return False

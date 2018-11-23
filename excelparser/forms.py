@@ -1,13 +1,20 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Button
+from crispy_forms.layout import Button
+from crispy_forms.layout import ButtonHolder
+from crispy_forms.layout import Fieldset
+from crispy_forms.layout import Layout
+from crispy_forms.layout import Submit
 from django.core.validators import FileExtensionValidator
-from django.forms import forms, FileField, ModelChoiceField, ChoiceField
+from django.forms import FileField
+from django.forms import ModelChoiceField
+from django.forms import forms
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from datamap.models import Datamap
 from datamap import urls as datamap_urls
+from datamap.models import Datamap
 from register import urls as register_urls
+from register.models import FinancialQuarter
 from register.models import Project
 
 acceptable_types = ["xlsm"]
@@ -38,8 +45,9 @@ class ProcessPopulatedTemplateForm(forms.Form):
             f"Please select an existing Datamap. <a href='/datamaps{datamap_create_url}'>Create new Datamap</a>"
         ),
     )
-    financial_quarter = ChoiceField(
-        choices=[("test", "TEST")], label="Financial Quarter"
+    financial_quarter = ModelChoiceField(
+        queryset=FinancialQuarter.objects.all(),
+        label="Financial Quarter",
     )
 
     def __init__(self, *args, **kwargs):
