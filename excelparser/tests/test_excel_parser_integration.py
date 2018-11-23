@@ -1,8 +1,6 @@
 import datetime
-import unittest
 from typing import List
 
-from django.core.files.uploadedfile import UploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from openpyxl import load_workbook
@@ -47,14 +45,31 @@ class ParsedSpreadsheet:
         datamap: Datamap,
     ):
         self.template_path = template_path
-        self.project = project
+        self._project = project
         self.fq = fq
         self.datamap = datamap
-        self.sheets: List = []
+        self.sheet_data = []
 
         self._get_sheets()
 
-    def _get_sheets(self):
+    def _process_sheets(self):
+        wb = load_workbook(self.template_path)
+        for ws in self.sheets:
+            self.sheet_data.append(wb[ws])
+
+    def process(self):
+        self._process_sheets()
+
+    @property
+    def project_name(self) -> str:
+        return self._project.name
+
+    def _get_sheets(self) -> None:
+        """
+        Get the names of the sheets in an Excel file.
+        :return:
+        :rtype:
+        """
         wb = load_workbook(self.template_path)
         self.sheets = wb.sheetnames
 
@@ -95,9 +110,28 @@ class ExcelParserIntegrationTests(TestCase):
             datamap=self.datamap,
         )
         self.assertEqual(parsed_spreadsheet.sheets, ["Test Sheet 1", "Test Sheet 2"])
-        # self.assertEqual(parsed_spreadsheet["Project Name"], "Testable Project")
+        self.assertEqual(parsed_spreadsheet.project_name, "Test Project")
+        # self.assertEqual(parsed_spreadsheet['Test Sheet 1'])
         # self.assertEqual(parsed_spreadsheet["Total Cost"], 45.2)
         # self.assertEqual(parsed_spreadsheet["SRO"], "John Milton")
         # self.assertEqual(
         #     parsed_spreadsheet["SRO Retirement Date"], datetime.date(2022, 2, 23)
         # )
+
+    def test_individual_excel_sheet(self):
+        parsed_spreadsheet = ParsedSpreadsheet(
+            template_path=self.populated_template,
+            project=self.project,
+            fq=self.financial_quarter,
+            datamap=self.datamap,
+        )
+        parsed_spreadsheet.process()
+        test_sheet_1_data = parsed_spreadsheet.sheet_data[0]
+        self.assertEqual(test_sheet_1_data.title, "Test Sheet 1")
+        self.assertEqual(test_sheet_1_data['B1'].value, "Testable Project")
+        self.assertEqual(test_sheet_1_data['B2'].value, 45.2)
+        self.assertEqual(test_sheet_1_data['B3'].value, "John Milton")
+        # do we want this to be a datetime object??
+        self.assertEqual(test_sheet_1_data['B4'].value, datetime.datetime(2022, 2, 23, 0, 0))
+
+
