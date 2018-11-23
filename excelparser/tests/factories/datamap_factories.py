@@ -1,5 +1,7 @@
 import factory
 from datamap.models import Datamap, DatamapLine
+from register.models import Project
+from register.models import ProjectType
 from register.models import Tier
 
 
@@ -31,5 +33,17 @@ class DatamapLineFactory(factory.django.DjangoModelFactory):
     cell_ref = "Test Cell_Ref"
 
 
-class ProjectFactory(object):
-    pass
+class ProjectTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProjectType
+
+    name = "Test ProjectType"
+
+
+class ProjectFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Project
+
+    name = "Test Project"
+    tier = factory.SubFactory(TierFactory)
+    project_type = factory.SubFactory(ProjectTypeFactory)

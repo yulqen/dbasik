@@ -12,9 +12,32 @@ from excelparser.tests.factories.datamap_factories import (
 from register.models import FinancialQuarter
 
 
+class FactoryTests(TestCase):
+    """
+    These are tests to explore the Factory Boy API.
+    """
+
+    def setUp(self):
+        self.datamap = DatamapFactory()
+        self.project = ProjectFactory()
+        self.datamapline = DatamapLineFactory(datamap=self.datamap)
+
+    def test_datamap_factory(self):
+        self.assertEqual(self.datamap.name, "Test Datamap from Factory")
+
+    def test_datamapline_factory(self):
+        self.assertEqual(self.datamapline.datamap, self.datamap)
+        self.assertEqual(self.datamapline.key, "Test key")
+
+    def test_project_factory(self):
+        self.assertEqual(self.project.name,"Test Project")
+        self.assertEqual(self.project.project_type.name, "Test ProjectType")
+
+
+@unittest.skip("Not running this until I understand factories")
 class ExcelParserIntegrationTests(TestCase):
     def setUp(self):
-        self.financial_quarter = FinancialQuarter(4, 2018)
+        self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         DatamapLineFactory(key="Project Name", sheet="Test Sheet", cell_ref="B1")
@@ -40,7 +63,6 @@ class ExcelParserIntegrationTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    @unittest.skip("Not ready for this yet")
     def test_parsed_spreadsheet_for_single_project(self):
         parsed_spreadsheet = ParseSpreadsheet(
             project=self.project, fq=self.financial_quarter, datamap=self.datamap
