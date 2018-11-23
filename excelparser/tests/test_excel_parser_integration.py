@@ -111,12 +111,6 @@ class ExcelParserIntegrationTests(TestCase):
         )
         self.assertEqual(parsed_spreadsheet.sheets, ["Test Sheet 1", "Test Sheet 2"])
         self.assertEqual(parsed_spreadsheet.project_name, "Test Project")
-        # self.assertEqual(parsed_spreadsheet['Test Sheet 1'])
-        # self.assertEqual(parsed_spreadsheet["Total Cost"], 45.2)
-        # self.assertEqual(parsed_spreadsheet["SRO"], "John Milton")
-        # self.assertEqual(
-        #     parsed_spreadsheet["SRO Retirement Date"], datetime.date(2022, 2, 23)
-        # )
 
     def test_individual_excel_sheet(self):
         parsed_spreadsheet = ParsedSpreadsheet(
