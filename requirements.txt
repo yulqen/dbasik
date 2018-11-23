@@ -4,3 +4,4 @@ django-extensions
 behave-django
 factory_boy
 selenium
+openpyxl

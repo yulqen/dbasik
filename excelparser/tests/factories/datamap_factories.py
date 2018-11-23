@@ -1,6 +1,9 @@
 import factory
-from datamap.models import Datamap, DatamapLine
+
+from datamap.models import Datamap
+from datamap.models import DatamapLine
 from register.models import Project
+from register.models import ProjectStage
 from register.models import ProjectType
 from register.models import Tier
 
@@ -40,6 +43,13 @@ class ProjectTypeFactory(factory.django.DjangoModelFactory):
     name = "Test ProjectType"
 
 
+class ProjectStageFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProjectStage
+
+    name = "Test Stage"
+
+
 class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Project
@@ -47,3 +57,4 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     name = "Test Project"
     tier = factory.SubFactory(TierFactory)
     project_type = factory.SubFactory(ProjectTypeFactory)
+    stage = factory.SubFactory(ProjectStageFactory)

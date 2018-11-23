@@ -1,15 +1,18 @@
 import datetime
 import unittest
+from typing import List
 
+from django.core.files.uploadedfile import UploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from openpyxl import load_workbook
 
-from excelparser.tests.factories.datamap_factories import (
-    ProjectFactory,
-    DatamapFactory,
-    DatamapLineFactory,
-)
+from datamap.models import Datamap
+from excelparser.tests.factories.datamap_factories import DatamapFactory
+from excelparser.tests.factories.datamap_factories import DatamapLineFactory
+from excelparser.tests.factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
+from register.models import Project
 
 
 class FactoryTests(TestCase):
@@ -30,11 +33,32 @@ class FactoryTests(TestCase):
         self.assertEqual(self.datamapline.key, "Test key")
 
     def test_project_factory(self):
-        self.assertEqual(self.project.name,"Test Project")
+        self.assertEqual(self.project.name, "Test Project")
         self.assertEqual(self.project.project_type.name, "Test ProjectType")
+        self.assertEqual(self.project.stage.name, "Test Stage")
 
 
-@unittest.skip("Not running this until I understand factories")
+class ParsedSpreadsheet:
+    def __init__(
+        self,
+        template_path: str,
+        project: Project,
+        fq: FinancialQuarter,
+        datamap: Datamap,
+    ):
+        self.template_path = template_path
+        self.project = project
+        self.fq = fq
+        self.datamap = datamap
+        self.sheets: List = []
+
+        self._get_sheets()
+
+    def _get_sheets(self):
+        wb = load_workbook(self.template_path)
+        self.sheets = wb.sheetnames
+
+
 class ExcelParserIntegrationTests(TestCase):
     def setUp(self):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
@@ -64,12 +88,16 @@ class ExcelParserIntegrationTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_parsed_spreadsheet_for_single_project(self):
-        parsed_spreadsheet = ParseSpreadsheet(
-            project=self.project, fq=self.financial_quarter, datamap=self.datamap
+        parsed_spreadsheet = ParsedSpreadsheet(
+            template_path=self.populated_template,
+            project=self.project,
+            fq=self.financial_quarter,
+            datamap=self.datamap,
         )
-        self.assertEqual(parsed_spreadsheet["Project Name"], "Testable Project")
-        self.assertEqual(parsed_spreadsheet["Total Cost"], 45.2)
-        self.assertEqual(parsed_spreadsheet["SRO"], "John Milton")
-        self.assertEqual(
-            parsed_spreadsheet["SRO Retirement Date"], datetime.date(2022, 2, 23)
-        )
+        self.assertEqual(parsed_spreadsheet.sheets, ["Test Sheet 1", "Test Sheet 2"])
+        # self.assertEqual(parsed_spreadsheet["Project Name"], "Testable Project")
+        # self.assertEqual(parsed_spreadsheet["Total Cost"], 45.2)
+        # self.assertEqual(parsed_spreadsheet["SRO"], "John Milton")
+        # self.assertEqual(
+        #     parsed_spreadsheet["SRO Retirement Date"], datetime.date(2022, 2, 23)
+        # )
