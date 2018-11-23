@@ -240,7 +240,7 @@ class DatamapIntegrationTests(LiveServerTestCase):
 
         advisory = WebDriverWait(self.driver, 3).until(
             EC.presence_of_element_located(
-                (By.XPATH, "/html/body/div/div/div/div[1]/form/div[1]/ul/li")
+                (By.XPATH, "/html/body/div[2]/div/div[1]/form/div[1]/ul/li")
             )
         )
         self.assertEqual(
