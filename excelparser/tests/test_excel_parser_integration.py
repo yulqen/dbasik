@@ -4,17 +4,17 @@ import unittest
 from django.test import TestCase
 from django.urls import reverse
 
-from excelparser.helpers.financial_year import Quarter
 from excelparser.tests.factories.datamap_factories import (
     ProjectFactory,
     DatamapFactory,
     DatamapLineFactory,
 )
+from register.models import FinancialQuarter
 
 
 class ExcelParserIntegrationTests(TestCase):
     def setUp(self):
-        self.financial_quarter = Quarter(2018, 4)
+        self.financial_quarter = FinancialQuarter(4, 2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         DatamapLineFactory(key="Project Name", sheet="Test Sheet", cell_ref="B1")

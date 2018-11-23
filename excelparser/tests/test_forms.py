@@ -1,7 +1,7 @@
 import datetime
 
 from django.test import TestCase
-from excelparser.helpers.financial_year import check_date_in_quarter
+from excelparser.helpers.financial_quarter import check_date_in_quarter
 
 from register.models import FinancialQuarter
 from ..forms import ProcessPopulatedTemplateForm

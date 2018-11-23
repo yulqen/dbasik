@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from excelparser.forms import ProcessPopulatedTemplateForm
-from excelparser.helpers.financial_year import check_date_in_quarter
+from excelparser.helpers.financial_quarter import check_date_in_quarter
 from register.models import FinancialQuarter
 
 
