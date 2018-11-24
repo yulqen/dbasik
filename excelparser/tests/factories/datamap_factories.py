@@ -33,7 +33,7 @@ class DatamapLineFactory(factory.django.DjangoModelFactory):
     datamap = factory.SubFactory(DatamapFactory)
     key = "Test key"
     sheet = "Test sheet"
-    cell_ref = "Test Cell_Ref"
+    cell_ref = "A1"
 
 
 class ProjectTypeFactory(factory.django.DjangoModelFactory):
