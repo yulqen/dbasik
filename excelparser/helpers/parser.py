@@ -1,7 +1,7 @@
 from typing import List
 
 from openpyxl import load_workbook
-from openpyxl.worksheet import Worksheet
+from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 
 from datamap.models import Datamap
 from register.models import FinancialQuarter
@@ -20,7 +20,7 @@ class ParsedSpreadsheet:
         self._project = project
         self.fq = fq
         self.datamap = datamap
-        self.sheet_data: List[Worksheet] = []
+        self.sheet_data: List[OpenpyxlWorksheet] = []
 
         self._get_sheets()
 
@@ -41,12 +41,12 @@ class ParsedSpreadsheet:
         self.sheets = wb.sheetnames
 
 
-def convert_openpyxl_worksheet(test_sheet_1_data: Worksheet, datamap: Datamap):
+def convert_openpyxl_worksheet(test_sheet_1_data: OpenpyxlWorksheet, datamap: Datamap):
     return WorkSheetFromDatamap(test_sheet_1_data, datamap)
 
 
 class WorkSheetFromDatamap:
-    def __init__(self, openpyxl_worksheet: Worksheet, datamap: Datamap):
+    def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap):
         self._data = {}
         self.openpyxl_worksheet = openpyxl_worksheet
         self.datamap = datamap
