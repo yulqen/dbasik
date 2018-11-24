@@ -75,7 +75,7 @@ class ExcelParserIntegrationTests(TestCase):
 
     def test_parsed_spreadsheet_for_single_project(self):
         self.assertEqual(
-            self.parsed_spreadsheet.sheets, ["Test Sheet 1", "Test Sheet 2"]
+            self.parsed_spreadsheet.sheetnames, ["Test Sheet 1", "Test Sheet 2"]
         )
         self.assertEqual(self.parsed_spreadsheet.project_name, "Test Project")
 
