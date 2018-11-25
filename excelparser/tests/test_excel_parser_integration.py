@@ -2,12 +2,10 @@ import unittest
 
 from django.test import TestCase
 from django.urls import reverse
-from openpyxl.worksheet import Worksheet
 
 from datamap.models import DatamapLine
 from excelparser.helpers.parser import ParsedSpreadsheet
 from excelparser.helpers.parser import WorkSheetFromDatamap
-from excelparser.helpers.parser import convert_openpyxl_worksheet
 from excelparser.tests.factories.datamap_factories import DatamapFactory
 from excelparser.tests.factories.datamap_factories import DatamapLineFactory
 from excelparser.tests.factories.datamap_factories import ProjectFactory
@@ -79,28 +77,11 @@ class ExcelParserIntegrationTests(TestCase):
         )
         self.assertEqual(self.parsed_spreadsheet.project_name, "Test Project")
 
-    # def test_individual_excel_sheet(self):
-    #     self.parsed_spreadsheet.process()
-    #     test_sheet_1_data = self.parsed_spreadsheet.sheet_data[0]
-    #     self.assertEqual(test_sheet_1_data.title, "Test Sheet 1")
-    #     self.assertEqual(test_sheet_1_data["B1"].value, "Testable Project")
-    #     self.assertEqual(test_sheet_1_data["B2"].value, 45.2)
-    #     self.assertEqual(test_sheet_1_data["B3"].value, "John Milton")
-    #     # do we want this to be a datetime object??
-    #     self.assertEqual(
-    #         test_sheet_1_data["B4"].value, datetime.datetime(2022, 2, 23, 0, 0)
-    #     )
-
     def test_getting_sheet_data_using_datamap(self):
         self.parsed_spreadsheet.process()
         test_sheet_1_data = self.parsed_spreadsheet.sheet_data[0]
-        self.assertIsInstance(test_sheet_1_data, Worksheet)
-        self.assertEqual(test_sheet_1_data.title, "Test Sheet 1")
-        test_sheet_1_data_datamap = convert_openpyxl_worksheet(
-            test_sheet_1_data, self.datamap
-        )
-        self.assertIsInstance(test_sheet_1_data_datamap, WorkSheetFromDatamap)
-        self.assertEqual(test_sheet_1_data_datamap["Project Name"], "Testable Project")
+        self.assertIsInstance(test_sheet_1_data, WorkSheetFromDatamap)
+        self.assertEqual(test_sheet_1_data["Project Name"], "Testable Project")
 
     @unittest.skip("Not yet implemented")
     def test_strip_colon_from_key(self):

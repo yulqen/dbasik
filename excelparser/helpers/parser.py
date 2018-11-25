@@ -8,10 +8,15 @@ from datamap.models import Datamap
 from register.models import FinancialQuarter
 from register.models import Project
 
-SheetData = List[OpenpyxlWorksheet]
+SheetData = List['WorkSheetFromDatamap']
 
 
 class ParsedSpreadsheet:
+    """
+    A single spreadsheet whose data can be extracted using a Datamap upon
+    calling the process() method. Data per sheet is then available via
+    a processed_spreadsheet['sheet_name'] basis.
+    """
     def __init__(
         self,
         template_path: str,
@@ -31,7 +36,9 @@ class ParsedSpreadsheet:
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self.template_path)
         for ws in self.sheetnames:
-            self.sheet_data.append(wb[ws])
+            ws_from_dm = WorkSheetFromDatamap(wb[ws], self.datamap)
+            ws_from_dm._convert()
+            self.sheet_data.append(ws_from_dm)
 
     def process(self) -> None:
         self._process_sheets()
@@ -62,7 +69,3 @@ class WorkSheetFromDatamap:
             self._data[key] = value
 
 
-def convert_openpyxl_worksheet(
-    test_sheet_1_data: OpenpyxlWorksheet, datamap: Datamap
-) -> WorkSheetFromDatamap:
-    return WorkSheetFromDatamap(test_sheet_1_data, datamap)
