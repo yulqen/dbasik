@@ -1,3 +1,5 @@
+import datetime
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -95,13 +97,21 @@ class ExcelParserIntegrationTests(TestCase):
         test_sheet_1_data = self.parsed_spreadsheet["Test Sheet 1"]
         self.assertIsInstance(test_sheet_1_data, WorkSheetFromDatamap)
         self.assertIsInstance(test_sheet_1_data["Project Name"], CellData)
-        # self.assertEqual(test_sheet_1_data["Project Name"], "Testable Project")
-        # self.assertEqual(test_sheet_1_data["Total Cost"], 45.2)
-        # self.assertEqual(test_sheet_1_data["SRO"], "John Milton")
-        # self.assertEqual(test_sheet_1_data["SRO"], "John Milton")
-        # self.assertEqual(
-        #     test_sheet_1_data["SRO Retirement Date"], datetime.date(2022, 2, 23)
-        # )
+
+        self.assertEqual(test_sheet_1_data["Project Name"].value, "Testable Project")
+        self.assertEqual(test_sheet_1_data["Project Name"].type, CellValueType.STRING)
+
+        self.assertEqual(test_sheet_1_data["Total Cost"].value, 45.2)
+        self.assertEqual(test_sheet_1_data["Total Cost"].type, CellValueType.FLOAT)
+
+        self.assertEqual(test_sheet_1_data["SRO"].value, "John Milton")
+        self.assertEqual(test_sheet_1_data["SRO"].type, CellValueType.STRING)
+        self.assertEqual(
+            test_sheet_1_data["SRO Retirement Date"].value, datetime.datetime(2022, 2, 23)
+        )
+        self.assertEqual(
+            test_sheet_1_data["SRO Retirement Date"].type, CellValueType.DATETIME
+        )
 
     def test_map_type_to_cellvaluetype_enum(self):
         self.assertEqual(_detect_cell_type(1), CellValueType.INTEGER)

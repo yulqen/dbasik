@@ -67,7 +67,9 @@ class CellValueType(Enum):
     INTEGER = auto()
     STRING = auto()
     DATE = auto()
+    DATETIME = auto()
     FLOAT = auto()
+    UNKNOWN = auto()
 
 
 class CellData(NamedTuple):
@@ -97,8 +99,12 @@ class WorkSheetFromDatamap:
         for dml in self.datamap.datamapline_set.all():
             key = dml.key
             _parsed_value = self.openpyxl_worksheet[dml.cell_ref].value
-            value = CellData(key, _parsed_value, dml.cell_ref, type(_parsed_value))
-            self._data[key] = value
+            try:
+                value = CellData(key, _parsed_value, dml.cell_ref, _detect_cell_type(_parsed_value))
+                self._data[key] = value
+            except ValueError:
+                value = CellData(key, _parsed_value, dml.cell_ref, CellValueType.UNKNOWN)
+                self._data[key] = value
 
 
 def _detect_cell_type(obj: Any) -> CellValueType:
@@ -108,7 +114,7 @@ def _detect_cell_type(obj: Any) -> CellValueType:
         return CellValueType.STRING
     if isinstance(obj, float):
         return CellValueType.FLOAT
-    if isinstance(obj, datetime.date):
-        return CellValueType.DATE
+    if isinstance(obj, datetime.datetime):
+        return CellValueType.DATETIME
     else:
         raise ValueError("Cannot detect applicable type")
