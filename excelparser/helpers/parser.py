@@ -1,3 +1,4 @@
+from typing import Dict
 from typing import List
 
 from openpyxl import load_workbook
@@ -8,7 +9,7 @@ from datamap.models import Datamap
 from register.models import FinancialQuarter
 from register.models import Project
 
-SheetData = List['WorkSheetFromDatamap']
+SheetData = Dict[str, "WorkSheetFromDatamap"]
 
 
 class ParsedSpreadsheet:
@@ -17,6 +18,7 @@ class ParsedSpreadsheet:
     calling the process() method. Data per sheet is then available via
     a processed_spreadsheet['sheet_name'] basis.
     """
+
     def __init__(
         self,
         template_path: str,
@@ -28,17 +30,20 @@ class ParsedSpreadsheet:
         self._project = project
         self.fq = fq
         self.datamap = datamap
-        self.sheet_data: SheetData = []
+        self.sheet_data: SheetData = {}
         self.sheetnames: List[str]
 
         self._get_sheets()
+
+    def __getitem__(self, item):
+        return self.sheet_data[item]
 
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self.template_path)
         for ws in self.sheetnames:
             ws_from_dm = WorkSheetFromDatamap(wb[ws], self.datamap)
             ws_from_dm._convert()
-            self.sheet_data.append(ws_from_dm)
+            self.sheet_data[ws] = ws_from_dm
 
     def process(self) -> None:
         self._process_sheets()
@@ -53,8 +58,13 @@ class ParsedSpreadsheet:
 
 
 class WorkSheetFromDatamap:
+    """
+    A dictionary-like object holding the data for a single spreadsheet sheet
+    parsed using a Datamap object. Created by calling process() method on a
+    ParsedSpreadsheet object.
+    """
     def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap) -> None:
-        self._data: dict = {}
+        self._data: Dict[str, str] = {}
         self.openpyxl_worksheet = openpyxl_worksheet
         self.datamap = datamap
         self._convert()
@@ -67,5 +77,3 @@ class WorkSheetFromDatamap:
             key = dml.key
             value = self.openpyxl_worksheet[dml.cell_ref].value
             self._data[key] = value
-
-
