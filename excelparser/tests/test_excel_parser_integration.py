@@ -1,3 +1,4 @@
+import datetime
 import unittest
 
 from django.test import TestCase
@@ -40,11 +41,23 @@ class ExcelParserIntegrationTests(TestCase):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
-        DatamapLine.objects.create(datamap=self.datamap, key="Project Name", sheet="Test Sheet 1", cell_ref="B1")
-        DatamapLine.objects.create(datamap=self.datamap, key="Total Cost", sheet="Test Sheet 1", cell_ref="B2")
-        DatamapLine.objects.create(datamap=self.datamap, key="SRO", sheet="Test Sheet 1", cell_ref="B3")
         DatamapLine.objects.create(
-            datamap=self.datamap, key="SRO Retirement Date", sheet="Test Sheet 1", cell_ref="B4"
+            datamap=self.datamap,
+            key="Project Name",
+            sheet="Test Sheet 1",
+            cell_ref="B1",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="Total Cost", sheet="Test Sheet 1", cell_ref="B2"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="SRO", sheet="Test Sheet 1", cell_ref="B3"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="SRO Retirement Date",
+            sheet="Test Sheet 1",
+            cell_ref="B4",
         )
         self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
         self.parsed_spreadsheet = ParsedSpreadsheet(
@@ -79,10 +92,13 @@ class ExcelParserIntegrationTests(TestCase):
 
     def test_getting_sheet_data_using_datamap(self):
         self.parsed_spreadsheet.process()
-        test_sheet_1_data = self.parsed_spreadsheet['Test Sheet 1']
+        test_sheet_1_data = self.parsed_spreadsheet["Test Sheet 1"]
         self.assertIsInstance(test_sheet_1_data, WorkSheetFromDatamap)
         self.assertEqual(test_sheet_1_data["Project Name"], "Testable Project")
+        self.assertEqual(test_sheet_1_data["Total Cost"], 45.2)
+        self.assertEqual(test_sheet_1_data["SRO"], "John Milton")
+        self.assertEqual(test_sheet_1_data["SRO"], "John Milton")
+        self.assertEqual(
+            test_sheet_1_data["SRO Retirement Date"], datetime.date(2022, 2, 23)
+        )
 
-    @unittest.skip("Not yet implemented")
-    def test_strip_colon_from_key(self):
-        pass
