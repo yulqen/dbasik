@@ -1,5 +1,11 @@
+import datetime
+from enum import Enum
+from enum import auto
+from typing import Any
 from typing import Dict
 from typing import List
+from typing import NamedTuple
+from typing import Union
 
 from openpyxl import load_workbook
 from openpyxl import Workbook as OpenpyxlWorkbook
@@ -57,14 +63,29 @@ class ParsedSpreadsheet:
         self.sheetnames = wb.sheetnames
 
 
+class CellValueType(Enum):
+    INTEGER = auto()
+    STRING = auto()
+    DATE = auto()
+    FLOAT = auto()
+
+
+class CellData(NamedTuple):
+    key: str
+    value: str
+    source_cell: str
+    type: Any
+
+
 class WorkSheetFromDatamap:
     """
     A dictionary-like object holding the data for a single spreadsheet sheet
     parsed using a Datamap object. Created by calling process() method on a
     ParsedSpreadsheet object.
     """
+
     def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap) -> None:
-        self._data: Dict[str, str] = {}
+        self._data: Dict[str, CellData] = {}
         self.openpyxl_worksheet = openpyxl_worksheet
         self.datamap = datamap
         self._convert()
@@ -75,5 +96,19 @@ class WorkSheetFromDatamap:
     def _convert(self) -> None:
         for dml in self.datamap.datamapline_set.all():
             key = dml.key
-            value = self.openpyxl_worksheet[dml.cell_ref].value
+            _parsed_value = self.openpyxl_worksheet[dml.cell_ref].value
+            value = CellData(key, _parsed_value, dml.cell_ref, type(_parsed_value))
             self._data[key] = value
+
+
+def _detect_cell_type(obj: Any) -> CellValueType:
+    if isinstance(obj, int):
+        return CellValueType.INTEGER
+    if isinstance(obj, str):
+        return CellValueType.STRING
+    if isinstance(obj, float):
+        return CellValueType.FLOAT
+    if isinstance(obj, datetime.date):
+        return CellValueType.DATE
+    else:
+        raise ValueError("Cannot detect applicable type")
