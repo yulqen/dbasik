@@ -99,18 +99,34 @@ class ExcelParserIntegrationTests(TestCase):
         self.assertIsInstance(test_sheet_1_data["Project Name"], CellData)
 
         self.assertEqual(test_sheet_1_data["Project Name"].value, "Testable Project")
+        self.assertEqual(test_sheet_1_data["Project Name"].sheet, "Test Sheet 1")
         self.assertEqual(test_sheet_1_data["Project Name"].type, CellValueType.STRING)
+        self.assertEqual(test_sheet_1_data["Project Name"].source_cell, "B1")
+        self.assertEqual(test_sheet_1_data["Project Name"].key, "Project Name")
 
         self.assertEqual(test_sheet_1_data["Total Cost"].value, 45.2)
+        self.assertEqual(test_sheet_1_data["Total Cost"].sheet, "Test Sheet 1")
         self.assertEqual(test_sheet_1_data["Total Cost"].type, CellValueType.FLOAT)
+        self.assertEqual(test_sheet_1_data["Total Cost"].source_cell, "B2")
+        self.assertEqual(test_sheet_1_data["Total Cost"].key, "Total Cost")
 
         self.assertEqual(test_sheet_1_data["SRO"].value, "John Milton")
+        self.assertEqual(test_sheet_1_data["SRO"].sheet, "Test Sheet 1")
         self.assertEqual(test_sheet_1_data["SRO"].type, CellValueType.STRING)
+        self.assertEqual(test_sheet_1_data["SRO"].source_cell, "B3")
+        self.assertEqual(test_sheet_1_data["SRO"].key, "SRO")
+
         self.assertEqual(
-            test_sheet_1_data["SRO Retirement Date"].value, datetime.datetime(2022, 2, 23)
+            test_sheet_1_data["SRO Retirement Date"].value,
+            datetime.datetime(2022, 2, 23),
         )
+        self.assertEqual(test_sheet_1_data["SRO Retirement Date"].sheet, "Test Sheet 1")
         self.assertEqual(
             test_sheet_1_data["SRO Retirement Date"].type, CellValueType.DATETIME
+        )
+        self.assertEqual(test_sheet_1_data["SRO Retirement Date"].source_cell, "B4")
+        self.assertEqual(
+            test_sheet_1_data["SRO Retirement Date"].key, "SRO Retirement Date"
         )
 
     def test_map_type_to_cellvaluetype_enum(self):

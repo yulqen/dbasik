@@ -74,6 +74,7 @@ class CellValueType(Enum):
 
 class CellData(NamedTuple):
     key: str
+    sheet: str
     value: str
     source_cell: str
     type: Any
@@ -99,11 +100,24 @@ class WorkSheetFromDatamap:
         for dml in self.datamap.datamapline_set.all():
             key = dml.key
             _parsed_value = self.openpyxl_worksheet[dml.cell_ref].value
+            _sheet_title = self.openpyxl_worksheet.title
             try:
-                value = CellData(key, _parsed_value, dml.cell_ref, _detect_cell_type(_parsed_value))
+                value = CellData(
+                    key,
+                    _sheet_title,
+                    _parsed_value,
+                    dml.cell_ref,
+                    _detect_cell_type(_parsed_value),
+                )
                 self._data[key] = value
             except ValueError:
-                value = CellData(key, _parsed_value, dml.cell_ref, CellValueType.UNKNOWN)
+                value = CellData(
+                    key,
+                    _sheet_title,
+                    _parsed_value,
+                    dml.cell_ref,
+                    CellValueType.UNKNOWN,
+                )
                 self._data[key] = value
 
 
