@@ -212,3 +212,11 @@ class ExcelParserIntegrationTests(TestCase):
             tmp = self.parsed_spreadsheet[1]
         with self.assertRaises(TypeError):
             tmp = self.parsed_spreadsheet[[1]]
+
+    def test_non_attribute_access(self):
+        self.parsed_spreadsheet.process()
+        with self.assertRaisesMessage(
+            MissingSheetError,
+            "There is no sheet in the spreadsheet with title MISSING " "SHEET.",
+        ):
+            tmp = self.parsed_spreadsheet["MISSING SHEET"]

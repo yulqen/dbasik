@@ -55,7 +55,11 @@ class ParsedSpreadsheet:
         if isinstance(item, numbers.Integral):
             msg = "{cls.__name__} indices must be strings"
             raise TypeError(msg.format(cls=cls))
-        return self._sheet_data[item]
+        try:
+            return self._sheet_data[item]
+        except KeyError:
+            msg = f"There is no sheet in the spreadsheet with title {item}."
+            raise MissingSheetError(msg.format(item=item))
 
     def _get_filename(self):
         self.filename = os.path.split(self._template_path)[1]
