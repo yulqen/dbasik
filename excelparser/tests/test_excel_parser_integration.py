@@ -173,20 +173,24 @@ class ExcelParserIntegrationTests(TestCase):
             cell_ref="B1",
         )
 
-        def _test_process():
-            parsed_spreadsheet_with_wrong_datamap_sheet = ParsedSpreadsheet(
+        with self.assertRaises(MissingSheetError):
+            ParsedSpreadsheet(
                 template_path=self.populated_template,
                 project=self.project,
                 fq=self.financial_quarter,
                 datamap=dodgy_datamap,
             )
-            parsed_spreadsheet_with_wrong_datamap_sheet.process()
 
-        self.assertRaises(MissingSheetError, _test_process)
-        self.assertRaisesMessage(
+        with self.assertRaisesMessage(
             MissingSheetError,
             "There is a worksheet in the spreadsheet not in the Datamap - Test Sheet NONEXISTENT",
-        )
+        ):
+            ParsedSpreadsheet(
+                template_path=self.populated_template,
+                project=self.project,
+                fq=self.financial_quarter,
+                datamap=dodgy_datamap,
+            )
 
     def test_map_type_to_cellvaluetype_enum(self):
         self.assertEqual(_detect_cell_type(1), CellValueType.INTEGER)
@@ -208,4 +212,3 @@ class ExcelParserIntegrationTests(TestCase):
             tmp = self.parsed_spreadsheet[1]
         with self.assertRaises(TypeError):
             tmp = self.parsed_spreadsheet[[1]]
-

@@ -65,7 +65,7 @@ class ParsedSpreadsheet:
         self._dml_sheets = list({dml.sheet for dml in dmls})
         _extra_sheet = list(set(self._dml_sheets) - set(self.sheetnames))
         if _extra_sheet:
-            raise MissingSheetError(f"There is a worksheet in the spreadsheet not in the Datamap - {_extra_sheet}")
+            raise MissingSheetError(f"There is a worksheet in the spreadsheet not in the Datamap - {_extra_sheet[0]}")
 
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self._template_path)
