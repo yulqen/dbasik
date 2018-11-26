@@ -24,4 +24,5 @@ urlpatterns = [
     path('register/', include('register.urls', namespace="register")),
     path('templates/', include('templates.urls', namespace="templates")),
     path('excelparser/', include('excelparser.urls', namespace="excelparser")),
+    path('returns/', include('returns.urls', namespace="returns")),
 ]
