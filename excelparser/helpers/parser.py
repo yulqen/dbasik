@@ -1,4 +1,5 @@
 import datetime
+import numbers
 import os
 from enum import Enum
 from enum import auto
@@ -50,6 +51,10 @@ class ParsedSpreadsheet:
         self._check_sheets_present()
 
     def __getitem__(self, item):
+        cls = type(self)
+        if isinstance(item, numbers.Integral):
+            msg = "{cls.__name__} indices must be strings"
+            raise TypeError(msg.format(cls=cls))
         return self._sheet_data[item]
 
     def _get_filename(self):

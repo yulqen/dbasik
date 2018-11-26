@@ -201,3 +201,9 @@ class ExcelParserIntegrationTests(TestCase):
         self.parsed_spreadsheet.process()
         self.assertEqual(self.parsed_spreadsheet.filename, "populated.xlsm")
         self.assertEqual(self.parsed_spreadsheet.project_name, "Test Project")
+
+    def test_exception_if_integer_index_used(self):
+        self.parsed_spreadsheet.process()
+        with self.assertRaises(TypeError):
+            self.parsed_spreadsheet[1]
+
