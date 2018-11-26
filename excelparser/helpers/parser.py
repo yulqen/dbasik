@@ -121,8 +121,8 @@ class WorkSheetFromDatamap:
 
     def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap) -> None:
         self._data: Dict[str, CellData] = {}
-        self.openpyxl_worksheet = openpyxl_worksheet
-        self.datamap = datamap
+        self._openpyxl_worksheet = openpyxl_worksheet
+        self._datamap = datamap
         self._convert()
 
     def __getitem__(self, item):
@@ -137,12 +137,12 @@ class WorkSheetFromDatamap:
         :return: None
         :rtype: None
         """
-        for _dml in self.datamap.datamapline_set.filter(
-            sheet__exact=self.openpyxl_worksheet.title
+        for _dml in self._datamap.datamapline_set.filter(
+            sheet__exact=self._openpyxl_worksheet.title
         ):
             _key = _dml.key
-            _parsed_value = self.openpyxl_worksheet[_dml.cell_ref].value
-            _sheet_title = self.openpyxl_worksheet.title
+            _parsed_value = self._openpyxl_worksheet[_dml.cell_ref].value
+            _sheet_title = self._openpyxl_worksheet.title
             try:
                 _value = CellData(
                     _key,
