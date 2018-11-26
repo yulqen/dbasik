@@ -196,3 +196,8 @@ class ExcelParserIntegrationTests(TestCase):
         self.assertRaisesMessage(
             ValueError, "Cannot detect applicable type", _detect_cell_type, []
         )
+
+    def test_parsed_spreadsheet_metadata(self):
+        self.parsed_spreadsheet.process()
+        self.assertEqual(self.parsed_spreadsheet.filename, "populated.xlsm")
+        self.assertEqual(self.parsed_spreadsheet.project_name, "Test Project")

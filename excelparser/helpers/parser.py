@@ -1,4 +1,5 @@
 import datetime
+import os
 from enum import Enum
 from enum import auto
 from typing import Any
@@ -36,18 +37,23 @@ class ParsedSpreadsheet:
         datamap: Datamap,
     ) -> None:
         self.sheetnames: List[str]
+        self.filename: str
+        self.project_name = project.name
         self._template_path = template_path
-        self._project = project
         self._fq = fq
         self._datamap = datamap
         self._sheet_data: SheetData = {}
         self._get_sheets()
+        self._get_filename()
         self._dml_sheets: List[str]
         self._dml_sheets_missing_from_spreadsheet: List[str]
         self._check_sheets_present()
 
     def __getitem__(self, item):
         return self._sheet_data[item]
+
+    def _get_filename(self):
+        self.filename = os.path.split(self._template_path)[1]
 
     def _check_sheets_present(self) -> None:
         dmls = self._datamap.datamapline_set.all()
@@ -72,15 +78,6 @@ class ParsedSpreadsheet:
         :rtype: None
         """
         self._process_sheets()
-
-    @property
-    def project_name(self) -> str:
-        """
-        The name of the project relating to this spreadsheet.
-        :return: project name
-        :rtype: str
-        """
-        return self._project.name
 
     def _get_sheets(self) -> None:
         wb = load_workbook(self._template_path)
