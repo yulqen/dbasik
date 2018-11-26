@@ -61,6 +61,13 @@ class ExcelParserIntegrationTests(TestCase):
             sheet="Test Sheet 1",
             cell_ref="B4",
         )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Janitor's Favourite Colour",
+            sheet="Test Sheet 2",
+            cell_ref="B1",
+        )
+
         self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
         self.parsed_spreadsheet = ParsedSpreadsheet(
             template_path=self.populated_template,
@@ -128,6 +135,30 @@ class ExcelParserIntegrationTests(TestCase):
         self.assertEqual(test_sheet_1_data["SRO Retirement Date"].source_cell, "B4")
         self.assertEqual(
             test_sheet_1_data["SRO Retirement Date"].key, "SRO Retirement Date"
+        )
+
+    def test_getting_separate_sheet_data(self):
+        self.parsed_spreadsheet.process()
+        test_sheet_2_data = self.parsed_spreadsheet["Test Sheet 2"]
+
+        self.assertIsInstance(test_sheet_2_data, WorkSheetFromDatamap)
+        self.assertIsInstance(test_sheet_2_data["Janitor's Favourite Colour"], CellData)
+
+        self.assertEqual(
+            test_sheet_2_data["Janitor's Favourite Colour"].value, "Purple"
+        )
+        self.assertEqual(
+            test_sheet_2_data["Janitor's Favourite Colour"].sheet, "Test Sheet 2"
+        )
+        self.assertEqual(
+            test_sheet_2_data["Janitor's Favourite Colour"].type, CellValueType.STRING
+        )
+        self.assertEqual(
+            test_sheet_2_data["Janitor's Favourite Colour"].source_cell, "B1"
+        )
+        self.assertEqual(
+            test_sheet_2_data["Janitor's Favourite Colour"].key,
+            "Janitor's Favourite Colour",
         )
 
     def test_map_type_to_cellvaluetype_enum(self):

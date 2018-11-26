@@ -47,7 +47,9 @@ class ParsedSpreadsheet:
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self.template_path)
         for ws in self.sheetnames:
-            ws_from_dm = WorkSheetFromDatamap(wb[ws], self.datamap)
+            ws_from_dm = WorkSheetFromDatamap(
+                openpyxl_worksheet=wb[ws], datamap=self.datamap
+            )
             ws_from_dm._convert()
             self.sheet_data[ws] = ws_from_dm
 
@@ -67,6 +69,7 @@ class CellValueType(Enum):
     """
     Type classifiers for data parsed from a spreadsheet.
     """
+
     INTEGER = auto()
     STRING = auto()
     DATE = auto()
@@ -79,6 +82,7 @@ class CellData(NamedTuple):
     """
     Holds the data and useful metadata parsed from a spreadsheet.
     """
+
     key: str
     sheet: str
     value: str
@@ -111,7 +115,9 @@ class WorkSheetFromDatamap:
         :return: None
         :rtype: None
         """
-        for _dml in self.datamap.datamapline_set.all():
+        for _dml in self.datamap.datamapline_set.filter(
+            sheet__exact=self.openpyxl_worksheet.title
+        ):
             _key = _dml.key
             _parsed_value = self.openpyxl_worksheet[_dml.cell_ref].value
             _sheet_title = self.openpyxl_worksheet.title
