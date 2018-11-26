@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ object }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div id="message-test" class="alert alert-dismissible alert-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3 id="show-datamap-table">Return Item: {{ object }} </h3>
+        <table class="table table-hover">
+            <thead>
+            <tr id="datamap-detail-header-row">
+                <th scope="col">Key</th>
+                <th scope="col" class="col-sm-1">Sheet</th>
+                <th scope="col" class="col-sm-1">String Value</th>
+                <th scope="col" class="col-sm-1">Integer Value</th>
+                <th scope="col" class="col-sm-2">Float Value</th>
+                <th scope="col" class="col-sm-1">Date Value</th>
+            </tr>
+            </thead>
+            <tr>
+                <td scope="col">{{ object.datamapline.key }}</td>
+                <td scope="col">{{ object.datamapline.sheet }}</td>
+                <td scope="col">{{ object.value_str }}</td>
+                <td scope="col">{{ object.value_int }}</td>
+                <td scope="col">{{ object.value_float }}</td>
+                <td scope="col">{{ object.value_date }}</td>
+            </tr>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block title %}Financial Quarters{% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        <h3 id="show-datamap-table">Financial Quarters</h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-sm-4">Financial Quarter</th>
+                </tr>
+            </thead>
+            {% if object_list %}
+                {% for fq in object_list %}
+                <tr>
+                    <td>{{ fq }}</td>
+                    <td> {{ fq.financial_quarter }} </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <td>There are no Financial Quarters.</td>
+            {% endif %}
+        </table>
+    </div>
+
+{% endblock %}
