@@ -95,6 +95,7 @@ class ExcelParserIntegrationTests(TestCase):
     def test_getting_sheet_data_using_datamap(self):
         self.parsed_spreadsheet.process()
         test_sheet_1_data = self.parsed_spreadsheet["Test Sheet 1"]
+
         self.assertIsInstance(test_sheet_1_data, WorkSheetFromDatamap)
         self.assertIsInstance(test_sheet_1_data["Project Name"], CellData)
 

@@ -64,6 +64,9 @@ class ParsedSpreadsheet:
 
 
 class CellValueType(Enum):
+    """
+    Type classifiers for data parsed from a spreadsheet.
+    """
     INTEGER = auto()
     STRING = auto()
     DATE = auto()
@@ -73,6 +76,9 @@ class CellValueType(Enum):
 
 
 class CellData(NamedTuple):
+    """
+    Holds the data and useful metadata parsed from a spreadsheet.
+    """
     key: str
     sheet: str
     value: str
@@ -97,31 +103,48 @@ class WorkSheetFromDatamap:
         return self._data[item]
 
     def _convert(self) -> None:
-        for dml in self.datamap.datamapline_set.all():
-            key = dml.key
-            _parsed_value = self.openpyxl_worksheet[dml.cell_ref].value
+        """
+        Populates self._data dictionary with data from the spreadsheet.
+        If type of data is not expected (i.e. not in the enum CellValueType)
+        will still parse the data but classify it as CellValueType.UNKOWN
+        for onward processing.
+        :return: None
+        :rtype: None
+        """
+        for _dml in self.datamap.datamapline_set.all():
+            _key = _dml.key
+            _parsed_value = self.openpyxl_worksheet[_dml.cell_ref].value
             _sheet_title = self.openpyxl_worksheet.title
             try:
-                value = CellData(
-                    key,
+                _value = CellData(
+                    _key,
                     _sheet_title,
                     _parsed_value,
-                    dml.cell_ref,
+                    _dml.cell_ref,
                     _detect_cell_type(_parsed_value),
                 )
-                self._data[key] = value
+                self._data[_key] = _value
             except ValueError:
-                value = CellData(
-                    key,
+                _value = CellData(
+                    _key,
                     _sheet_title,
                     _parsed_value,
-                    dml.cell_ref,
+                    _dml.cell_ref,
                     CellValueType.UNKNOWN,
                 )
-                self._data[key] = value
+                self._data[_key] = _value
 
 
 def _detect_cell_type(obj: Any) -> CellValueType:
+    """
+    Takes an object and maps its type to the CellValueType enum.
+    Raises ValueError exception if the object is not an enum type
+    useful for this process (int, str, float, etc).
+    :param obj:
+    :type obj: List[str]
+    :return: CellValueType
+    :rtype: None
+    """
     if isinstance(obj, int):
         return CellValueType.INTEGER
     if isinstance(obj, str):
