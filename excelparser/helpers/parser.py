@@ -5,11 +5,9 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
-from openpyxl import load_workbook
 from openpyxl import Workbook as OpenpyxlWorkbook
+from openpyxl import load_workbook
 from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 
 from datamap.models import Datamap
@@ -37,44 +35,55 @@ class ParsedSpreadsheet:
         fq: FinancialQuarter,
         datamap: Datamap,
     ) -> None:
-        self.template_path = template_path
-        self._project = project
-        self.fq = fq
-        self.datamap = datamap
-        self.sheet_data: SheetData = {}
         self.sheetnames: List[str]
+        self._template_path = template_path
+        self._project = project
+        self._fq = fq
+        self._datamap = datamap
+        self._sheet_data: SheetData = {}
         self._get_sheets()
         self._dml_sheets: List[str]
         self._dml_sheets_missing_from_spreadsheet: List[str]
         self._check_sheets_present()
 
     def __getitem__(self, item):
-        return self.sheet_data[item]
+        return self._sheet_data[item]
 
     def _check_sheets_present(self) -> None:
-        dmls = self.datamap.datamapline_set.all()
+        dmls = self._datamap.datamapline_set.all()
         self._dml_sheets = list({dml.sheet for dml in dmls})
-        if list(set(self.sheetnames) - set(self._dml_sheets)):
-            raise MissingSheetError("There is a worksheet in the spreadsheet not in the Datamap")
+        _extra_sheet = list(set(self._dml_sheets) - set(self.sheetnames))
+        if _extra_sheet:
+            raise MissingSheetError(f"There is a worksheet in the spreadsheet not in the Datamap - {_extra_sheet}")
 
     def _process_sheets(self) -> None:
-        wb: OpenpyxlWorkbook = load_workbook(self.template_path)
+        wb: OpenpyxlWorkbook = load_workbook(self._template_path)
         for ws in self.sheetnames:
             ws_from_dm = WorkSheetFromDatamap(
-                openpyxl_worksheet=wb[ws], datamap=self.datamap
+                openpyxl_worksheet=wb[ws], datamap=self._datamap
             )
             ws_from_dm._convert()
-            self.sheet_data[ws] = ws_from_dm
+            self._sheet_data[ws] = ws_from_dm
 
     def process(self) -> None:
+        """
+        Convert a populated spreadsheet into a parseable data structure.
+        :return: None
+        :rtype: None
+        """
         self._process_sheets()
 
     @property
     def project_name(self) -> str:
+        """
+        The name of the project relating to this spreadsheet.
+        :return: project name
+        :rtype: str
+        """
         return self._project.name
 
     def _get_sheets(self) -> None:
-        wb = load_workbook(self.template_path)
+        wb = load_workbook(self._template_path)
         self.sheetnames = wb.sheetnames
 
 
