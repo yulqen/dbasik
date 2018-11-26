@@ -5,6 +5,7 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 from typing import Union
 
 from openpyxl import load_workbook
@@ -16,6 +17,10 @@ from register.models import FinancialQuarter
 from register.models import Project
 
 SheetData = Dict[str, "WorkSheetFromDatamap"]
+
+
+class MissingSheetError(Exception):
+    pass
 
 
 class ParsedSpreadsheet:
@@ -38,11 +43,19 @@ class ParsedSpreadsheet:
         self.datamap = datamap
         self.sheet_data: SheetData = {}
         self.sheetnames: List[str]
-
         self._get_sheets()
+        self._dml_sheets: List[str]
+        self._dml_sheets_missing_from_spreadsheet: List[str]
+        self._check_sheets_present()
 
     def __getitem__(self, item):
         return self.sheet_data[item]
+
+    def _check_sheets_present(self) -> None:
+        dmls = self.datamap.datamapline_set.all()
+        self._dml_sheets = list({dml.sheet for dml in dmls})
+        if list(set(self.sheetnames) - set(self._dml_sheets)):
+            raise MissingSheetError("There is a worksheet in the spreadsheet not in the Datamap")
 
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self.template_path)

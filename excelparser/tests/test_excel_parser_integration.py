@@ -6,6 +6,7 @@ from django.urls import reverse
 from datamap.models import DatamapLine
 from excelparser.helpers.parser import CellData
 from excelparser.helpers.parser import CellValueType
+from excelparser.helpers.parser import MissingSheetError
 from excelparser.helpers.parser import ParsedSpreadsheet
 from excelparser.helpers.parser import WorkSheetFromDatamap
 from excelparser.helpers.parser import _detect_cell_type
@@ -160,6 +161,28 @@ class ExcelParserIntegrationTests(TestCase):
             test_sheet_2_data["Janitor's Favourite Colour"].key,
             "Janitor's Favourite Colour",
         )
+
+    def test_exception_raised_when_dml_sheet_and_actual_sheet_dont_match(self):
+
+        dodgy_datamap = DatamapFactory()
+
+        DatamapLine.objects.create(
+            datamap=dodgy_datamap,
+            key="Dodgy Line",
+            sheet="Test Sheet NONEXISTENT",
+            cell_ref="B1",
+        )
+
+        def _test_process():
+            parsed_spreadsheet_with_wrong_datamap_sheet = ParsedSpreadsheet(
+                template_path=self.populated_template,
+                project=self.project,
+                fq=self.financial_quarter,
+                datamap=dodgy_datamap,
+            )
+            parsed_spreadsheet_with_wrong_datamap_sheet.process()
+
+        self.assertRaises(MissingSheetError, _test_process)
 
     def test_map_type_to_cellvaluetype_enum(self):
         self.assertEqual(_detect_cell_type(1), CellValueType.INTEGER)
