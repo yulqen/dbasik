@@ -15,6 +15,7 @@ from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 from datamap.models import Datamap
 from register.models import FinancialQuarter
 from register.models import Project
+from returns.models import Return
 
 SheetData = Dict[str, "WorkSheetFromDatamap"]
 
@@ -34,14 +35,14 @@ class ParsedSpreadsheet:
         self,
         template_path: str,
         project: Project,
-        fq: FinancialQuarter,
+        return_obj: Return,
         datamap: Datamap,
     ) -> None:
         self.sheetnames: List[str]
         self.filename: str
         self.project_name = project.name
         self._template_path = template_path
-        self._fq = fq
+        self._return_obj = return_obj
         self._datamap = datamap
         self._sheet_data: SheetData = {}
         self._get_sheets()

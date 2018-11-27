@@ -75,7 +75,7 @@ class ExcelParserIntegrationTests(TestCase):
         self.parsed_spreadsheet = ParsedSpreadsheet(
             template_path=self.populated_template,
             project=self.project,
-            fq=self.financial_quarter,
+            return_obj=self.return_obj,
             datamap=self.datamap,
         )
 
@@ -178,7 +178,7 @@ class ExcelParserIntegrationTests(TestCase):
             ParsedSpreadsheet(
                 template_path=self.populated_template,
                 project=self.project,
-                fq=self.financial_quarter,
+                return_obj=self.return_obj,
                 datamap=dodgy_datamap,
             )
 
@@ -189,7 +189,7 @@ class ExcelParserIntegrationTests(TestCase):
             ParsedSpreadsheet(
                 template_path=self.populated_template,
                 project=self.project,
-                fq=self.financial_quarter,
+                return_obj=self.return_obj,
                 datamap=dodgy_datamap,
             )
 
