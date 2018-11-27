@@ -13,9 +13,6 @@ from django.utils.safestring import mark_safe
 
 from datamap import urls as datamap_urls
 from datamap.models import Datamap
-from register import urls as register_urls
-from register.models import FinancialQuarter
-from register.models import Project
 from returns.models import Return
 
 acceptable_types = ["xlsm"]
@@ -35,7 +32,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
 
     return_obj = ModelChoiceField(
         queryset=Return.objects.all(),
-        help_text="Please select an exististing return. <a href='/returns/create/'>Create a new Return</a>",
+        help_text=mark_safe("Please select an existing return. <a href='/returns/create/'>Create a new Return</a>"),
     )
 
     datamap = ModelChoiceField(
@@ -44,10 +41,6 @@ class ProcessPopulatedTemplateForm(forms.Form):
         help_text=mark_safe(
             f"Please select an existing Datamap. <a href='/datamaps{datamap_create_url}'>Create new Datamap</a>"
         ),
-    )
-    financial_quarter = ModelChoiceField(
-        queryset=FinancialQuarter.objects.all(),
-        label="Financial Quarter",
     )
 
     def __init__(self, *args, **kwargs):
@@ -64,7 +57,6 @@ class ProcessPopulatedTemplateForm(forms.Form):
                 "Process a populated spreadsheet",
                 "return_obj",
                 "datamap",
-                "financial_quarter",
                 "source_file",
             ),
             ButtonHolder(

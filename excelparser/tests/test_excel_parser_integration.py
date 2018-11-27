@@ -14,6 +14,7 @@ from excelparser.tests.factories.datamap_factories import DatamapFactory
 from excelparser.tests.factories.datamap_factories import DatamapLineFactory
 from excelparser.tests.factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
+from returns.models import Return
 
 
 class FactoryTests(TestCase):
@@ -44,6 +45,7 @@ class ExcelParserIntegrationTests(TestCase):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
+        self.return_obj = Return.objects.create(project=self.project, financial_quarter=self.financial_quarter)
         DatamapLine.objects.create(
             datamap=self.datamap,
             key="Project Name",
@@ -78,17 +80,16 @@ class ExcelParserIntegrationTests(TestCase):
         )
 
     def test_can_get_to_populated_template_upload_page(self):
-        response = self.client.get(reverse("excelparser:process_populated"))
+        response = self.client.get(reverse("excelparser:process_populated", args=[self.return_obj.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "excelparser/process_populated_template.html")
 
     def test_can_post_populated_template_form(self):
         response = self.client.post(
-            reverse("excelparser:process_populated"),
+            reverse("excelparser:process_populated", args=[self.return_obj.id]),
             data={
                 "datamap": self.datamap,
                 "project": self.project,
-                "financial_quarter": self.financial_quarter,
                 "source_file": self.populated_template,
             },
         )

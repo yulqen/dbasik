@@ -4,8 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from excelparser.forms import ProcessPopulatedTemplateForm
-from excelparser.helpers.financial_quarter import check_date_in_quarter
-from register.models import FinancialQuarter
+from returns.models import Return
 
 
 class ProcessPopulatedTemplate(FormView):
@@ -16,7 +15,5 @@ class ProcessPopulatedTemplate(FormView):
 
     def get_initial(self):
         today = datetime.date.today()
-        for q in FinancialQuarter.objects.all():
-            if check_date_in_quarter(today, q):
-                return {'financial_quarter': q, 'return_obj': self.kwargs['return_id']}
-        return None
+        return_obj = Return.objects.get(id=self.kwargs['return_id'])
+        return {'return_obj': self.kwargs['return_id']}

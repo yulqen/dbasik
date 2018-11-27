@@ -1,30 +1,37 @@
 import datetime
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
+
+from datamap.models import DatamapLine
 from excelparser.helpers.financial_quarter import check_date_in_quarter
+from excelparser.tests.factories.datamap_factories import DatamapFactory
+from excelparser.tests.factories.datamap_factories import ProjectFactory
 
 from register.models import FinancialQuarter
+from returns.models import Return
 from ..forms import ProcessPopulatedTemplateForm
 
 
 class UploadPopulatedTemplateTests(TestCase):
     def setUp(self):
         self.form = ProcessPopulatedTemplateForm()
+        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
+        self.project = ProjectFactory()
+        self.datamap = DatamapFactory()
+        self.dml1 = DatamapLine.objects.create(datamap=self.datamap)
+        self.fq = FinancialQuarter.objects.create(quarter=1, year=2010)
+        self.return_obj = Return.objects.create(
+            project=self.project, financial_quarter=self.fq
+        )
 
     def test_form_fields_are_valid(self):
         self.assertTrue(self.form.fields["datamap"].label == "Datamap")
-        self.assertTrue(
-            self.form.fields["financial_quarter"].label == "Financial Quarter"
-        )
 
         # because we haven't explicitly set label on the source_file or project fields...
         self.assertTrue(
             self.form.fields["source_file"].label == "Source file"
             or self.form.fields["source_file"].label is None
-        )
-        self.assertTrue(
-            self.form.fields["project"].label == "Project"
-            or self.form.fields["project"].label is None
         )
 
     def test_help_text_on_each_field(self):
@@ -32,10 +39,17 @@ class UploadPopulatedTemplateTests(TestCase):
             self.form.fields["datamap"].help_text,
             "Please select an existing Datamap. <a href='/datamaps/create/'>Create new Datamap</a>",
         )
-        self.assertEqual(
-            self.form.fields["project"].help_text,
-            "Please select an existing Project. <a href='/register/project/create'> Create new Project </a>",
-        )
+
+    def test_valid_form(self):
+        f = open(self.populated_template, "rb")
+        data = {
+            "return_obj": self.return_obj.id,
+            "datamap": self.datamap.id,
+        }
+        file = {"source_file": SimpleUploadedFile(f.name, f.read())}
+        form = ProcessPopulatedTemplateForm(data, file)
+        self.assertTrue(form.is_valid())
+        f.close()
 
 
 class TestFinancialQuarterDates(TestCase):
@@ -49,4 +63,3 @@ class TestFinancialQuarterDates(TestCase):
 
     def test_date_outside_quarter(self):
         self.assertFalse(check_date_in_quarter(self.outwith_quarter, self.fq1))
-
