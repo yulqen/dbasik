@@ -14,6 +14,4 @@ class ProcessPopulatedTemplate(FormView):
     template_name = "excelparser/process_populated_template.html"
 
     def get_initial(self):
-        today = datetime.date.today()
-        return_obj = Return.objects.get(id=self.kwargs['return_id'])
         return {'return_obj': self.kwargs['return_id']}
