@@ -92,6 +92,10 @@ class ParsedSpreadsheet:
         wb = load_workbook(self._template_path)
         self.sheetnames = wb.sheetnames
 
+    @property
+    def return_obj(self):
+        return self._return_obj
+
 
 class CellValueType(Enum):
     """
