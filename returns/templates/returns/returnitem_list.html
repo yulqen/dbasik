@@ -10,15 +10,22 @@
             <thead>
                 <tr>
                     <th scope="col" class="col-sm-4">Return Item</th>
-                    <th scope="col" class="col-sm-2">Financial Quarter</th>
+                    <th scope="col" class="col-sm-4">Sheet</th>
+                    <th scope="col" class="col-sm-4">Text Value</th>
+                    <th scope="col" class="col-sm-4">Integer Value</th>
+                    <th scope="col" class="col-sm-4">Float Value</th>
+                    <th scope="col" class="col-sm-4">Date Value</th>
                 </tr>
             </thead>
             {% if object_list %}
-                {% for ri in object_list %}
+                {% for returnitem in return.returnitem_set.all %}
                 <tr>
-                    <td>{{ ri }}</td>
-                    <td> {{ ri.financial_quarter }} </td>
-                    <td> {{ ri.datamapline }} </td>
+                    <td>{{ returnitem.datamapline.key }}</td>
+                    <td>{{ returnitem.datamapline.sheet }}</td>
+                    <td>{{ returnitem.value_str }}</td>
+                    <td>{{ returnitem.value_int }}</td>
+                    <td>{{ returnitem.value_float }}</td>
+                    <td>{{ returnitem.value_date }}</td>
                 </tr>
                 {% endfor %}
             {% else %}
