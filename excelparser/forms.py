@@ -31,20 +31,13 @@ class ProcessPopulatedTemplateForm(forms.Form):
     datamap_create_url = reverse(
         "datamap-create", current_app="excelparser", urlconf=datamap_urls
     )
-    project_create_url = reverse(
-        "project_create", current_app="excelparser", urlconf=register_urls
-    )
     source_file = FileField(validators=[file_validator])
 
     return_obj = ModelChoiceField(
         queryset=Return.objects.all(),
-        help_text="Please select an exististing return. <a href='#'>Create a new Return</a>",
+        help_text="Please select an exististing return. <a href='/returns/create/'>Create a new Return</a>",
     )
 
-    project = ModelChoiceField(
-        queryset=Project.objects.all(),
-        help_text="Please select an existing Project. <a href='/register/project/create'> Create new Project </a>",
-    )
     datamap = ModelChoiceField(
         queryset=Datamap.objects.all(),
         label="Datamap",
@@ -71,7 +64,6 @@ class ProcessPopulatedTemplateForm(forms.Form):
                 "Process a populated spreadsheet",
                 "return_obj",
                 "datamap",
-                "project",
                 "financial_quarter",
                 "source_file",
             ),
