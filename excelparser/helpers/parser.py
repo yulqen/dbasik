@@ -13,7 +13,6 @@ from openpyxl import load_workbook
 from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 
 from datamap.models import Datamap
-from register.models import FinancialQuarter
 from register.models import Project
 from returns.models import Return
 

@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button
 from crispy_forms.layout import ButtonHolder
+from crispy_forms.layout import Field
 from crispy_forms.layout import Fieldset
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Submit
@@ -55,10 +56,10 @@ class ProcessPopulatedTemplateForm(forms.Form):
         self.helper.layout = Layout(
             Fieldset(
                 "Process a populated spreadsheet",
-                "return_obj",
                 "datamap",
                 "source_file",
             ),
+            Field("return_obj", type="hidden"),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
