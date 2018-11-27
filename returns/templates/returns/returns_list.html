@@ -22,6 +22,9 @@
                 <td>There are no Return Items.</td>
             {% endif %}
         </table>
+        <div class="container">
+            <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
+        </div>
     </div>
 
 {% endblock %}

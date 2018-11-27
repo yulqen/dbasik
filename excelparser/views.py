@@ -18,5 +18,5 @@ class ProcessPopulatedTemplate(FormView):
         today = datetime.date.today()
         for q in FinancialQuarter.objects.all():
             if check_date_in_quarter(today, q):
-                return {'financial_quarter': q}
+                return {'financial_quarter': q, 'return_obj': self.kwargs['return_id']}
         return None

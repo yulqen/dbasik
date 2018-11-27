@@ -7,5 +7,5 @@ from .views import (
 app_name = "excelparser"
 
 urlpatterns = [
-    path("process-populated/", ProcessPopulatedTemplate.as_view(), name="process_populated"),
+    path("process-populated/<int:return_id>/", ProcessPopulatedTemplate.as_view(), name="process_populated"),
 ]

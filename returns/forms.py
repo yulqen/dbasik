@@ -20,7 +20,6 @@ class ReturnCreateForm(forms.ModelForm):
                   "Project</a>",
     )
 
-
     class Meta:
         model = models.Return
         fields = ['project', 'financial_quarter']
