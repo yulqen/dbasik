@@ -16,6 +16,7 @@ from datamap.models import Datamap
 from register import urls as register_urls
 from register.models import FinancialQuarter
 from register.models import Project
+from returns.models import Return
 
 acceptable_types = ["xlsm"]
 
@@ -34,6 +35,12 @@ class ProcessPopulatedTemplateForm(forms.Form):
         "project_create", current_app="excelparser", urlconf=register_urls
     )
     source_file = FileField(validators=[file_validator])
+
+    return_obj = ModelChoiceField(
+        queryset=Return.objects.all(),
+        help_text="Please select an exististing return. <a href='#'>Create a new Return</a>",
+    )
+
     project = ModelChoiceField(
         queryset=Project.objects.all(),
         help_text="Please select an existing Project. <a href='/register/project/create'> Create new Project </a>",
@@ -62,6 +69,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
         self.helper.layout = Layout(
             Fieldset(
                 "Process a populated spreadsheet",
+                "return_obj",
                 "datamap",
                 "project",
                 "financial_quarter",

@@ -1,7 +1,11 @@
+from django.urls import reverse
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
 
 from register.models import FinancialQuarter
+from returns.forms import ReturnCreateForm
 from returns.models import Return
 from returns.models import ReturnItem
 
@@ -9,6 +13,13 @@ from returns.models import ReturnItem
 class ReturnsList(ListView):
     queryset = Return.objects.all()
     template_name = "returns/returns_list.html"
+
+
+class ReturnCreate(CreateView):
+    model = Return
+    form_class = ReturnCreateForm
+    success_url = reverse_lazy("returns:returns_list")
+    template_name = "returns/return_create.html"
 
 
 class ReturnLines(ListView):

@@ -16,6 +16,9 @@ class Return(models.Model):
         related_name="return_financial_quarters",
     )
 
+    class Meta:
+        unique_together = ['project', 'financial_quarter']
+
     def __str__(self):
         return f"Return for {self.project} for {self.financial_quarter}"
 
