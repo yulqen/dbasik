@@ -19,3 +19,4 @@ Test Results - CSV_Form_Validator_Tests.html
 .idea/
 /.mypy_cache/
 /excelparser/tests/.~lock.populated.xlsm#
+/venve/
