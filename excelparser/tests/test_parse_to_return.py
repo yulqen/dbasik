@@ -3,7 +3,7 @@ import unittest
 from django.test import TestCase
 
 from datamap.models import DatamapLine
-from excelparser.helpers.parser import ParsedSpreadsheet
+from excelparser.helpers.parser import ParsedSpreadsheet, CellData, CellValueType
 from excelparser.tests.factories.datamap_factories import DatamapFactory
 from excelparser.tests.factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
@@ -55,6 +55,11 @@ class TestParseToReturn(TestCase):
         return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
         self.assertEqual(return_item.datamapline.key, "Project Name")
         self.assertEqual(return_item.value_str, "Testable Project")
+
+    def test_celldata_mapper(self):
+        self.parsed_spreadsheet.process()
+        cell_data = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
+        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data), "value_int")
 
     @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):

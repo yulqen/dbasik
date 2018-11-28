@@ -124,9 +124,9 @@ class CellData(NamedTuple):
 
     key: str
     sheet: str
-    value: str
+    value: Any
     source_cell: str
-    type: Any
+    type: CellValueType
 
 
 class WorkSheetFromDatamap:
