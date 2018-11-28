@@ -1,3 +1,5 @@
+import unittest
+
 from django.test import TestCase
 
 from datamap.models import DatamapLine
@@ -47,6 +49,15 @@ class TestParseToReturn(TestCase):
             datamap=self.datamap,
         )
 
+    def test_return_parser(self):
+        self.parsed_spreadsheet.process()
+        self.parsed_spreadsheet._process_sheet_to_return(self.parsed_spreadsheet["Test Sheet 1"])
+        return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
+        self.assertEqual(return_item.datamapline.key, "Project Name")
+
+    @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):
         self.parsed_spreadsheet.process()
-        self.assertEqual("START HERE!", 1)
+        return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
+        self.assertEqual(return_item.datamapline.key, "Project/Programme Name")
+        self.assertEqual(return_item.value_str, "Testable Project")

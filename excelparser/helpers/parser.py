@@ -14,7 +14,7 @@ from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 
 from datamap.models import Datamap
 from register.models import Project
-from returns.models import Return
+from returns.models import Return, ReturnItem
 
 SheetData = Dict[str, "WorkSheetFromDatamap"]
 
@@ -88,6 +88,13 @@ class ParsedSpreadsheet:
         """
         self._process_sheets()
 
+    def _process_sheet_to_return(self, sheet: 'WorkSheetFromDatamap'):
+        sheet_name = sheet.title
+        relevant_dmls = self._datamap.datamapline_set.filter(sheet=sheet_name)
+        for dml in relevant_dmls:
+            # ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key])
+            ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str="tits")
+
     def _get_sheets(self) -> None:
         wb = load_workbook(self._template_path)
         self.sheetnames = wb.sheetnames
@@ -134,6 +141,7 @@ class WorkSheetFromDatamap:
         self._openpyxl_worksheet = openpyxl_worksheet
         self._datamap = datamap
         self._convert()
+        self.title = self._openpyxl_worksheet.title
 
     def __getitem__(self, item):
         return self._data[item]
