@@ -93,7 +93,7 @@ class ParsedSpreadsheet:
         relevant_dmls = self._datamap.datamapline_set.filter(sheet=sheet_name)
         for dml in relevant_dmls:
             # ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key])
-            ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str="tits")
+            ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key].value)
 
     def _get_sheets(self) -> None:
         wb = load_workbook(self._template_path)

@@ -54,6 +54,7 @@ class TestParseToReturn(TestCase):
         self.parsed_spreadsheet._process_sheet_to_return(self.parsed_spreadsheet["Test Sheet 1"])
         return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
         self.assertEqual(return_item.datamapline.key, "Project Name")
+        self.assertEqual(return_item.value_str, "Testable Project")
 
     @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):
