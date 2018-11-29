@@ -58,8 +58,10 @@ class TestParseToReturn(TestCase):
 
     def test_celldata_mapper(self):
         self.parsed_spreadsheet.process()
-        cell_data = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
-        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data), "value_int")
+        cell_data_int = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
+        cell_data_float = CellData("Key", "Sheet", 1, "B1", CellValueType.FLOAT)
+        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int")
+        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_float), "value_float")
 
     @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):

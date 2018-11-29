@@ -55,6 +55,7 @@ class ParsedSpreadsheet:
             CellValueType.STRING: "value_str",
             CellValueType.INTEGER: "value_int",
             CellValueType.FLOAT: "value_float",
+            CellValueType.DATE: "value_date",
         }
         return _map[cell_data.type]
 
