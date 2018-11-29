@@ -50,6 +50,14 @@ class ParsedSpreadsheet:
         self._dml_sheets_missing_from_spreadsheet: List[str]
         self._check_sheets_present()
 
+    def _map_to_keyword_param(self, cell_data: "CellData") -> str:
+        _map = {
+            CellValueType.STRING: "value_str",
+            CellValueType.INTEGER: "value_int",
+            CellValueType.FLOAT: "value_float",
+        }
+        return _map[cell_data.type]
+
     def __getitem__(self, item):
         cls = type(self)
         if isinstance(item, numbers.Integral):
