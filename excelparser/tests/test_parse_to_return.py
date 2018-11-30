@@ -67,9 +67,6 @@ class TestParseToReturn(TestCase):
         cell_data_date = CellData(
             "Key", "Sheet", date(2018, 1, 1), "B1", CellValueType.DATE
         )
-        cell_data_datetime = CellData(
-            "Key", "Sheet", datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME
-        )
         self.assertEqual(
             self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int"
         )
@@ -79,10 +76,6 @@ class TestParseToReturn(TestCase):
         )
         self.assertEqual(
             self.parsed_spreadsheet._map_to_keyword_param(cell_data_date), "value_date"
-        )
-        self.assertEqual(
-            self.parsed_spreadsheet._map_to_keyword_param(cell_data_datetime),
-            "value_datetime",
         )
 
     def test_parse_to_return_object(self):
@@ -122,13 +115,9 @@ class TestParseToReturn(TestCase):
         self.assertEqual(return_item_projectname.value_str, "Testable Project")
 
         self.assertEqual(return_item_srocell.datamapline.key, "SRO Retirement Date")
-        self.assertEqual(
-            return_item_srocell.value_datetime,
-            datetime(2022, 2, 23, 0, 0, tzinfo=timezone.get_current_timezone()),
-        )
+        self.assertEqual(return_item_srocell.value_date, date(2022, 2, 23))
 
         self.assertEqual(return_item_sro.datamapline.key, "SRO")
         self.assertEqual(return_item_sro.value_str, "John Milton")
         self.assertEqual(return_item_sro.value_int, None)
         self.assertEqual(return_item_sro.value_date, None)
-        self.assertEqual(return_item_sro.value_datetime, None)

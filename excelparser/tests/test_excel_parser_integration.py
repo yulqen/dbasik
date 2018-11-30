@@ -128,11 +128,11 @@ class ExcelParserIntegrationTests(TestCase):
 
         self.assertEqual(
             test_sheet_1_data["SRO Retirement Date"].value,
-            datetime.datetime(2022, 2, 23),
+            datetime.date(2022, 2, 23),
         )
         self.assertEqual(test_sheet_1_data["SRO Retirement Date"].sheet, "Test Sheet 1")
         self.assertEqual(
-            test_sheet_1_data["SRO Retirement Date"].type, CellValueType.DATETIME
+            test_sheet_1_data["SRO Retirement Date"].type, CellValueType.DATE
         )
         self.assertEqual(test_sheet_1_data["SRO Retirement Date"].source_cell, "B4")
         self.assertEqual(

@@ -47,7 +47,7 @@ class ParsedSpreadsheet:
         self._check_sheets_present()
 
         self._return_params = set(
-            ["value_str", "value_int", "value_float", "value_date", "value_datetime"]
+            ["value_str", "value_int", "value_float", "value_date"]
         )
 
     def _map_to_keyword_param(self, cell_data: "CellData") -> str:
@@ -56,7 +56,6 @@ class ParsedSpreadsheet:
             CellValueType.INTEGER: "value_int",
             CellValueType.FLOAT: "value_float",
             CellValueType.DATE: "value_date",
-            CellValueType.DATETIME: "value_datetime",
         }
         return _map[cell_data.type]
 
@@ -133,7 +132,6 @@ class CellValueType(Enum):
     INTEGER = auto()
     STRING = auto()
     DATE = auto()
-    DATETIME = auto()
     FLOAT = auto()
     UNKNOWN = auto()
 
@@ -181,6 +179,8 @@ class WorkSheetFromDatamap:
         ):
             _key = _dml.key
             _parsed_value = self._openpyxl_worksheet[_dml.cell_ref].value
+            if isinstance(_parsed_value, datetime.datetime):
+                _parsed_value = _parsed_value.date()
             _sheet_title = self._openpyxl_worksheet.title
             try:
                 _value = CellData(
@@ -218,9 +218,7 @@ def _detect_cell_type(obj: Any) -> CellValueType:
         return CellValueType.STRING
     if isinstance(obj, float):
         return CellValueType.FLOAT
-    if isinstance(obj, datetime.datetime):
-        return CellValueType.DATETIME
-    if isinstance(obj, datetime.date):
+    if isinstance(obj, (datetime.datetime, datetime.date)):
         return CellValueType.DATE
     else:
         raise ValueError("Cannot detect applicable type")
