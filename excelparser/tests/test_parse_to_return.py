@@ -75,11 +75,20 @@ class TestParseToReturn(TestCase):
 
         dml_project_name = DatamapLine.objects.filter(datamap=self.datamap).filter(key="Project Name").first()
         dml_sro_retirement = DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO Retirement Date").first()
+        dml_sro = DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO").first()
 
         return_item_projectname = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_project_name).first()
         return_item_srocell = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_sro_retirement).first()
+        return_item_sro = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_sro).first()
 
         self.assertEqual(return_item_projectname.datamapline.key, "Project Name")
         self.assertEqual(return_item_projectname.value_str, "Testable Project")
+
         self.assertEqual(return_item_srocell.datamapline.key, "SRO Retirement Date")
         self.assertEqual(return_item_srocell.value_datetime, datetime(2022, 2, 23, 0, 0, tzinfo=timezone.utc))
+
+        self.assertEqual(return_item_sro.datamapline.key, "SRO")
+        self.assertEqual(return_item_sro.value_str, "John Milton")
+        self.assertEqual(return_item_sro.value_int, None)
+        self.assertEqual(return_item_sro.value_date, None)
+        self.assertEqual(return_item_sro.value_datetime, None)
