@@ -1,8 +1,9 @@
 import unittest
 
-from datetime import datetime, timezone, date
+from datetime import datetime, date
 
 from django.test import TestCase
+from django.utils import timezone
 
 from datamap.models import DatamapLine
 from excelparser.helpers.parser import ParsedSpreadsheet, CellData, CellValueType
@@ -123,7 +124,7 @@ class TestParseToReturn(TestCase):
         self.assertEqual(return_item_srocell.datamapline.key, "SRO Retirement Date")
         self.assertEqual(
             return_item_srocell.value_datetime,
-            datetime(2022, 2, 23, 0, 0, tzinfo=timezone.utc),
+            datetime(2022, 2, 23, 0, 0, tzinfo=timezone.get_current_timezone()),
         )
 
         self.assertEqual(return_item_sro.datamapline.key, "SRO")
