@@ -1,4 +1,5 @@
 import unittest
+import datetime
 
 from django.test import TestCase
 
@@ -60,8 +61,12 @@ class TestParseToReturn(TestCase):
         self.parsed_spreadsheet.process()
         cell_data_int = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
         cell_data_float = CellData("Key", "Sheet", 1, "B1", CellValueType.FLOAT)
+        cell_data_date = CellData("Key", "Sheet", datetime.date(2018, 1, 1), "B1", CellValueType.DATE)
+        cell_data_datetime = CellData("Key", "Sheet", datetime.datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME)
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int")
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_float), "value_float")
+        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_date), "value_date")
+        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_datetime), "value_datetime")
 
     @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):
