@@ -1,5 +1,6 @@
 import unittest
-import datetime
+
+from datetime import datetime, timezone, date
 
 from django.test import TestCase
 
@@ -61,16 +62,24 @@ class TestParseToReturn(TestCase):
         self.parsed_spreadsheet.process()
         cell_data_int = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
         cell_data_float = CellData("Key", "Sheet", 1, "B1", CellValueType.FLOAT)
-        cell_data_date = CellData("Key", "Sheet", datetime.date(2018, 1, 1), "B1", CellValueType.DATE)
-        cell_data_datetime = CellData("Key", "Sheet", datetime.datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME)
+        cell_data_date = CellData("Key", "Sheet", date(2018, 1, 1), "B1", CellValueType.DATE)
+        cell_data_datetime = CellData("Key", "Sheet", datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME)
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int")
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_float), "value_float")
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_date), "value_date")
         self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_datetime), "value_datetime")
 
-    @unittest.skip("Not ready to pass")
     def test_parse_to_return_object(self):
         self.parsed_spreadsheet.process()
-        return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
-        self.assertEqual(return_item.datamapline.key, "Project/Programme Name")
-        self.assertEqual(return_item.value_str, "Testable Project")
+        self.parsed_spreadsheet._process_sheet_to_return(self.parsed_spreadsheet["Test Sheet 1"])
+
+        dml_project_name = DatamapLine.objects.filter(datamap=self.datamap).filter(key="Project Name").first()
+        dml_sro_retirement = DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO Retirement Date").first()
+
+        return_item_projectname = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_project_name).first()
+        return_item_srocell = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_sro_retirement).first()
+
+        self.assertEqual(return_item_projectname.datamapline.key, "Project Name")
+        self.assertEqual(return_item_projectname.value_str, "Testable Project")
+        self.assertEqual(return_item_srocell.datamapline.key, "SRO Retirement Date")
+        self.assertEqual(return_item_srocell.value_datetime, datetime(2022, 2, 23, 0, 0, tzinfo=timezone.utc))

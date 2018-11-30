@@ -31,11 +31,7 @@ class ParsedSpreadsheet:
     """
 
     def __init__(
-        self,
-        template_path: str,
-        project: Project,
-        return_obj: Return,
-        datamap: Datamap,
+        self, template_path: str, project: Project, return_obj: Return, datamap: Datamap
     ) -> None:
         self.sheetnames: List[str]
         self.filename: str
@@ -49,6 +45,10 @@ class ParsedSpreadsheet:
         self._dml_sheets: List[str]
         self._dml_sheets_missing_from_spreadsheet: List[str]
         self._check_sheets_present()
+
+        self._return_params = set(
+            ["value_str", "value_int", "value_float", "value_date", "value_datetime"]
+        )
 
     def _map_to_keyword_param(self, cell_data: "CellData") -> str:
         _map = {
@@ -79,7 +79,9 @@ class ParsedSpreadsheet:
         self._dml_sheets = list({dml.sheet for dml in dmls})
         _extra_sheet = list(set(self._dml_sheets) - set(self.sheetnames))
         if _extra_sheet:
-            raise MissingSheetError(f"There is a worksheet in the spreadsheet not in the Datamap - {_extra_sheet[0]}")
+            raise MissingSheetError(
+                f"There is a worksheet in the spreadsheet not in the Datamap - {_extra_sheet[0]}"
+            )
 
     def _process_sheets(self) -> None:
         wb: OpenpyxlWorkbook = load_workbook(self._template_path)
@@ -98,12 +100,19 @@ class ParsedSpreadsheet:
         """
         self._process_sheets()
 
-    def _process_sheet_to_return(self, sheet: 'WorkSheetFromDatamap'):
+    def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap"):
         sheet_name = sheet.title
         relevant_dmls = self._datamap.datamapline_set.filter(sheet=sheet_name)
         for dml in relevant_dmls:
             # ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key])
-            ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key].value)
+            _return_param = self._map_to_keyword_param(sheet[dml.key])
+            _value_dict = {_return_param: sheet[dml.key].value}
+            _other_params = self._return_params - set([_return_param])
+            _combined_params = {k: None for k in list(_other_params)}
+            _combined_params.update(_value_dict)
+            ReturnItem.objects.create(
+                parent=self.return_obj, datamapline=dml, **_combined_params
+            )
 
     def _get_sheets(self) -> None:
         wb = load_workbook(self._template_path)
@@ -209,5 +218,7 @@ def _detect_cell_type(obj: Any) -> CellValueType:
         return CellValueType.FLOAT
     if isinstance(obj, datetime.datetime):
         return CellValueType.DATETIME
+    if isinstance(obj, datetime.date):
+        return CellValueType.DATE
     else:
         raise ValueError("Cannot detect applicable type")
