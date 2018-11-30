@@ -99,12 +99,14 @@ class ParsedSpreadsheet:
         :rtype: None
         """
         self._process_sheets()
+        for sd in self._sheet_data.values():
+            self._process_sheet_to_return(sd)
+
 
     def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap"):
-        sheet_name = sheet.title
+        sheet_name: str = sheet.title
         relevant_dmls = self._datamap.datamapline_set.filter(sheet=sheet_name)
         for dml in relevant_dmls:
-            # ReturnItem.objects.create(parent=self.return_obj, datamapline=dml, value_str=sheet[dml.key])
             _return_param = self._map_to_keyword_param(sheet[dml.key])
             _value_dict = {_return_param: sheet[dml.key].value}
             _other_params = self._return_params - set([_return_param])

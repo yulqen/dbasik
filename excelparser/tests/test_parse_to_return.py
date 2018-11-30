@@ -17,7 +17,9 @@ class TestParseToReturn(TestCase):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
-        self.return_obj = Return.objects.create(project=self.project, financial_quarter=self.financial_quarter)
+        self.return_obj = Return.objects.create(
+            project=self.project, financial_quarter=self.financial_quarter
+        )
         DatamapLine.objects.create(
             datamap=self.datamap,
             key="Project Name",
@@ -53,7 +55,6 @@ class TestParseToReturn(TestCase):
 
     def test_return_parser(self):
         self.parsed_spreadsheet.process()
-        self.parsed_spreadsheet._process_sheet_to_return(self.parsed_spreadsheet["Test Sheet 1"])
         return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
         self.assertEqual(return_item.datamapline.key, "Project Name")
         self.assertEqual(return_item.value_str, "Testable Project")
@@ -62,30 +63,68 @@ class TestParseToReturn(TestCase):
         self.parsed_spreadsheet.process()
         cell_data_int = CellData("Key", "Sheet", 1, "B1", CellValueType.INTEGER)
         cell_data_float = CellData("Key", "Sheet", 1, "B1", CellValueType.FLOAT)
-        cell_data_date = CellData("Key", "Sheet", date(2018, 1, 1), "B1", CellValueType.DATE)
-        cell_data_datetime = CellData("Key", "Sheet", datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME)
-        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int")
-        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_float), "value_float")
-        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_date), "value_date")
-        self.assertEqual(self.parsed_spreadsheet._map_to_keyword_param(cell_data_datetime), "value_datetime")
+        cell_data_date = CellData(
+            "Key", "Sheet", date(2018, 1, 1), "B1", CellValueType.DATE
+        )
+        cell_data_datetime = CellData(
+            "Key", "Sheet", datetime(2018, 1, 1, 0, 0), "B1", CellValueType.DATETIME
+        )
+        self.assertEqual(
+            self.parsed_spreadsheet._map_to_keyword_param(cell_data_int), "value_int"
+        )
+        self.assertEqual(
+            self.parsed_spreadsheet._map_to_keyword_param(cell_data_float),
+            "value_float",
+        )
+        self.assertEqual(
+            self.parsed_spreadsheet._map_to_keyword_param(cell_data_date), "value_date"
+        )
+        self.assertEqual(
+            self.parsed_spreadsheet._map_to_keyword_param(cell_data_datetime),
+            "value_datetime",
+        )
 
     def test_parse_to_return_object(self):
         self.parsed_spreadsheet.process()
-        self.parsed_spreadsheet._process_sheet_to_return(self.parsed_spreadsheet["Test Sheet 1"])
 
-        dml_project_name = DatamapLine.objects.filter(datamap=self.datamap).filter(key="Project Name").first()
-        dml_sro_retirement = DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO Retirement Date").first()
-        dml_sro = DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO").first()
+        dml_project_name = (
+            DatamapLine.objects.filter(datamap=self.datamap)
+            .filter(key="Project Name")
+            .first()
+        )
+        dml_sro_retirement = (
+            DatamapLine.objects.filter(datamap=self.datamap)
+            .filter(key="SRO Retirement Date")
+            .first()
+        )
+        dml_sro = (
+            DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO").first()
+        )
 
-        return_item_projectname = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_project_name).first()
-        return_item_srocell = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_sro_retirement).first()
-        return_item_sro = Return.objects.get(id=self.return_obj.id).returnitem_set.filter(datamapline=dml_sro).first()
+        return_item_projectname = (
+            Return.objects.get(id=self.return_obj.id)
+            .returnitem_set.filter(datamapline=dml_project_name)
+            .first()
+        )
+        return_item_srocell = (
+            Return.objects.get(id=self.return_obj.id)
+            .returnitem_set.filter(datamapline=dml_sro_retirement)
+            .first()
+        )
+        return_item_sro = (
+            Return.objects.get(id=self.return_obj.id)
+            .returnitem_set.filter(datamapline=dml_sro)
+            .first()
+        )
 
         self.assertEqual(return_item_projectname.datamapline.key, "Project Name")
         self.assertEqual(return_item_projectname.value_str, "Testable Project")
 
         self.assertEqual(return_item_srocell.datamapline.key, "SRO Retirement Date")
-        self.assertEqual(return_item_srocell.value_datetime, datetime(2022, 2, 23, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(
+            return_item_srocell.value_datetime,
+            datetime(2022, 2, 23, 0, 0, tzinfo=timezone.utc),
+        )
 
         self.assertEqual(return_item_sro.datamapline.key, "SRO")
         self.assertEqual(return_item_sro.value_str, "John Milton")
