@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from datamap.models import DatamapLine
 from excelparser.tests.factories.datamap_factories import DatamapFactory
@@ -17,6 +18,13 @@ class TestExcelParserViews(TestCase):
         self.return_obj = Return.objects.create(
             project=self.project, financial_quarter=self.fq
         )
+
+    def test_upload_single_populated_has_correct_header(self):
+        response = self.client.get(
+            reverse("excelparser:process_populated", args=[self.return_obj.id])
+        )
+        self.assertTrue(response.status_code, 200)
+        self.assertContains(response, f"<legend>Process a populated template for Test Project</legend>")
 
     def test_view_receives_uploaded_file(self):
         response = self.client.post(

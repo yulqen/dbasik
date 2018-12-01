@@ -1,27 +1,29 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.views.generic import ListView, DeleteView, UpdateView, DetailView
+from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 
 from templates.forms import TemplateCreateForm
 from templates.models import Template
 
 
-class TemplateList(ListView):
+class TemplateList(LoginRequiredMixin, ListView):
     model = Template
 
 
-class TemplateDetail(DetailView):
+class TemplateDetail(LoginRequiredMixin, DetailView):
     model = Template
 
 
-class TemplateDelete(DeleteView):
+class TemplateDelete(LoginRequiredMixin, DeleteView):
     model = Template
     success_url = reverse_lazy("templates:list")
 
 
-class TemplateUpdate(UpdateView):
+class TemplateUpdate(LoginRequiredMixin, UpdateView):
     model = Template
     form_class = TemplateCreateForm
     template_name_suffix = "_update"
@@ -33,6 +35,7 @@ class TemplateUpdate(UpdateView):
         return context
 
 
+@login_required
 def template_create(request):
     """Create a new template CRUD function."""
 
@@ -50,5 +53,3 @@ def template_create(request):
         form = TemplateCreateForm()
 
     return render(request, "templates/template_create.html", {"form": form})
-
-

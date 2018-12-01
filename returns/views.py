@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -10,19 +11,19 @@ from returns.models import Return
 from returns.models import ReturnItem
 
 
-class ReturnsList(ListView):
+class ReturnsList(LoginRequiredMixin, ListView):
     queryset = Return.objects.all()
     template_name = "returns/returns_list.html"
 
 
-class ReturnCreate(CreateView):
+class ReturnCreate(LoginRequiredMixin, CreateView):
     model = Return
     form_class = ReturnCreateForm
     success_url = reverse_lazy("returns:returns_list")
     template_name = "returns/return_create.html"
 
 
-class ReturnLines(ListView):
+class ReturnLines(LoginRequiredMixin, ListView):
     model = ReturnItem
     paginate_by = 100
 
@@ -32,9 +33,9 @@ class ReturnLines(ListView):
         return context
 
 
-class ReturnDetail(DetailView):
+class ReturnDetail(LoginRequiredMixin, DetailView):
     model = Return
 
 
-class FinancialQuartersList(ListView):
+class FinancialQuartersList(LoginRequiredMixin, ListView):
     queryset = FinancialQuarter.objects.all()

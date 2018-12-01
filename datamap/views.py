@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.forms import Form
 from django.http import HttpResponseRedirect
@@ -30,12 +31,12 @@ logger.setLevel(logging.DEBUG)
 # datamap view functions
 
 
-class DatamapDelete(DeleteView):
+class DatamapDelete(LoginRequiredMixin, DeleteView):
     model = Datamap
     success_url = reverse_lazy("datamaps:datamap_list")
 
 
-class DatamapUpdate(UpdateView):
+class DatamapUpdate(LoginRequiredMixin, UpdateView):
     model = Datamap
     template_name_suffix = "_update"
     form_class = DatamapForm
@@ -47,7 +48,7 @@ class DatamapUpdate(UpdateView):
         return context
 
 
-class DatamapCreate(CreateView):
+class DatamapCreate(LoginRequiredMixin, CreateView):
     model = Datamap
     template_name_suffix = "_create"
     form_class = DatamapForm
@@ -66,6 +67,7 @@ class DatamapCreate(CreateView):
         return context
 
 
+@login_required
 def datamap_detail(request, slug):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
     dms = Datamap.objects.all()
@@ -79,7 +81,7 @@ class DatamapList(LoginRequiredMixin, ListView):
     model = Datamap
 
 
-class DatamapLineCreate(CreateView):
+class DatamapLineCreate(LoginRequiredMixin, CreateView):
 
     model = DatamapLine
     form_class = DatamapLineForm
@@ -99,7 +101,7 @@ class DatamapLineCreate(CreateView):
         return reverse("datamaps:datamap_detail", args=[self.kwargs["slug"]])
 
 
-class DatamapLineUpdate(UpdateView):
+class DatamapLineUpdate(LoginRequiredMixin, UpdateView):
     model = DatamapLine
     form_class = DatamapLineEditForm
 
@@ -109,7 +111,7 @@ class DatamapLineUpdate(UpdateView):
         return reverse("datamaps:datamap_detail", kwargs={"slug": dm_slug})
 
 
-class DatamapLineDelete(DeleteView):
+class DatamapLineDelete(LoginRequiredMixin, DeleteView):
     model = DatamapLine
 
     def get_success_url(self):
@@ -118,7 +120,7 @@ class DatamapLineDelete(DeleteView):
 
 
 # noinspection Pylint
-class UploadDatamapView(FormView):
+class UploadDatamapView(LoginRequiredMixin, FormView):
     template_name = "datamap/upload_datamap.html"
     form_class = UploadDatamap
 

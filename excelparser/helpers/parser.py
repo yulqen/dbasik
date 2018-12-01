@@ -2,13 +2,13 @@ import datetime
 import numbers
 import os
 from enum import Enum, auto
-from typing import Any, Dict, List, NamedTuple
+from typing import Any, Dict, List, NamedTuple, Iterable
 
 from openpyxl import Workbook as OpenpyxlWorkbook
 from openpyxl import load_workbook
 from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
 
-from datamap.models import Datamap
+from datamap.models import Datamap, DatamapLine
 from register.models import Project
 from returns.models import Return, ReturnItem
 
@@ -56,7 +56,9 @@ class ParsedSpreadsheet:
         try:
             return _map[cell_data.type]
         except KeyError:
-            return "value_str"   # return str type for now if map gets CellValueType.UNKNOWN
+            return (
+                "value_str"
+            )  # return str type for now if map gets CellValueType.UNKNOWN
 
     def __getitem__(self, item):
         cls = type(self)
@@ -100,9 +102,11 @@ class ParsedSpreadsheet:
         for sd in self._sheet_data.values():
             self._process_sheet_to_return(sd)
 
-    def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap"):
+    def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap") -> None:
         sheet_name: str = sheet.title
-        relevant_dmls = self._datamap.datamapline_set.filter(sheet=sheet_name)
+        relevant_dmls: Iterable[DatamapLine] = self._datamap.datamapline_set.filter(
+            sheet=sheet_name
+        )
         for dml in relevant_dmls:
             _return_param = self._map_to_keyword_param(sheet[dml.key])
             _value_dict = {_return_param: sheet[dml.key].value}

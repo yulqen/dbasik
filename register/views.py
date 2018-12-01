@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -7,12 +8,12 @@ from . models import ProjectType, Tier, ProjectStage, StrategicAlignment, Projec
 from . forms import ProjectTypeForm, TierForm, ProjectStageForm, StrategicAlignmentForm, ProjectForm
 
 
-class ProjectTypeDelete(DeleteView):
+class ProjectTypeDelete(LoginRequiredMixin, DeleteView):
     model = ProjectType
     success_url = reverse_lazy("register:projecttype_list")
 
 
-class ProjectTypeUpdate(UpdateView):
+class ProjectTypeUpdate(LoginRequiredMixin, UpdateView):
     model = ProjectType
     form_class = ProjectTypeForm
     template_name_suffix = "_update"
@@ -24,16 +25,16 @@ class ProjectTypeUpdate(UpdateView):
         return context
 
 
-class ProjectTypeDetail(DetailView):
+class ProjectTypeDetail(LoginRequiredMixin, DetailView):
     model = ProjectType
     form_class = ProjectTypeForm
 
 
-class ProjectTypeList(ListView):
+class ProjectTypeList(LoginRequiredMixin, ListView):
     model = ProjectType
 
 
-class ProjectTypeCreate(CreateView):
+class ProjectTypeCreate(LoginRequiredMixin, CreateView):
     model = ProjectType
     template_name_suffix = "_create"
     form_class = ProjectTypeForm
@@ -46,7 +47,7 @@ class ProjectTypeCreate(CreateView):
         return context
 
 
-class TierCreate(CreateView):
+class TierCreate(LoginRequiredMixin, CreateView):
     model = Tier
     template_name_suffix = "_create"
     form_class = TierForm
@@ -59,20 +60,20 @@ class TierCreate(CreateView):
         return context
 
 
-class TierList(ListView):
+class TierList(LoginRequiredMixin, ListView):
     model = Tier
 
 
-class TierDetail(DetailView):
+class TierDetail(LoginRequiredMixin, DetailView):
     model = Tier
 
 
-class TierDelete(DeleteView):
+class TierDelete(LoginRequiredMixin, DeleteView):
     model = Tier
     success_url = reverse_lazy("register:tier_list")
 
 
-class TierUpdate(UpdateView):
+class TierUpdate(LoginRequiredMixin, UpdateView):
     model = Tier
     form_class = TierForm
     template_name_suffix = "_update"
@@ -84,7 +85,7 @@ class TierUpdate(UpdateView):
         return context
 
 
-class ProjectStageCreate(CreateView):
+class ProjectStageCreate(LoginRequiredMixin, CreateView):
     model = ProjectStage
     template_name_suffix = "_create"
     form_class = ProjectStageForm
@@ -97,20 +98,20 @@ class ProjectStageCreate(CreateView):
         return context
 
 
-class ProjectStageList(ListView):
+class ProjectStageList(LoginRequiredMixin, ListView):
     model = ProjectStage
 
 
-class ProjectStageDetail(DetailView):
+class ProjectStageDetail(LoginRequiredMixin, DetailView):
     model = ProjectStage
 
 
-class ProjectStageDelete(DeleteView):
+class ProjectStageDelete(LoginRequiredMixin, DeleteView):
     model = ProjectStage
     success_url = reverse_lazy("register:projectstage_list")
 
 
-class ProjectStageUpdate(UpdateView):
+class ProjectStageUpdate(LoginRequiredMixin, UpdateView):
     model = ProjectStage
     form_class = ProjectStageForm
     template_name_suffix = "_update"
@@ -122,7 +123,7 @@ class ProjectStageUpdate(UpdateView):
         return context
 
 
-class StrategicAlignmentCreate(CreateView):
+class StrategicAlignmentCreate(LoginRequiredMixin, CreateView):
     model = StrategicAlignment
     template_name_suffix = "_create"
     form_class = StrategicAlignmentForm
@@ -135,20 +136,20 @@ class StrategicAlignmentCreate(CreateView):
         return context
 
 
-class StrategicAlignmentList(ListView):
+class StrategicAlignmentList(LoginRequiredMixin, ListView):
     model = StrategicAlignment
 
 
-class StrategicAlignmentDetail(DetailView):
+class StrategicAlignmentDetail(LoginRequiredMixin, DetailView):
     model = StrategicAlignment
 
 
-class StrategicAlignmentDelete(DeleteView):
+class StrategicAlignmentDelete(LoginRequiredMixin, DeleteView):
     model = StrategicAlignment
     success_url = reverse_lazy("register:strategicalignment_list")
 
 
-class StrategicAlignmentUpdate(UpdateView):
+class StrategicAlignmentUpdate(LoginRequiredMixin, UpdateView):
     model = StrategicAlignment
     form_class = StrategicAlignmentForm
     template_name_suffix = "_update"
@@ -161,7 +162,7 @@ class StrategicAlignmentUpdate(UpdateView):
 
 
 
-class ProjectCreate(CreateView):
+class ProjectCreate(LoginRequiredMixin, CreateView):
     model = Project
     template_name_suffix = "_create"
     form_class = ProjectForm
@@ -174,20 +175,20 @@ class ProjectCreate(CreateView):
         return context
 
 
-class ProjectList(ListView):
+class ProjectList(LoginRequiredMixin, ListView):
     model = Project
 
 
-class ProjectDetail(DetailView):
+class ProjectDetail(LoginRequiredMixin, DetailView):
     model = Project
 
 
-class ProjectDelete(DeleteView):
+class ProjectDelete(LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy("register:project_list")
 
 
-class ProjectUpdate(UpdateView):
+class ProjectUpdate(LoginRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name_suffix = "_update"

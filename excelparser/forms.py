@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from datamap import urls as datamap_urls
+from register.models import Project
 from datamap.models import Datamap
 from returns.models import Return
 
@@ -46,6 +47,8 @@ class ProcessPopulatedTemplateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        return_item = Return.objects.get(id=self.initial['return_obj'])
+        project_being_done = Project.objects.get(id=return_item.project.id)
 
         cancel_redirect = reverse("templates:list")
 
@@ -55,7 +58,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
         self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Fieldset(
-                "Process a populated spreadsheet",
+                f"Process a populated template for {project_being_done}",
                 "datamap",
                 "source_file",
             ),
