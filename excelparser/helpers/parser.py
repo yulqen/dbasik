@@ -218,7 +218,7 @@ def _detect_cell_type(obj: Any) -> CellValueType:
         return CellValueType.INTEGER
     if isinstance(obj, str):
         return CellValueType.STRING
-    if isinstance(obj, numbers.Rational):
+    if isinstance(obj, float):
         return CellValueType.FLOAT
     if isinstance(obj, (datetime.datetime, datetime.date)):
         return CellValueType.DATE
