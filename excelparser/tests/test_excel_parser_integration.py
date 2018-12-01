@@ -4,15 +4,19 @@ from django.test import TestCase
 from django.urls import reverse
 
 from datamap.models import DatamapLine
-from excelparser.helpers.parser import CellData
-from excelparser.helpers.parser import CellValueType
-from excelparser.helpers.parser import MissingSheetError
-from excelparser.helpers.parser import ParsedSpreadsheet
-from excelparser.helpers.parser import WorkSheetFromDatamap
-from excelparser.helpers.parser import _detect_cell_type
-from excelparser.tests.factories.datamap_factories import DatamapFactory
-from excelparser.tests.factories.datamap_factories import DatamapLineFactory
-from excelparser.tests.factories.datamap_factories import ProjectFactory
+from excelparser.helpers.parser import (
+    CellData,
+    CellValueType,
+    MissingSheetError,
+    ParsedSpreadsheet,
+    WorkSheetFromDatamap,
+    _detect_cell_type,
+)
+from excelparser.tests.factories.datamap_factories import (
+    DatamapFactory,
+    DatamapLineFactory,
+    ProjectFactory,
+)
 from register.models import FinancialQuarter
 from returns.models import Return
 
@@ -45,7 +49,9 @@ class ExcelParserIntegrationTests(TestCase):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
-        self.return_obj = Return.objects.create(project=self.project, financial_quarter=self.financial_quarter)
+        self.return_obj = Return.objects.create(
+            project=self.project, financial_quarter=self.financial_quarter
+        )
         DatamapLine.objects.create(
             datamap=self.datamap,
             key="Project Name",
@@ -80,7 +86,9 @@ class ExcelParserIntegrationTests(TestCase):
         )
 
     def test_can_get_to_populated_template_upload_page(self):
-        response = self.client.get(reverse("excelparser:process_populated", args=[self.return_obj.id]))
+        response = self.client.get(
+            reverse("excelparser:process_populated", args=[self.return_obj.id])
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "excelparser/process_populated_template.html")
 
@@ -127,8 +135,7 @@ class ExcelParserIntegrationTests(TestCase):
         self.assertEqual(test_sheet_1_data["SRO"].key, "SRO")
 
         self.assertEqual(
-            test_sheet_1_data["SRO Retirement Date"].value,
-            datetime.date(2022, 2, 23),
+            test_sheet_1_data["SRO Retirement Date"].value, datetime.date(2022, 2, 23)
         )
         self.assertEqual(test_sheet_1_data["SRO Retirement Date"].sheet, "Test Sheet 1")
         self.assertEqual(
