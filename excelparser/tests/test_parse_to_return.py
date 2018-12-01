@@ -41,6 +41,12 @@ class TestParseToReturn(TestCase):
         )
         DatamapLine.objects.create(
             datamap=self.datamap,
+            key="Missing Data",
+            sheet="Test Sheet 1",
+            cell_ref="B5",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
             key="Janitor's Favourite Colour",
             sheet="Test Sheet 2",
             cell_ref="B1",
@@ -95,6 +101,12 @@ class TestParseToReturn(TestCase):
             DatamapLine.objects.filter(datamap=self.datamap).filter(key="SRO").first()
         )
 
+        dml_missing_data = (
+            DatamapLine.objects.filter(datamap=self.datamap)
+            .filter(key="Missing Data")
+            .first()
+        )
+
         return_item_projectname = (
             Return.objects.get(id=self.return_obj.id)
             .returnitem_set.filter(datamapline=dml_project_name)
@@ -110,6 +122,11 @@ class TestParseToReturn(TestCase):
             .returnitem_set.filter(datamapline=dml_sro)
             .first()
         )
+        return_item_missing_data = (
+            Return.objects.get(id=self.return_obj.id)
+            .returnitem_set.filter(datamapline=dml_missing_data)
+            .first()
+        )
 
         self.assertEqual(return_item_projectname.datamapline.key, "Project Name")
         self.assertEqual(return_item_projectname.value_str, "Testable Project")
@@ -121,3 +138,8 @@ class TestParseToReturn(TestCase):
         self.assertEqual(return_item_sro.value_str, "John Milton")
         self.assertEqual(return_item_sro.value_int, None)
         self.assertEqual(return_item_sro.value_date, None)
+
+        self.assertEqual(return_item_missing_data.datamapline.key, "Missing Data")
+        self.assertIsNone(return_item_missing_data.value_date)
+        self.assertIsNone(return_item_missing_data.value_str)
+        self.assertIsNone(return_item_missing_data.value_float)

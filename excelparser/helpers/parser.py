@@ -57,7 +57,10 @@ class ParsedSpreadsheet:
             CellValueType.FLOAT: "value_float",
             CellValueType.DATE: "value_date",
         }
-        return _map[cell_data.type]
+        try:
+            return _map[cell_data.type]
+        except KeyError:
+            return "value_str"   # return str type for now if map gets CellValueType.UNKNOWN
 
     def __getitem__(self, item):
         cls = type(self)
@@ -100,7 +103,6 @@ class ParsedSpreadsheet:
         self._process_sheets()
         for sd in self._sheet_data.values():
             self._process_sheet_to_return(sd)
-
 
     def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap"):
         sheet_name: str = sheet.title
