@@ -1,12 +1,8 @@
 import datetime
 import numbers
 import os
-from enum import Enum
-from enum import auto
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import NamedTuple
+from enum import Enum, auto
+from typing import Any, Dict, List, NamedTuple
 
 from openpyxl import Workbook as OpenpyxlWorkbook
 from openpyxl import load_workbook
