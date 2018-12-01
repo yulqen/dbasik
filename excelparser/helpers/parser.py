@@ -210,11 +210,11 @@ def _detect_cell_type(obj: Any) -> CellValueType:
     :return: CellValueType
     :rtype: None
     """
-    if isinstance(obj, int):
+    if isinstance(obj, numbers.Integral):
         return CellValueType.INTEGER
     if isinstance(obj, str):
         return CellValueType.STRING
-    if isinstance(obj, float):
+    if isinstance(obj, numbers.Rational):
         return CellValueType.FLOAT
     if isinstance(obj, (datetime.datetime, datetime.date)):
         return CellValueType.DATE
