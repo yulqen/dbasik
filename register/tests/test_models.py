@@ -17,4 +17,3 @@ class ModelTests(TestCase):
         fq = FinancialQuarter(quarter=1, year=2010)
         fq.save()
         self.assertEqual(fq.end_date, date(2010, 6, 30))
-

@@ -18,4 +18,6 @@ class ProcessPopulatedTemplate(FormView):
 
     def form_valid(self, form):
         print("Here is where we process the spreadsheet!")
+        # this is a form to handle a single form - we will do zip files elsewhere
+        print(self.request.FILES['source_file'])
         return HttpResponseRedirect(self.get_success_url())

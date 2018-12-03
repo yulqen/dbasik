@@ -31,7 +31,6 @@ class TestExcelParserViews(TestCase):
             f"/excelparser/process-populated/{self.return_obj.id}/",
             {
                 "return_obj": self.return_obj,
-                "financial_quarter": self.fq,
                 "datamap": self.datamap,
                 "source_file": self.populated_template,
             },
