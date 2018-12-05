@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <h3 id="show-datamap-table">{{ return }}</h3>
-        <table class="table table-sm table-striped table-bordered">
+        <table class="table table-sm table-striped">
             <thead>
                 <tr>
                     <th scope="col" class="col-sm-3">Return Item</th>
@@ -19,9 +19,9 @@
             {% if object_list %}
                 {% for obj in object_list %}
                 <tr>
-                    <td>{{ obj.datamapline.key }}</td>
+                    <td class="font-weight-bold">{{ obj.datamapline.key }}</td>
                     <td>{{ obj.datamapline.sheet }}</td>
-                    <td>{{ obj.value_str|default:"-" }}</td>
+                    <td class="text-truncate">{{ obj.value_str|default:"-" }}</td>
                     <td>{{ obj.value_int|default:"-"  }}</td>
                     <td>{{ obj.value_float|default:"-"  }}</td>
                     <td>{{ obj.value_date|date:"j M Y"|default:"-"  }}</td>

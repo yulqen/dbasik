@@ -44,11 +44,11 @@ class ReturnCreate(LoginRequiredMixin, CreateView):
 
 class ReturnLines(LoginRequiredMixin, ListView):
     model = ReturnItem
-    paginate_by = 100
 
     def get_queryset(self):
         this_return = Return.objects.get(id=self.kwargs["id"])
-        return this_return.return_returnitems.all().order_by("datamapline")
+        qs = this_return.return_returnitems.all().order_by("datamapline")
+        return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
