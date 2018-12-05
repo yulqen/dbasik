@@ -17,14 +17,14 @@
                 </tr>
             </thead>
             {% if object_list %}
-                {% for returnitem in return.returnitem_set.all %}
+                {% for obj in object_list %}
                 <tr>
-                    <td>{{ returnitem.datamapline.key }}</td>
-                    <td>{{ returnitem.datamapline.sheet }}</td>
-                    <td>{{ returnitem.value_str|default:"-" }}</td>
-                    <td>{{ returnitem.value_int|default:"-"  }}</td>
-                    <td>{{ returnitem.value_float|default:"-"  }}</td>
-                    <td>{{ returnitem.value_date|date:"j M Y"|default:"-"  }}</td>
+                    <td>{{ obj.datamapline.key }}</td>
+                    <td>{{ obj.datamapline.sheet }}</td>
+                    <td>{{ obj.value_str|default:"-" }}</td>
+                    <td>{{ obj.value_int|default:"-"  }}</td>
+                    <td>{{ obj.value_float|default:"-"  }}</td>
+                    <td>{{ obj.value_date|date:"j M Y"|default:"-"  }}</td>
                 </tr>
                 {% endfor %}
             {% else %}

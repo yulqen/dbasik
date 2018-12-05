@@ -35,7 +35,7 @@ class ReturnItem(models.Model):
     a routine to select appropriately.
     """
 
-    parent = models.ForeignKey(Return, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Return, on_delete=models.CASCADE, related_name="return_returnitems")
     datamapline = models.ForeignKey(
         DatamapLine,
         on_delete=models.CASCADE,
