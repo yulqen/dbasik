@@ -1,7 +1,5 @@
 import os
 
-from pudb import set_trace
-
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -15,7 +13,6 @@ from excelparser.helpers.parser import ParsedSpreadsheet
 
 class ProcessPopulatedTemplate(FormView):
     form_class = ProcessPopulatedTemplateForm
-    # TODO - fix this link
     template_name = "excelparser/process_populated_template.html"
 
     def get_initial(self):

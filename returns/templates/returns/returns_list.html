@@ -6,6 +6,14 @@
     <div class="container">
         
         <h3 id="show-datamap-table">Returns</h3>
+
+        {% if valid_fqs %}
+            {% for fq in valid_fqs %}
+                <p>{{ fq }}</p>
+            {% endfor %}
+        {% endif %}
+
+
         <table class="table table-hover">
             <thead>
                 <tr>
