@@ -27,16 +27,18 @@ class ReturnsList(LoginRequiredMixin, ListView):
         for fq in FinancialQuarter.objects.all():
             if len(fq.return_financial_quarters.all()) > 0:
                 valid_fqs.append(fq)
-        valid_fqs = reversed(sorted(valid_fqs, key=lambda x: x.start_date))
-        context.update({"valid_fqs": valid_fqs})
-        return context
+        if valid_fqs:
+            valid_fqs = reversed(sorted(valid_fqs, key=lambda x: x.start_date))
+            context.update({"valid_fqs": valid_fqs})
+            return context
+        else:
+            return context
 
 
 
 class ReturnCreate(LoginRequiredMixin, CreateView):
     model = Return
     form_class = ReturnCreateForm
-    success_url = reverse_lazy("returns:returns_list")
     template_name = "returns/return_create.html"
 
 

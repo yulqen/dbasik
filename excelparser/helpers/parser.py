@@ -84,7 +84,7 @@ class ParsedSpreadsheet:
             )
 
     def _process_sheets(self) -> None:
-        wb: OpenpyxlWorkbook = load_workbook(self._template_path)
+        wb: OpenpyxlWorkbook = load_workbook(self._template_path, data_only=True)
         for ws in self.sheetnames:
             ws_from_dm = WorkSheetFromDatamap(
                 openpyxl_worksheet=wb[ws], datamap=self._datamap

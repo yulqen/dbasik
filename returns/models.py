@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.urls import reverse
+
 from datamap.models import Datamap
 from datamap.models import DatamapLine
 from register.models import FinancialQuarter
@@ -20,7 +22,10 @@ class Return(models.Model):
         unique_together = ['project', 'financial_quarter']
 
     def __str__(self):
-        return f"Return for {self.project} for {self.financial_quarter}"
+        return f"{self.project} - {self.financial_quarter} return"
+
+    def get_absolute_url(self):
+        return reverse("returns:return_data", args=[self.pk])
 
 
 class ReturnItem(models.Model):
