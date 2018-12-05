@@ -27,7 +27,7 @@ class ReturnsList(LoginRequiredMixin, ListView):
         for fq in FinancialQuarter.objects.all():
             if len(fq.return_financial_quarters.all()) > 0:
                 valid_fqs.append(fq)
-        valid_fqs = sorted(valid_fqs, key=lambda x: x.start_date)
+        valid_fqs = reversed(sorted(valid_fqs, key=lambda x: x.start_date))
         context.update({"valid_fqs": valid_fqs})
         return context
 
