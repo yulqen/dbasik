@@ -34,6 +34,12 @@ def _get_populated_param(
             "You can't have multiple populated params in a ReturnItem object"
         )
     else:
+        try:
+            _non_none_params[0]
+        except IndexError:
+            # all params are None, therefore empty cell
+            # we can just pass it as value_str
+            return ("value_str", "")
         return _non_none_params[0]
 
 
@@ -52,7 +58,7 @@ def generate_master(
 
     column_counter = 2  # start at column 2 after the key column
     for ret in all_returns:
-        ret_items = ret.return_returnitems.all()
+        ret_items = ret.return_returnitems.all().order_by("datamapline")
         for counter_through_items, item in enumerate(ret_items, start=1):
             param: str = _get_populated_param(item)[0]
             ws.cell(
@@ -62,5 +68,5 @@ def generate_master(
             )
         column_counter += 1
     ws.title = "Master Data"
-    dest_filename = "master.xlsm"
+    dest_filename = output
     wb.save(filename=dest_filename)
