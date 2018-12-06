@@ -40,7 +40,7 @@ class DatamapLine(models.Model):
     )
 
     """A single line in the datamap."""
-    datamap = models.ForeignKey("Datamap", on_delete=models.CASCADE)
+    datamap = models.ForeignKey("Datamap", on_delete=models.CASCADE, related_name="datamaplines")
     key = models.CharField(max_length=100)
     data_type = models.CharField(max_length=10, choices=DATAMAPLINE_TYPES, default='Text')
     required = models.BooleanField(default=True)

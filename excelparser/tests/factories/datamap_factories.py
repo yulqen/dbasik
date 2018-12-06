@@ -40,7 +40,7 @@ class ProjectTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProjectType
 
-    name = "Test ProjectType"
+    name = factory.Faker('name')
 
 
 class ProjectStageFactory(factory.django.DjangoModelFactory):
