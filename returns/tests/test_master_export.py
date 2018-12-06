@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from django.test import TestCase
 
@@ -14,6 +15,7 @@ from openpyxl import utils
 
 class TestMasterExport(TestCase):
     def setUp(self):
+        self.output_file = "master.xlsm"
         self.project1 = ProjectFactory(name="Test Project 1")
         self.project2 = ProjectFactory(name="Test Project 2")
         self.fq = FinancialQuarter.objects.create(quarter=1, year=2010)
@@ -95,7 +97,7 @@ class TestMasterExport(TestCase):
 
     def test_master_output(self):
         generate_master(
-            financial_quarter=self.fq, output="master.xlsm", datamap=self.datamap
+            financial_quarter=self.fq, output=self.output_file, datamap=self.datamap
         )
         wb = load_workbook("master.xlsm", data_only=True)
         ws = wb.active
@@ -110,3 +112,4 @@ class TestMasterExport(TestCase):
         # dates always come out of Excel as datetime objects!
         self.assertEqual(ws["B3"].value, datetime.datetime(2010, 10, 10, 0, 0))
         self.assertEqual(ws["C3"].value, datetime.datetime(2011, 7, 12, 0, 0))
+        os.remove(self.output_file)

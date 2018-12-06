@@ -75,7 +75,7 @@ class ParsedSpreadsheet:
         self.filename = os.path.split(self._template_path)[1]
 
     def _check_sheets_present(self) -> None:
-        dmls = self._datamap.datamapline_set.all()
+        dmls = self._datamap.datamaplines.all()
         self._dml_sheets = list({dml.sheet for dml in dmls})
         _extra_sheet = list(set(self._dml_sheets) - set(self.sheetnames))
         if _extra_sheet:
@@ -104,7 +104,7 @@ class ParsedSpreadsheet:
 
     def _process_sheet_to_return(self, sheet: "WorkSheetFromDatamap") -> None:
         sheet_name: str = sheet.title
-        relevant_dmls: Iterable[DatamapLine] = self._datamap.datamapline_set.filter(
+        relevant_dmls: Iterable[DatamapLine] = self._datamap.datamaplines.filter(
             sheet=sheet_name
         )
         for dml in relevant_dmls:
@@ -176,7 +176,7 @@ class WorkSheetFromDatamap:
         :return: None
         :rtype: None
         """
-        for _dml in self._datamap.datamapline_set.filter(
+        for _dml in self._datamap.datamaplines.filter(
             sheet__exact=self._openpyxl_worksheet.title
         ):
             _key = _dml.key

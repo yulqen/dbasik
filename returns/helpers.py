@@ -29,7 +29,6 @@ def _get_populated_param(
         param for param in _ri_params if param[1] is not None and param[1] is not ""
     ]
     if len(_non_none_params) > 1:
-        breakpoint()
         raise ValueError(
             "You can't have multiple populated params in a ReturnItem object"
         )
@@ -48,7 +47,7 @@ def generate_master(
 ) -> None:
     # we need to get all returns for a FinancialQuarter
     all_returns = financial_quarter.return_financial_quarters.all()
-    keys: List = [dml.key for dml in datamap.datamaplines.all()]
+    keys: List = [dml.key for dml in datamap.datamaplines.all().order_by('pk')]
     wb = Workbook()
     ws = wb.active
 

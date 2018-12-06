@@ -171,6 +171,7 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         reader = csv.DictReader(x.decode("utf-8") for x in uploaded_file_data)
         _timeround = 0
         for line in reader:
+            line.pop("")
             csv_form = CSVForm(line)
             if csv_form.is_valid():
                 try:
@@ -240,7 +241,7 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         :rtype: None
         """
         if _timeround == 0:
-            for dml in self.datamap.datamapline_set.all():
+            for dml in self.datamap.datamaplines.all():
                 self._temporary_datamapline_objects.append(dml)
             DatamapLine.objects.filter(datamap=self.datamap).delete()
         dml = DatamapLine.objects.create(

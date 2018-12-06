@@ -62,7 +62,7 @@ class TestParseToReturn(TestCase):
 
     def test_return_parser(self):
         self.parsed_spreadsheet.process()
-        return_item = Return.objects.get(id=self.return_obj.id).returnitem_set.first()
+        return_item = Return.objects.get(id=self.return_obj.id).return_returnitems.first()
         self.assertEqual(return_item.datamapline.key, "Project Name")
         self.assertEqual(return_item.value_str, "Testable Project")
 
@@ -109,22 +109,22 @@ class TestParseToReturn(TestCase):
 
         return_item_projectname = (
             Return.objects.get(id=self.return_obj.id)
-            .returnitem_set.filter(datamapline=dml_project_name)
+            .return_returnitems.filter(datamapline=dml_project_name)
             .first()
         )
         return_item_srocell = (
             Return.objects.get(id=self.return_obj.id)
-            .returnitem_set.filter(datamapline=dml_sro_retirement)
+            .return_returnitems.filter(datamapline=dml_sro_retirement)
             .first()
         )
         return_item_sro = (
             Return.objects.get(id=self.return_obj.id)
-            .returnitem_set.filter(datamapline=dml_sro)
+            .return_returnitems.filter(datamapline=dml_sro)
             .first()
         )
         return_item_missing_data = (
             Return.objects.get(id=self.return_obj.id)
-            .returnitem_set.filter(datamapline=dml_missing_data)
+            .return_returnitems.filter(datamapline=dml_missing_data)
             .first()
         )
 
