@@ -178,7 +178,8 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
                     self._create_new_dml_with_line_from_csv(_timeround, line)
                 except IntegrityError:
                     self._add_database_error_to_messages(request, line)
-                    return self.form_valid(main_form)
+#                   return self.form_valid(main_form)
+                    continue
                 except ValueError:
                     self._send_errors_to_messages(request, csv_form)
                     return self.form_valid(main_form)
@@ -201,7 +202,7 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         """
         err_str = parse_kwargs_to_error_string(self.datamap, line)
         messages.add_message(request, messages.ERROR, err_str)
-        self._rollback_database()
+#       self._rollback_database()
 
     def _rollback_database(self) -> None:
         """
