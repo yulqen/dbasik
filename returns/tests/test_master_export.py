@@ -9,6 +9,7 @@ from returns.models import Return, ReturnItem
 from returns.helpers import generate_master
 
 from openpyxl import load_workbook
+from openpyxl import utils
 
 
 class TestMasterExport(TestCase):
@@ -106,5 +107,6 @@ class TestMasterExport(TestCase):
         self.assertEqual(ws["B2"].value, "Test dml return_ob1 str value2")
         self.assertEqual(ws["C2"].value, "Test dml return_ob2 str value2")
         self.assertEqual(ws["A3"].value, "Test dml key3_date")
-        self.assertEqual(ws["B3"].value, datetime.date(2010, 10, 10))
-        self.assertEqual(ws["C3"].value, datetime.date(2011, 7, 12))
+        # dates always come out of Excel as datetime objects!
+        self.assertEqual(ws["B3"].value, datetime.datetime(2010, 10, 10, 0, 0))
+        self.assertEqual(ws["C3"].value, datetime.datetime(2011, 7, 12, 0, 0))
