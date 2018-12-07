@@ -8,38 +8,40 @@
 
         <h2 id="show-datamap-table">Returns</h2>
 
+        <p>Some blurb about what these things are.</p>
+
         {% if valid_fqs %}
             {% for fq in valid_fqs %}
-                <div class="card w-75">
+
+                <div class="card border-primary mb-3" style="width: 48rem;">
                     <div class="card-body">
-                        <div class="card-title">
-                            <h4 class="card-title">{{ fq }}</h4>
 
-                            <!--<div class="btn btn-warning align-self-end">-->
-                            <!--<a href="#">Download Master</a>-->
-                            <!--</div>-->
-                            {% for r in fq.return_financial_quarters.all %}
-                                <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-primary badge-pill">Data points: {{ r.return_returnitems.count }}</span>
-                                    </li>
-                            {% endfor %}
-                            <li class="list-group-item align-self-end">
-                                <a href="#" class="btn btn-muted">Download Master</a>
+                <div class"card-title">
+                    <h4 class="bg-light text-primary">{{ fq }}</h4>
+                </div>
+
+                    {% for r in fq.return_financial_quarters.all %}
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
                             </li>
-                            </ul>
-                        {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="container">
-                            <p class="text-muted">There are no Return Items.</p>
-                        </div>
-                    {% endif %}
+                    {% endfor %}
+                            <li class="list-group-item align-self-end">
+                                <a href="#" class="btn btn-primary">Download Master</a>
+                            </li>
+                        </ul>
                     </div>
-                    </div>
+                </div>
 
-                    <div class="container">
-                        <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
-                    </div>
+            {% endfor %}
+        {% else %}
+            <div class="container">
+                <p class="text-muted">There are no Return Items.</p>
+            </div>
+        {% endif %}
 
-            {% endblock %}
+        <div class="container">
+            <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
+        </div>
+
+{% endblock %}
