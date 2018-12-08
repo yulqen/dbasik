@@ -5,7 +5,7 @@ from returns.views import FinancialQuartersList
 from returns.views import ReturnCreate
 from returns.views import ReturnDetail
 from returns.views import ReturnLines
-from . views import ReturnsList
+from . views import ReturnsList, download_master
 
 app_name = "returns"
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path("return-data/<int:id>/", ReturnLines.as_view(), name="return_data"),
     path("create/", ReturnCreate.as_view(), name="return_create"),
     path("financial-quarters/", FinancialQuartersList.as_view(), name="financial_quarters"),
+    path("download-master/<int:fqid>", download_master, name="download_master"),
     path("<int:pk>/", ReturnDetail.as_view(), name="returns_detail"),
 ]
