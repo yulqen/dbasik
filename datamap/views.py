@@ -3,25 +3,22 @@ import logging
 from collections import OrderedDict
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.forms import Form
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import (CreateView, DeleteView, FormView, ListView,
+                                  UpdateView)
 
 from datamap.helpers import parse_kwargs_to_error_string
 from register.models import Tier
-from .forms import (
-    UploadDatamap,
-    DatamapForm,
-    DatamapLineForm,
-    DatamapLineEditForm,
-    CSVForm,
-)
+
+from .forms import (CSVForm, DatamapForm, DatamapLineEditForm, DatamapLineForm,
+                    UploadDatamap)
 from .models import Datamap, DatamapLine
 
 logger = logging.getLogger(__name__)

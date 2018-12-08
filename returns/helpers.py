@@ -46,7 +46,7 @@ def generate_master(
     financial_quarter: FinancialQuarter, output: str, datamap: Datamap
 ) -> None:
     # we need to get all returns for a FinancialQuarter
-    all_returns = financial_quarter.return_financial_quarters.all()
+    all_returns = financial_quarter.return_financial_quarters.all().order_by('project')
     keys: List = [dml.key for dml in datamap.datamaplines.all().order_by('pk')]
     wb = Workbook()
     ws = wb.active

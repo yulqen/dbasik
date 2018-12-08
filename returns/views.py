@@ -1,20 +1,43 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.urls import reverse
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.views.generic import DetailView
-from django.views.generic import ListView
-
-from openpyxl import load_workbook
-
+import os
 from typing import List
 
-from register.models import FinancialQuarter
-from returns.forms import ReturnCreateForm
-from returns.models import Return
-from returns.models import ReturnItem
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView, FormView, ListView
+from openpyxl import load_workbook
+
+from excelparser.helpers.parser import ParsedSpreadsheet
+from register.models import FinancialQuarter, Project
+from returns.forms import ReturnBatchCreateForm, ReturnCreateForm
 from returns.helpers import generate_master
+from returns.models import Return, ReturnItem
+
+
+class ReturnBatchCreate(LoginRequiredMixin, FormView):
+    form_class = ReturnBatchCreateForm
+    template_name = "returns/return_batch_create.html"
+    success_url = reverse_lazy("returns:returns_list")
+
+    def form_valid(self, form):
+        fq = form.cleaned_data['financial_quarter']
+        datamap = form.cleaned_data['datamap']
+        files = self.request.FILES.getlist('source_files')
+        for f in files:
+            datamap = form.cleaned_data['datamap']
+            save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f.name)
+            path = default_storage.save(save_path, f)
+            project = Project.objects.get(name=f.name.strip(".xlsm"))
+            return_obj = Return.objects.create(
+                project=project,
+                financial_quarter=fq
+            )
+            parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
+            parsed_spreadsheet.process()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 def download_master(request, fqid: int):
