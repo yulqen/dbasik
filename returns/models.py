@@ -2,7 +2,6 @@ from django.db import models
 
 from django.urls import reverse
 
-from datamap.models import Datamap
 from datamap.models import DatamapLine
 from register.models import FinancialQuarter
 from register.models import Project

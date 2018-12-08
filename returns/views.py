@@ -6,9 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, FormView, ListView
-from openpyxl import load_workbook
 
 from excelparser.helpers.parser import ParsedSpreadsheet
 from register.models import FinancialQuarter, Project
