@@ -27,7 +27,7 @@
                             </li>
                     {% endfor %}
                             <li class="list-group-item align-self-end">
-                                <a href="#" class="btn btn-primary">Download Master</a>
+                                <a href="{% url "returns:download_master" fq.id %}" class="btn btn-primary">Download Master</a>
                             </li>
                         </ul>
                     </div>
