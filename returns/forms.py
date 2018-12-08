@@ -1,6 +1,9 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, ButtonHolder, Fieldset, Layout, Submit
+
 from django import forms
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 from django.forms import ModelChoiceField
 from django.urls import reverse
 
@@ -19,10 +22,9 @@ class ReturnBatchCreateForm(forms.Form):
         queryset=Datamap.objects.all(), help_text="Choose a datamap"
     )
     source_files = forms.FileField(
-        help_text="Please ensure the name of each file matches exactly the title of the project!",
-        widget=forms.ClearableFileInput(attrs={'multiple': True})
+        help_text="Please ensure the name of each file matches exactly the title of the project, and only .xlsm files will work.",
+        widget=forms.ClearableFileInput(attrs={"multiple": True}),
     )
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,7 +35,12 @@ class ReturnBatchCreateForm(forms.Form):
         self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create new Returns (batch upload)", "financial_quarter", "datamap", "source_files"),
+            Fieldset(
+                "Create new Returns (batch upload)",
+                "financial_quarter",
+                "datamap",
+                "source_files",
+            ),
             ButtonHolder(
                 Submit("submit", "Submit"),
                 Button(
