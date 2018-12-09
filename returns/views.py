@@ -8,12 +8,16 @@ from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, FormView, ListView
+from django.shortcuts import redirect
+from django.contrib import messages
 
 from excelparser.helpers.parser import ParsedSpreadsheet
 from register.models import FinancialQuarter, Project
 from returns.forms import ReturnBatchCreateForm, ReturnCreateForm
 from returns.helpers import generate_master
 from returns.models import Return, ReturnItem
+
+from returns.tasks import process_batch as process
 
 
 class ReturnBatchCreate(LoginRequiredMixin, FormView):
@@ -22,21 +26,34 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
     success_url = reverse_lazy("returns:returns_list")
 
     def form_valid(self, form):
-        fq = form.cleaned_data['financial_quarter']
-        datamap = form.cleaned_data['datamap']
         files = self.request.FILES.getlist('source_files')
+        fq_id = form.cleaned_data['financial_quarter'].id
+        dm_id = form.cleaned_data['datamap'].id
         for f in files:
-            datamap = form.cleaned_data['datamap']
-            save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f.name)
-            path = default_storage.save(save_path, f)
-            project = Project.objects.get(name=f.name.strip(".xlsm"))
-            return_obj = Return.objects.create(
-                project=project,
-                financial_quarter=fq
-            )
-            parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
-            parsed_spreadsheet.process()
-        return HttpResponseRedirect(self.get_success_url())
+            project_name = f.name.strip(".xlsm")
+            save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', str(f))
+            save_path = default_storage.save(save_path, f)
+            process.delay(fq_id, dm_id, save_path, project_name)
+        messages.success(self.request, "Processing uploads - please refresh page later...")
+        return redirect("returns:returns_list")
+
+
+    # def form_valid(self, form):
+    #     fq = form.cleaned_data['financial_quarter']
+    #     datamap = form.cleaned_data['datamap']
+    #     files = self.request.FILES.getlist('source_files')
+    #     for f in files:
+    #         datamap = form.cleaned_data['datamap']
+    #         save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', f.name)
+    #         path = default_storage.save(save_path, f)
+    #         project = Project.objects.get(name=f.name.strip(".xlsm"))
+    #         return_obj = Return.objects.create(
+    #             project=project,
+    #             financial_quarter=fq
+    #         )
+    #         parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
+    #         parsed_spreadsheet.process()
+    #     return HttpResponseRedirect(self.get_success_url())
 
 
 def download_master(request, fqid: int):

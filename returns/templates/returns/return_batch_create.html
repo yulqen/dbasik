@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{%  block title %} Create new Returns - batch upload {% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <div id="bad-file-upload-id" class="alert alert-dismissible alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-6">
+                {% crispy form %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h6>Current project in the system:</h6> 
+        <ul>
+            <li>Project 1</li>
+            <li>Project 2</li>
+        </ul>
+    </div>
+{% endblock content %}

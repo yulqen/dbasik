@@ -46,6 +46,7 @@ ACCEPTABLE_CONTENT = [
     "text/comma-separated-values",
 ]
 
+CELERY_BROKER_URL = "amqp://localhost"
 
 # SECRETS
 with open("secrets.json") as f:

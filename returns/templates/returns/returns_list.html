@@ -5,6 +5,15 @@
 {% block content %}
 
     <div class="container">
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <div id="message-test" class="alert alert-dismissible alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         <h2 id="show-datamap-table">Returns</h2>
 
