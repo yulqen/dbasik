@@ -1,8 +1,8 @@
 #!/bin/bash
 
-NAME="dbasik_dftgovernance"                                  # Name of the application
-DJANGODIR=/dbasik/code/dbasik_dftgovernance/             # Django project directory
-SOCKFILE=/dbasik/code/dbasik_dftgovernance/run/gunicorn.sock  # we will communicte using this unix socket
+NAME="dbasik-dftgovernance"                                  # Name of the application
+DJANGODIR=/dbasik/code/dbasik-dftgovernance/             # Django project directory
+SOCKFILE=/dbasik/code/dbasik-dftgovernance/run/gunicorn.sock  # we will communicte using this unix socket
 USER=dbasik                                       # the user to run as
 GROUP=dbasik                                     # the group to run as
 NUM_WORKERS=3                                     # how many worker processes should Gunicorn spawn
