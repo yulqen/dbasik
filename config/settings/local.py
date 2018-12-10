@@ -24,6 +24,11 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
+        "returns_console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
         "file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
@@ -37,6 +42,11 @@ LOGGING = {
         "django": {"handlers": ["file", "console"], "level": "INFO", "propagate": True},
         "datamap.views": {
             "handlers": ["file", "datamap_console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "returns.views": {
+            "handlers": ["file", "returns_console"],
             "level": "DEBUG",
             "propagate": True,
         },

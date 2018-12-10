@@ -55,12 +55,13 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
+        logger.info("The form is valid!")
         files = self.request.FILES.getlist("source_files")
         # test if we have erroneous files
         for uploaded_file in files:
+            logger.info(f"Uploaded file name is {uploaded_file}")
             uploaded_file = uploaded_file.name.strip(".xlsm")
             if uploaded_file not in self.valid_project_names:
-                logger.info(f"Uploaded file name is {uploaded_file}")
                 messages.add_message(
                     self.request,
                     messages.ERROR,
