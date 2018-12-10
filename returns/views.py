@@ -30,6 +30,18 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
     template_name = "returns/return_batch_create.html"
     success_url = reverse_lazy("returns:returns_list")
 
+    def get_context_data(self, **kwargs):
+        """
+        We want to provide a list of valid project names, and the
+        projects themselves.
+        """
+        context = super().get_context_data(**kwargs)
+        valid_project_names = [p.name for p in Project.objects.all().order_by('name')]
+        projects = Project.objects.all().order_by('name')
+        context['valid_project_names'] = valid_project_names
+        context['projects'] = projects
+        return context
+
     def form_valid(self, form):
         files = self.request.FILES.getlist('source_files')
         fq_id = form.cleaned_data['financial_quarter'].id

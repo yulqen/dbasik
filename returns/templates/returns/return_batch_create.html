@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="container">
+
         {% if messages %}
         <ul>
             {% for message in messages %}
@@ -15,17 +16,26 @@
             {% endfor %}
         </ul>
         {% endif %}
+
         <div class="row">
             <div class="col-sm-6">
                 {% crispy form %}
             </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Current projects in system 
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for project in projects %}
+                                <li class="list-group-item"><a href="{% url "register:project_detail" project.slug %}">{{ project }}</a></li> 
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container">
-        <h6>Current project in the system:</h6> 
-        <ul>
-            <li>Project 1</li>
-            <li>Project 2</li>
-        </ul>
-    </div>
+
 {% endblock content %}
