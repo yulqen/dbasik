@@ -38,6 +38,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
+        'returns_console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -55,6 +60,11 @@ LOGGING = {
         },
         'datamap.views': {
             'handlers': ['file', 'datamap_console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'returns.views': {
+            'handlers': ['file', 'returns_console'],
             'level': 'INFO',
             'propagate': True,
         },
