@@ -24,6 +24,10 @@ def process_batch(fq_id, dm_id, save_path, project_name):
         project=project,
         financial_quarter=fq
     )
-    parsed_spreadsheet = ParsedSpreadsheet(save_path, project, return_obj, datamap)
+    import pudb; pudb.set_trace()  # XXX BREAKPOINT
+    try:
+        parsed_spreadsheet = ParsedSpreadsheet(save_path, project, return_obj, datamap)
+    except ImportError:
+        raise
     parsed_spreadsheet.process()
     print(f"{save_path} processed successfully")

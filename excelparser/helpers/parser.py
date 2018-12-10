@@ -122,7 +122,7 @@ class ParsedSpreadsheet:
     def _get_sheets(self) -> None:
         try:
             wb = load_workbook(self._template_path)
-        except Exception:
+        except ImportError:
             raise
         self.sheetnames = wb.sheetnames
 

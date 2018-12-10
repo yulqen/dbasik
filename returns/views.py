@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, FormView, ListView
+from django.views.generic import CreateView, DetailView, FormView, ListView, DeleteView
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -18,6 +18,11 @@ from returns.helpers import generate_master
 from returns.models import Return, ReturnItem
 
 from returns.tasks import process_batch as process
+
+
+class DeleteReturn(LoginRequiredMixin, DeleteView):
+    model = Return
+    success_url = reverse_lazy("returns:returns_list")
 
 
 class ReturnBatchCreate(LoginRequiredMixin, FormView):

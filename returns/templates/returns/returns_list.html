@@ -32,10 +32,34 @@
                     {% for r in fq.return_financial_quarters.all %}
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {% if r.return_returnitems.count < 1000 %}
-                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-warning badge-pill">Uploading {{ r.return_returnitems.count }}</span>
+                                {% if r.return_returnitems.count < 1 %}
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="badge badge-warning badge-pill">Check errors/progress</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">DELETE</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {% else %}
-                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">DELETE</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 {% endif %}
                             </li>
                     {% endfor %}
