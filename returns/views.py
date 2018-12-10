@@ -32,8 +32,10 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         self.kwargs = super().get_form_kwargs()
-        self.valid_project_names = [p.name for p in Project.objects.all().order_by('name')]
-        self.kwargs['valid_project_names'] = self.valid_project_names
+        self.valid_project_names = [
+            p.name for p in Project.objects.all().order_by("name")
+        ]
+        self.kwargs["valid_project_names"] = self.valid_project_names
         return self.kwargs
 
     def get_context_data(self, **kwargs):
@@ -42,28 +44,33 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         projects themselves.
         """
         context = super().get_context_data(**kwargs)
-        projects = Project.objects.all().order_by('name')
-        context['projects'] = projects
+        projects = Project.objects.all().order_by("name")
+        context["projects"] = projects
         return context
 
     def form_valid(self, form):
-        files = self.request.FILES.getlist('source_files')
+        files = self.request.FILES.getlist("source_files")
         # test if we have erroneous files
         for uploaded_file in files:
             uploaded_file = uploaded_file.name.strip(".xlsm")
             if uploaded_file not in self.valid_project_names:
-                messages.add_message(self.request, messages.ERROR,  f"{uploaded_file} is not a valid filename in this context.")
+                messages.add_message(
+                    self.request,
+                    messages.ERROR,
+                    f"{uploaded_file} is not a valid filename in this context.",
+                )
                 return redirect("returns:returns_list")
-        fq_id = form.cleaned_data['financial_quarter'].id
-        dm_id = form.cleaned_data['datamap'].id
+        fq_id = form.cleaned_data["financial_quarter"].id
+        dm_id = form.cleaned_data["datamap"].id
         for f in files:
             project_name = f.name.strip(".xlsm")
-            save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', str(f))
+            save_path = os.path.join(settings.MEDIA_ROOT, "uploads", str(f))
             save_path = default_storage.save(save_path, f)
             process.delay(fq_id, dm_id, save_path, project_name)
-        messages.success(self.request, "Processing uploads - please refresh page later...")
+        messages.success(
+            self.request, "Processing uploads - please refresh page later..."
+        )
         return redirect("returns:returns_list")
-
 
     # def form_valid(self, form):
     #     fq = form.cleaned_data['financial_quarter']
@@ -104,7 +111,7 @@ def download_master(request, fqid: int):
 
 
 class ReturnsList(LoginRequiredMixin, ListView):
-    queryset = Return.objects.all().order_by('project__name')
+    queryset = Return.objects.all().order_by("project__name")
     template_name = "returns/returns_list.html"
 
     def get_context_data(self, **kwargs):
