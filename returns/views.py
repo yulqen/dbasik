@@ -1,4 +1,6 @@
 import os
+import logging
+
 from typing import List
 
 from django.conf import settings
@@ -18,6 +20,10 @@ from returns.helpers import generate_master
 from returns.models import Return, ReturnItem
 
 from returns.tasks import process_batch as process
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class DeleteReturn(LoginRequiredMixin, DeleteView):
@@ -54,6 +60,7 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         for uploaded_file in files:
             uploaded_file = uploaded_file.name.strip(".xlsm")
             if uploaded_file not in self.valid_project_names:
+                logger.info(f"Uploaded file name is {uploaded_file}")
                 messages.add_message(
                     self.request,
                     messages.ERROR,
