@@ -82,7 +82,7 @@ def download_master(request, fqid: int):
 
 
 class ReturnsList(LoginRequiredMixin, ListView):
-    queryset = Return.objects.all()
+    queryset = Return.objects.all().order_by('project__name')
     template_name = "returns/returns_list.html"
 
     def get_context_data(self, **kwargs):
