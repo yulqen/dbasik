@@ -30,20 +30,30 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
     template_name = "returns/return_batch_create.html"
     success_url = reverse_lazy("returns:returns_list")
 
+    def get_form_kwargs(self):
+        self.kwargs = super().get_form_kwargs()
+        self.valid_project_names = [p.name for p in Project.objects.all().order_by('name')]
+        self.kwargs['valid_project_names'] = self.valid_project_names
+        return self.kwargs
+
     def get_context_data(self, **kwargs):
         """
         We want to provide a list of valid project names, and the
         projects themselves.
         """
         context = super().get_context_data(**kwargs)
-        valid_project_names = [p.name for p in Project.objects.all().order_by('name')]
         projects = Project.objects.all().order_by('name')
-        context['valid_project_names'] = valid_project_names
         context['projects'] = projects
         return context
 
     def form_valid(self, form):
         files = self.request.FILES.getlist('source_files')
+        # test if we have erroneous files
+        for uploaded_file in files:
+            uploaded_file = uploaded_file.name.strip(".xlsm")
+            if uploaded_file not in self.valid_project_names:
+                messages.add_message(self.request, messages.ERROR,  f"{uploaded_file} is not a valid filename in this context.")
+                return redirect("returns:returns_list")
         fq_id = form.cleaned_data['financial_quarter'].id
         dm_id = form.cleaned_data['datamap'].id
         for f in files:
