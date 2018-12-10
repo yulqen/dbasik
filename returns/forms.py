@@ -34,11 +34,11 @@ class ReturnBatchCreateForm(forms.Form):
         There doesn't appear to be a way round this currently.
         https://stackoverflow.com/questions/46318587/django-uploading-multiple-files-list-of-files-needed-in-cleaned-datafile
         """
-        data = self.cleaned_data['source_files']
+        data = self.cleaned_data["source_files"]
         return data
 
     def __init__(self, *args, **kwargs):
-        self.valid_project_names = kwargs.pop('valid_project_names')
+        self.valid_project_names = kwargs.pop("valid_project_names")
         super().__init__(*args, **kwargs)
 
         cancel_redirect = reverse("returns:returns_list")
