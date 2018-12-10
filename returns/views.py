@@ -55,7 +55,6 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
-        logger.info("The form is valid!")
         files = self.request.FILES.getlist("source_files")
         # test if we have erroneous files
         for uploaded_file in files:
@@ -109,7 +108,7 @@ def download_master(request, fqid: int):
     return_obj_sample = fq.return_financial_quarters.first()
     first_return_obj_item = return_obj_sample.return_returnitems.first()
     datamap = first_return_obj_item.datamapline.datamap
-    file_name = f"Master_for_Q{fq.quarter}_{fq.year}.xlsm"
+    file_name = f"Master_for_Q{fq.quarter}_{fq.year}.xlsx"
     generate_master(fq, file_name, datamap)
     with open(file_name, "rb") as excel:
         data = excel.read()
