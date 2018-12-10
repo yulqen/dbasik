@@ -1,7 +1,9 @@
 import os
 
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.conf import settings
+from django.contrib import messages
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
 from django.urls import reverse_lazy
@@ -28,6 +30,10 @@ class ProcessPopulatedTemplate(FormView):
         project = form.cleaned_data['return_obj'].project
         return_obj = form.cleaned_data['return_obj']
         datamap = form.cleaned_data['datamap']
-        parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
+        try:
+            parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
+        except Exception:
+            messages.add_message(self.request, messages.ERROR, f"ERROR uploading file: {uploaded_file}. Please check that it is a valid template.")
+            return redirect("excelparser:process_populated", self.kwargs['return_id'])
         parsed_spreadsheet.process()
         return HttpResponseRedirect(self.get_success_url())

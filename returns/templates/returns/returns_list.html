@@ -32,7 +32,11 @@
                     {% for r in fq.return_financial_quarters.all %}
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
+                                {% if r.return_returnitems.count < 1000 %}
+                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-warning badge-pill">Uploading {{ r.return_returnitems.count }}</span>
+                                {% else %}
+                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a><span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
+                                {% endif %}
                             </li>
                     {% endfor %}
                             <li class="list-group-item align-self-end">

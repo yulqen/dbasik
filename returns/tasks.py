@@ -14,7 +14,7 @@ from datamap.models import Datamap
 
 
 @shared_task
-def process_batch(fq_id, dm_id, save_path, project_name) -> HttpResponseRedirect:
+def process_batch(fq_id, dm_id, save_path, project_name):
     print(project_name)
     print(save_path)
     fq = FinancialQuarter.objects.get(pk=fq_id)

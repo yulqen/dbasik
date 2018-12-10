@@ -53,10 +53,20 @@ ALLOWED_HOSTS.append("localhost")
 
 CRISPY_FAIL_SILENTLY = not DEBUG
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "HOST": "localhost",
+#         "NAME": "db.sqlite3",
+#     }
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "HOST": "localhost",
-        "NAME": "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbasik',
+        'USER': 'dbasikuser',
+        'PASSWORD': 'dbasik',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }

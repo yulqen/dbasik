@@ -113,12 +113,17 @@ class ParsedSpreadsheet:
             _other_params = self._return_params - set([_return_param])
             _combined_params = {k: None for k in list(_other_params)}
             _combined_params.update(_value_dict)
+            # TODO remove this and replace with logging
+            print(f"DOING {dml.key}")
             ReturnItem.objects.create(
                 parent=self.return_obj, datamapline=dml, **_combined_params
             )
 
     def _get_sheets(self) -> None:
-        wb = load_workbook(self._template_path)
+        try:
+            wb = load_workbook(self._template_path)
+        except Exception:
+            raise
         self.sheetnames = wb.sheetnames
 
     @property

@@ -41,7 +41,7 @@ class ReturnItem(models.Model):
         null=True,
         related_name="return_datamaplines",
     )
-    value_str = models.CharField(null=True, blank=True, max_length=255, default="")
+    value_str = models.CharField(null=True, blank=True, max_length=4096, default="")
     value_int = models.IntegerField(blank=True, null=True)
     value_float = models.DecimalField(
         blank=True, max_digits=9, decimal_places=2, null=True
