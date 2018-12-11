@@ -4,8 +4,16 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy, reverse
 
-from . models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
-from . forms import ProjectTypeForm, TierForm, ProjectStageForm, StrategicAlignmentForm, ProjectForm
+from .models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
+from .forms import (
+    ProjectTypeForm,
+    TierForm,
+    ProjectStageForm,
+    StrategicAlignmentForm,
+    ProjectForm,
+)
+from returns.models import Return
+from datamap.models import DatamapLine
 
 
 class ProjectTypeDelete(LoginRequiredMixin, DeleteView):
@@ -21,7 +29,7 @@ class ProjectTypeUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = ProjectType.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -43,7 +51,7 @@ class ProjectTypeCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = ProjectType.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -56,7 +64,7 @@ class TierCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Tier.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -81,7 +89,7 @@ class TierUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Tier.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -94,7 +102,7 @@ class ProjectStageCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = ProjectStage.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -119,7 +127,7 @@ class ProjectStageUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = ProjectStage.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -132,7 +140,7 @@ class StrategicAlignmentCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = StrategicAlignment.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -157,9 +165,8 @@ class StrategicAlignmentUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = StrategicAlignment.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
-
 
 
 class ProjectCreate(LoginRequiredMixin, CreateView):
@@ -171,16 +178,53 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Project.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
 class ProjectList(LoginRequiredMixin, ListView):
     model = Project
 
+    def get_queryset(self):
+        qs = Project.objects.all().order_by("name")
+        return qs
+
 
 class ProjectDetail(LoginRequiredMixin, DetailView):
     model = Project
+
+    rag_colours = {
+        "Amber": "eab735",
+        "Green": "3d7f2b",
+        "Amber/Green": "98aa3f"
+    }
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        returns_for = self.object.return_projects.all().order_by("-financial_quarter")
+        if len(returns_for) > 0:
+            _all_data = returns_for.first().return_returnitems.all().values()
+            if len(_all_data) > 1:
+                context["fq"] = returns_for.first().financial_quarter
+                _latest_return = {
+                    DatamapLine.objects.get(id=item["datamapline_id"]).key: {
+                        "value_str": item["value_str"],
+                        "value_int": item["value_int"],
+                        "value_float": item["value_float"],
+                        "value_d ate": item["value_date"],
+                        "value_datetime": item["value_datetime"],
+                    }
+                    for item in _all_data
+                }
+                context["sro_full_name"] = _latest_return['SRO Full Name']['value_str']
+                context["rag"] = _latest_return["SRO assurance confidence RAG external"]['value_str']
+                context["rag_c"] = self.rag_colours.get(_latest_return["SRO assurance confidence RAG external"]['value_str'])
+                return context
+            else:
+                return context
+        else:
+            return context
 
 
 class ProjectDelete(LoginRequiredMixin, DeleteView):
@@ -196,5 +240,5 @@ class ProjectUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Project.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <div class="container" style="padding-top: 20px">
+    <div class="container">
         {% if messages %}
             <ul>
                 {% for message in messages %}
@@ -21,14 +21,21 @@
             </ul>
         {% endif %}
 
-        <h2 id="show-datamap-table">Returns</h2>
 
-        <p>Some blurb about what these things are.</p>
+        <div class="p-3 mb-4 bg-primary text-white border border-dark">
+        <p>Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
+        the file name must match exactly the name of the project it corresponds with.</p>
+
+        e.g. the file for East Coast Mainline Programme must be called <code class="text-white">East Coast Mainline Programme.xlsm</code>.
+        Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
+        reported when uploading individually.
+        </div>
 
         {% if valid_fqs %}
+            <h3>Current returns in system:</h3>
             {% for fq in valid_fqs %}
 
-                <div class="card border-primary mb-5">
+                <div class="card border-dark mb-5">
                     <div class="card-body">
 
                 <div class"card-title">
@@ -46,10 +53,10 @@
                                                     <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
                                                 </div>
                                                 <div class="col-3">
-                                                    <span class="badge badge-warning badge-pill">Check errors/progress</span>
+                                                    <span class="badge badge-warning badge-pill"><i class="fas fa-exclamation-triangle"></i>Check errors/progress</span>
                                                 </div>
                                                 <div class="col-1">
-                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">DELETE</a>
+                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">Delete</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -60,10 +67,10 @@
                                                     <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
                                                 </div>
                                                 <div class="col-3">
-                                                    <span class="badge badge-success badge-pill">Data points: {{ r.return_returnitems.count }}</span>
+                                                    <span class="badge badge-success badge-pill"><i class="fas fa-database"></i> {{ r.return_returnitems.count }}</span>
                                                 </div>
                                                 <div class="col-1">
-                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">DELETE</a>
+                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">Delete</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -85,9 +92,13 @@
             </div>
         {% endif %}
 
-        <div class="container">
-            <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
-            <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
-        </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
+                </div>
+                <div class="col-sm-2">
+                    <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
+                </div>
+            </div>
 
 {% endblock %}

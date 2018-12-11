@@ -4,72 +4,94 @@
 
 {% block content %}
 
-<div class="container">
+    <div class="container">
         <h3>Project: {{ object.name }}</h3>
-        <div class="container">
-            {% if object.dependencies %}
-            <p class="w-75 p-3 border">{{ object.dependencies }}</p>
-            {% else %}
-            <p>There are no dependencies for this Project.</p>
-            {% endif %}
-        </div>
-    <div class="row">
-        <div class="col">
-            <table class="table table-hover">
-                <tr>
-                    <td><strong>Tier:</td></strong><td>{{ object.tier }}</td>  
-                </tr>
-                <tr>
-                    <td><strong>Project Type:</td></strong><td>{{ object.project_type }}</td>  
-                </tr>
-                <tr>
-                    <td><strong>Stage:</td></strong><td>{{ object.stage }}</td>  
-                </tr>
-                <tr>
-                    <td><strong>Start Date:</td></strong><td>{{ object.start_date|date:"j M Y" }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Planned End Date:</td></strong><td>{{ object.planned_end_date|date:"j M Y" }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Some more descriptive data:</td></strong><td>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper erat hendrerit, sagittis lectus eget, mattis dolor. Suspendisse quam justo, pellentesque fringilla egestas id, pellentesque id justo. Nullam ullamcorper maximus fringilla. Aliquam efficitur sit amet tellus et aliquet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam ac malesuada ligula. Ut rutrum, est a ornare luctus, diam metus vestibulum odio, et efficitur nibh nulla eu ante. Vivamus sed consectetur magna, sed ullamcorper mi. Duis consectetur nisi vitae interdum fringilla. In eleifend laoreet sem, quis suscipit lacus interdum porttitor. Mauris ultrices gravida semper. Duis sit amet est quis arcu elementum fringilla. Suspendisse consequat eros augue, dapibus luctus sem pulvinar ut. Nam sed eros a nibh semper elementum ac in ex.
-                    </td>  
-                </tr>
-            </table>
-        </div>
-        <div class="col">
-            <div class="col-sm-4">
-                <div class="card text-white bg-primary mb-3" style="width: 18rem;">
-                    <div class="card-header">Key Data</div>
-                    <div class="card-body">
-                        <table>
-                           <tr>
-                                <td class="px-2"><strong>Current RAG:</strong></td><td class="text-success"> GREEN</td>
-                           </tr> 
-                           <tr>
-                                <td class="px-2"><strong>SRO:</strong></td><td>Stan McKinley</td>
-                           </tr>
-                        <tr>
-                             <td class="px-2"><strong>DfT Director:</strong></td><td>Sarah Blair</td>
-                        </tr>
-                        <tr>
-                            <td class="px-2"><strong>Latest BICC submission:</strong></td><td>Q1-2018-19</td>
-                        </tr>
-                        <tr>
-                            <td class="px-2"><strong>Workflow Stage:</strong></td><td>MANDATE</td>
-                        </tr>
-                        </table>
-                    </div> 
+        <!--<div class="container">-->
+        <!--{% if object.dependencies %}-->
+            <!--<p class="w-75 p-3 border">{{ object.dependencies }}</p>-->
+        <!--{% else %}-->
+            <!--<p>There are no dependencies for this Project.</p>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <div class="mt-5 row">
+            <div class="col-6">
+                <table class="table table-hover">
+                    <tr>
+                        <td class="col-3"><strong>Tier:</td></strong><td>{{ object.tier }}</td>  
+                    </tr>
+                    <tr>
+                        <td class="col-3"><strong>Project Type:</td></strong><td>{{ object.project_type }}</td>  
+                    </tr>
+                    <tr>
+                        <td class="col-3"><strong>Stage:</td></strong><td>{{ object.stage }}</td>  
+                    </tr>
+                    <tr>
+                        <td class="col-3"><strong>Start Date:</td></strong><td>{{ object.start_date|date:"j M Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-3"><strong>Planned End Date:</td></strong><td>{{ object.planned_end_date|date:"j M Y" }}</td>
+                    </tr>
+                    <tr>
+                </table>
+            </div>
+            <div class="col-5">
+                <div class="card text-dark bg-light mb-3">
+                    {% if fq %}
+                        <div class="card-header">Key Data - {{ fq }} return</div>
+                        <div class="card-body">
+                            <table>
+                                <tr>
+                                    <td class="px-2"><strong>Current RAG:</strong></td><td style="background: #{{ rag_c }}"><span style="color: white">{{ rag }}</span></td>
+                                </tr> 
+                                <tr>
+                                    <td class="px-2"><strong>SRO Full Name:</strong></td><td>{{ sro_full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>DfT Director:</strong></td><td>Sarah Blair</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>Latest BICC submission:</strong></td><td>Q1-2018-19</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>Workflow Stage:</strong></td><td>MANDATE</td>
+                                </tr>
+                            </table>
+                        </div> 
+                    {% else %}
+                        <div class="card-header">Key Data - no current return</div>
+                        <div class="card-body">
+                            <table>
+                                <tr>
+                                    <td class="px-2"><strong>Current RAG:</strong></td><td>-</td>
+                                </tr> 
+                                <tr>
+                                    <td class="px-2"><strong>SRO Full Name:</strong></td><td>-</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>DfT Director:</strong></td><td>-</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>Latest BICC submission:</strong></td><td>-</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-2"><strong>Workflow Stage:</strong></td><td>-</td>
+                                </tr>
+                            </table>
+                        </div> 
+                    {% endif %}
                 </div>
             </div>
+        </div> 
+        <div class="row">
+           <div class="col">
+              <h5>Additional information:</h5> 
+              <p>Text here</p>
+           </div> 
         </div>
-    </div> 
-    <div class="buttonHolder">
-        <a class="btn btn-primary" href="{% url 'register:projecttype_update' object.slug %}">Edit</a>
-        <a class="btn btn-danger" href="{% url 'register:projecttype_delete' object.slug %}">Delete</a>
+        <div class="buttonHolder">
+            <a class="btn btn-primary" href="{% url 'register:projecttype_update' object.slug %}">Edit</a>
+            <a class="btn btn-danger" href="{% url 'register:projecttype_delete' object.slug %}">Delete</a>
+        </div>
+
     </div>
-
-</div>
-
 {% endblock %}

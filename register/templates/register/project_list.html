@@ -3,19 +3,19 @@
 {% block title %}List of Projects{% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 20px">
+<div class="container">
     <h3>Projects</h3>
     <div class="container">
         <p>This text is hard-coded into the template but should be moved into the database.</p>
         <p>General description of what a Project is and why we need it.</p>
         <table class="table table-hover">
             <tr>
-                <th scope="col" class="col-sm-3">Project</th>
-                <th scope="col" class="col-sm-1">Tier</th>
-                <th scope="col" class="col-sm-2">Type</th>
-                <th scope="col">Stage</th>
-                <th scope="col" class="col-sm-2">Start Date</th>
-                <th scope="col" class="col-sm-2">Planned End Date</th>
+                <th scope="col" class="col-lg-4">Project</th>
+                <th scope="col" class="col-lg-2">Tier</th>
+                <th scope="col" class="col-lg-2">Type</th>
+                <th scope="col" class="col-lg-2">Stage</th>
+                <th scope="col" class="col-lg-1">Start Date</th>
+                <th scope="col" class="col-lg-1">Planned End Date</th>
             </tr>
             {% for item in object_list %}
             <tr>

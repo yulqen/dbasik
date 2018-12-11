@@ -9,12 +9,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col-lg-7">
             {% crispy form %}
         </div>
 
-        <div class="col-sm-4">
-            <div class="card border-light mb-3" style="width: 18rem;">
+        <div class="col-sm-5">
+            <div class="card border-light mb-5">
                 <div class="card-header">Current Projects in system</div>
                 <div class="card-body">
                     {% for item in existing_objects %}
