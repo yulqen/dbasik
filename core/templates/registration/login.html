@@ -1,11 +1,13 @@
 {% extends "core/base.html" %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 {% block title %}dbasik | Log in{% endblock %}
 
 {% block extra_head_tags %}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{% static 'css/signin.css' %}" type="text/css">
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block body_class %}text-center{% endblock %}
@@ -21,16 +23,20 @@
     {% if next %}
     <p>You can't access that page!</p>
     {% endif %}
-
-    <form class="form-signin" action="{% url 'login' %}" method="post" accept-charset="utf-8">
+    <body class="text-center">
+      <form class="form-signin" action="{% url 'login' %}" method="post" accept-charset="utf-8">
         {% csrf_token %} 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in:</h1>
-        <p>Username: {{ form.username }}</p>
-        <p>Password: {{ form.password }}</p>
-
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        <img class="mb-4" src="{% static 'img/bw_logo.png' %}" alt="" width="172" height="172">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputEmail" class="sr-only">Username</label>
+        <label for="inputPassword" class="sr-only">Password</label>
+        {{ form|crispy }}
         <input type="hidden" value="{{ next }}" name="next" id="next"/>
-    <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
-    </form>
+        <div class="checkbox mb-3">
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+      </form>
+    </body>
 
 {% endblock %}
