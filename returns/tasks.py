@@ -15,15 +15,23 @@ from datamap.models import Datamap
 
 @shared_task
 def process_batch(fq_id, dm_id, save_path, project_name):
-    print(project_name)
-    print(save_path)
     fq = FinancialQuarter.objects.get(pk=fq_id)
     datamap = Datamap.objects.get(pk=dm_id)
     project = Project.objects.get(name=project_name)
-    return_obj = Return.objects.create(
-        project=project,
-        financial_quarter=fq
-    )
+    # make idempotent
+    # does this Return exist already?
+    if Return.objects.filter(financial_quarter=fq, project=project).exists():
+        r = Return.objects.get(financial_quarter=fq, project=project)
+        r.delete()
+        return_obj = Return.objects.create(
+            project=project,
+            financial_quarter=fq
+        )
+    else:
+        return_obj = Return.objects.create(
+            project=project,
+            financial_quarter=fq
+        )
     try:
         parsed_spreadsheet = ParsedSpreadsheet(save_path, project, return_obj, datamap)
     except ImportError:
