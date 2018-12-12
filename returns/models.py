@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django.db import models
 
 from django.urls import reverse
@@ -25,6 +26,21 @@ class Return(models.Model):
 
     def get_absolute_url(self):
         return reverse("returns:return_data", args=[self.pk])
+
+    def data_by_key(self, key) -> Dict[str, Any]:
+        """
+        Return a dict of data for a single Return.
+        """
+        _return_item = self.return_returnitems.filter(datamapline__key=key).first()
+        return {
+            "value_str": _return_item.value_str,
+            "value_int": _return_item.value_int,
+            "value_float": _return_item.value_float,
+            "value_date": _return_item.value_date,
+            "value_datetime": _return_item.value_datetime,
+        }
+
+
 
 
 class ReturnItem(models.Model):

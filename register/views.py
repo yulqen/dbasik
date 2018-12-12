@@ -12,7 +12,7 @@ from .forms import (
     StrategicAlignmentForm,
     ProjectForm,
 )
-from returns.models import Return
+from returns.models import Return, ReturnItem
 from datamap.models import DatamapLine
 
 
@@ -203,23 +203,14 @@ class ProjectDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         returns_for = self.object.return_projects.all().order_by("-financial_quarter")
-        if len(returns_for) > 0:
-            _all_data = returns_for.first().return_returnitems.all().values()
-            if len(_all_data) > 1:
+        first = returns_for.first()
+        returns_count = returns_for.count()
+        if returns_count > 0:
+            if ReturnItem.objects.filter(parent=first).count() > 1:
                 context["fq"] = returns_for.first().financial_quarter
-                _latest_return = {
-                    DatamapLine.objects.get(id=item["datamapline_id"]).key: {
-                        "value_str": item["value_str"],
-                        "value_int": item["value_int"],
-                        "value_float": item["value_float"],
-                        "value_d ate": item["value_date"],
-                        "value_datetime": item["value_datetime"],
-                    }
-                    for item in _all_data
-                }
-                context["sro_full_name"] = _latest_return['SRO Full Name']['value_str']
-                context["rag"] = _latest_return["SRO assurance confidence RAG external"]['value_str']
-                context["rag_c"] = self.rag_colours.get(_latest_return["SRO assurance confidence RAG external"]['value_str'])
+                context["sro_full_name"] = first.data_by_key('SRO Full Name')['value_str']
+                context["rag"] = first.data_by_key("SRO assurance confidence RAG external")['value_str']
+                context["rag_c"] = self.rag_colours.get(first.data_by_key("SRO assurance confidence RAG external")['value_str'])
                 return context
             else:
                 return context
