@@ -16,17 +16,16 @@
 
 {% block content %}
 
-    {% if form.errors %}
-        <p>Your username and password did't match. Please try again.</p>
-    {% endif %}
 
-    {% if next %}
-    <p>You can't access that page!</p>
-    {% endif %}
     <body class="text-center">
       <form class="form-signin" action="{% url 'login' %}" method="post" accept-charset="utf-8">
         {% csrf_token %} 
         <img class="mb-4" src="{% static 'img/bw_logo.png' %}" alt="" width="172" height="172">
+        {% if next %}
+            <div id="message-test" class="alert alert-danger">
+                <p class="text-center"><strong>You are not permitted to access that page.</strong></p>
+            </div>
+        {% endif %}
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputEmail" class="sr-only">Username</label>
         <label for="inputPassword" class="sr-only">Password</label>

@@ -3,7 +3,13 @@
 {% block title %}{{ dm_name }}{% endblock %}
 
 {% block content %}
+
+
     <div class="container">
+        <div class="p-3 mb-4 bg-primary text-white">
+            <p><strong>WARNING:</strong> The <strong>Data Type</strong>, <strong>Max Length</strong> and <strong>Required</strong> fields are not currently 
+                implemented. They will be in a future verison.</p>
+        </div>
         <div class="container">
             <div class="row">
                 {% if messages %}
@@ -17,6 +23,8 @@
                 {% endif %}
             </div>
         </div>
+
+
         <div class="row">
             <h3 id="show-datamap-table">{{ dm_name }} </h3>
             <table class="table-sm table-bordered table-hover">
