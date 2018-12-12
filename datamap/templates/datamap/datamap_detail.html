@@ -3,59 +3,65 @@
 {% block title %}{{ dm_name }}{% endblock %}
 
 {% block content %}
-<div class="container">
     <div class="container">
-        <div class="row">
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <div id="message-test" class="alert alert-dismissible alert-danger">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </ul>
-            {% endif %}
+        <div class="container">
+            <div class="row">
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div id="message-test" class="alert alert-dismissible alert-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
         </div>
-    </div>
+        <div class="row">
+            <h3 id="show-datamap-table">{{ dm_name }} </h3>
+            <table class="table-sm table-bordered table-hover">
+                <thead>
+                    <tr id="datamap-detail-header-row" class="table-active">
+                        <th scope="col" class="col-sm-3">Key</th>
+                        <th scope="col" class="col-sm-1">Data Type</th>
+                        <th scope="col" class="col-sm-1">Max Length</th>
+                        <th scope="col" class="col-sm-1">Required</th>
+                        <th scope="col" class="col-sm-1">Sheet</th>
+                        <th scope="col" class="col-sm-1">Cell Reference</th>
+                        <th scope="col" class="col-sm-1"></th>
+                        <th scope="col" class="col-sm-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for line in dm_lines %}
+                        <tr>
+                            <td><a href="{% url 'datamaps:datamapline_update' line.id %}" id="key-cell">{{ line.key }}</a></td>
+                            <td>{{ line.data_type }}</td>
+                            <td>{{ line.max_length }}</td>
+                            <td>{{ line.required }}</td>
+                            <td>{{ line.sheet }}</td>
+                            <td>{{ line.cell_ref }}</td>
+                            <td class="text-right">
+                                <a class="btn btn-primary mx-1 px-1" href="{% url 'datamaps:datamapline_update' line.id %}">Edit</a>
+                            </td>
+                            <td class="text-right">
+                                <a class="btn btn-danger mx-1 px-1" href="{% url 'datamaps:datamapline_delete' line.id %}">DELETE</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <h3 id="show-datamap-table">Datamap: {{ dm_name }} </h3>
-        <table class="table table-hover">
-            <thead>
-                <tr id="datamap-detail-header-row">
-                    <th scope="col">Key</th>
-                    <th scope="col" class="col-sm-1">Data Type</th>
-                    <th scope="col" class="col-sm-1">Max Length</th>
-                    <th scope="col" class="col-sm-1">Required</th>
-                    <th scope="col" class="col-sm-2">Sheet</th>
-                    <th scope="col" class="col-sm-1">Cell Reference</th>
-                    <th scope="col" class="col-sm-2">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for line in dm_lines %}
-                <tr>
-                    <td><a href="{% url 'datamaps:datamapline_update' line.id %}" id="key-cell">{{ line.key }}</a></td>
-                    <td>{{ line.data_type }}</td>
-                    <td>{{ line.max_length }}</td>
-                    <td>{{ line.required }}</td>
-                    <td>{{ line.sheet }}</td>
-                    <td>{{ line.cell_ref }}</td>
-                    <td>
 
-                        <a class="btn btn-primary mx-1 px-2" href="{% url 'datamaps:datamapline_update' line.id %}">Edit</a>
-                        <a class="btn btn-danger mx-1 px-2" href="{% url 'datamaps:datamapline_delete' line.id %}">DELETE</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="buttonHolder">
+
+        <div class="m-3 p-2 buttonHolder">
             <a class="btn btn-primary" id="add-line-to-datamap-button"  href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
             <a class="btn btn-primary" id="edit-datamap-button" href="{% url 'datamaps:datamap_update' dm.slug %}">Edit</a>
             <a class="btn btn-primary" id="upload-csv-button" href="{% url 'datamaps:uploaddatamap' dm.slug %}">Upload CSV</a>
             <a class="btn btn-danger" id="delete-datamap-button" href="{% url 'datamaps:datamap_delete' dm.slug %}">Delete this datamap</a>
         </div>
     </div>
-</div>
+    </div>
 
 {% endblock %}
