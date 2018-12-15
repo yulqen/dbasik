@@ -132,6 +132,7 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         return reverse_lazy("datamaps:datamap_detail", args=[self.kwargs["slug"]])
 
     def post(self, request, *args, **kwargs):
+        breakpoint()
         form: Form = self.get_form()
         self.datamap = Datamap.objects.get(slug=kwargs["slug"])
         if form.is_valid():

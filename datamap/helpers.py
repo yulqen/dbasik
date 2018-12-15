@@ -1,7 +1,45 @@
-from collections import OrderedDict
-from typing import List, Tuple, Any
+import csv
+
+from collections import OrderedDict, Counter
+from typing import List, Tuple, Any, Set, Dict
 
 from datamap.models import Datamap
+
+
+class _DataLine:
+    def __init__(self, key, sheet, cell_ref):
+        self.key = key
+        self.sheet = sheet
+        self.cell_ref = cell_ref
+
+    def __hash__(self):
+        return hash((self.sheet, self.cell_ref))
+
+    def __eq__(self, value):
+        if (self.sheet, self.cell_ref) == value:
+            return True
+        else:
+            return False
+
+    def __str__(self):
+        return f"{self.key} - {self.sheet}, {self.cell_ref}"
+
+    def __repr__(self):
+        return f"{self.key} - {self.sheet}, {self.cell_ref}"
+
+
+def check_duplicate_lines(f_path: str):
+    with open(f_path, "r") as f:
+        csv_reader = csv.DictReader(f)
+        _data_lines = []
+        for line in csv_reader:
+            _data_lines.append(_DataLine(line["cell_key"], line["template_sheet"], line["cell_reference"]))
+        s = list(set(_data_lines))
+        for x in s:
+            _data_lines.remove(x)
+
+        _intro = "Check duplicated lines:\n"
+        return "".join([_intro, *[f"{x.key}: {x.sheet}, {x.cell_ref}\n" for x in _data_lines]])
 
 
 def parse_kwargs_to_error_string(datamap: Datamap, csv_dict_items: OrderedDict) -> str:
@@ -32,6 +70,5 @@ def parse_kwargs_to_error_string(datamap: Datamap, csv_dict_items: OrderedDict) 
     for x in err_lst:
         err_stmt.append(f"{x[0]}: {x[1]}")
     return (
-        f"Error: {' '.join([x for x in err_stmt])}"
-        f" is a duplicate in this Datamap"
+        f"Error: {' '.join([x for x in err_stmt])}" f" is a duplicate in this Datamap"
     )
