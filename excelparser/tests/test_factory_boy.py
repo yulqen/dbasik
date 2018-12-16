@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .factories.datamap_factories import DatamapFactory, DatamapLineFactory
+from factories.datamap_factories import DatamapFactory, DatamapLineFactory
 
 
 class EnsureFactoryBoyObjects(TestCase):

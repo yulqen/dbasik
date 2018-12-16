@@ -5,12 +5,12 @@ from django.test import TestCase
 
 from datamap.models import DatamapLine
 from excelparser.helpers.financial_quarter import check_date_in_quarter
-from excelparser.tests.factories.datamap_factories import DatamapFactory
-from excelparser.tests.factories.datamap_factories import ProjectFactory
+from factories.datamap_factories import DatamapFactory
+from factories.datamap_factories import ProjectFactory
 
 from register.models import FinancialQuarter
 from returns.models import Return
-from ..forms import ProcessPopulatedTemplateForm
+from excelparser.forms import ProcessPopulatedTemplateForm
 
 
 class UploadPopulatedTemplateTests(TestCase):

@@ -70,5 +70,5 @@ def parse_kwargs_to_error_string(datamap: Datamap, csv_dict_items: OrderedDict) 
     for x in err_lst:
         err_stmt.append(f"{x[0]}: {x[1]}")
     return (
-        f"Error: {' '.join([x for x in err_stmt])}" f" is a duplicate in this Datamap"
+        f"Database Error: {' '.join([x for x in err_stmt])}" f" already appears in this Datamap"
     )

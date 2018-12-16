@@ -80,3 +80,5 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+SELENIUM_LOGIN_START_PAGE = "/"

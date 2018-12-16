@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from datamap.models import Datamap
 from datamap.tests.fixtures import csv_correct_headers
@@ -14,6 +15,8 @@ class CsvUploadViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        User = get_user_model()
+        cls.user = User.objects.create_user(username="lemon", password="lemonlemon")
         cls.csv_file: str = csv_correct_headers()
         cls.datamap = Datamap.objects.create(
             name="Test Datamap",
@@ -23,21 +26,25 @@ class CsvUploadViewTest(TestCase):
         cls.upload_url = f"/datamaps/uploaddatamap/test-datamap-test-tier/"
 
     def test_view_url_exists_at_desired_location(self):
+        self.client.force_login(self.user)
         response = self.client.get(self.upload_url)
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
+        self.client.force_login(self.user)
         response = self.client.get(
             reverse("datamaps:uploaddatamap", args=["test-datamap-test-tier"])
         )
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
+        self.client.force_login(self.user)
         response = self.client.get(self.upload_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "datamap/upload_datamap.html")
 
     def test_post_should_redirect_to_datamap_list(self):
+        self.client.force_login(self.user)
         with open(self.csv_file) as csv_f:
             response = self.client.post(
                 reverse("datamaps:uploaddatamap", args=["test-datamap-test-tier"]),

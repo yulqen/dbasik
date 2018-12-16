@@ -22,7 +22,7 @@ class TestDatamapViewHelpers(TestCase):
         )
         cls.expected_message = (
             "Database Error: key: Key 1 sheet: Sheet cell_ref: "
-            "A1 already appears in Datamap: Test Datamap"
+            "A1 already appears in this Datamap"
         )
         cls.exception_message = (
             "Expects csv_dict_items parameter to be a dict with "

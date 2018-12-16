@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 
 from datamap.models import DatamapLine
-from excelparser.tests.factories.datamap_factories import DatamapFactory
-from excelparser.tests.factories.datamap_factories import ProjectFactory
+from factories.datamap_factories import DatamapFactory
+from factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
 from returns.models import Return
 

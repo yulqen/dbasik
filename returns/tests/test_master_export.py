@@ -4,7 +4,7 @@ import os
 from django.test import TestCase
 
 from datamap.models import DatamapLine
-from excelparser.tests.factories.datamap_factories import DatamapFactory, ProjectFactory
+from factories.datamap_factories import DatamapFactory, ProjectFactory
 from register.models import FinancialQuarter
 from returns.models import Return, ReturnItem
 from returns.helpers import generate_master

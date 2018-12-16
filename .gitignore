@@ -20,3 +20,5 @@ Test Results - CSV_Form_Validator_Tests.html
 /.mypy_cache/
 /excelparser/tests/.~lock.populated.xlsm#
 /venve/
+excelparser/tests/does_not_open_workbook.xlsm
+returns/tests/expected_test_output.xlsm

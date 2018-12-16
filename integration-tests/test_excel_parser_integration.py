@@ -12,7 +12,7 @@ from excelparser.helpers.parser import (
     WorkSheetFromDatamap,
     _detect_cell_type,
 )
-from excelparser.tests.factories.datamap_factories import (
+from factories.datamap_factories import (
     DatamapFactory,
     DatamapLineFactory,
     ProjectFactory,
