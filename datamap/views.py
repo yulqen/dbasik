@@ -168,7 +168,7 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         reader = csv.DictReader(x.decode("utf-8") for x in uploaded_file_data)
         _timeround = 0
         for line in reader:
-            line.pop("")
+        #   line.pop("")
             csv_form = CSVForm(line)
             if csv_form.is_valid():
                 try:
