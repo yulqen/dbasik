@@ -56,10 +56,11 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         files = self.request.FILES.getlist("source_files")
+        logger.info(f"files is: {files}")
         # test if we have erroneous files
         for uploaded_file in files:
             logger.info(f"Uploaded file name is {uploaded_file}")
-            uploaded_file = uploaded_file.name.strip(".xlsm")
+            uploaded_file = uploaded_file.name.split(".")[0]
             if uploaded_file not in self.valid_project_names:
                 messages.add_message(
                     self.request,
@@ -70,9 +71,10 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         fq_id = form.cleaned_data["financial_quarter"].id
         dm_id = form.cleaned_data["datamap"].id
         for f in files:
-            project_name = f.name.strip(".xlsm")
+            project_name = f.name.split(".")[0]
             save_path = os.path.join(settings.MEDIA_ROOT, "uploads", str(f))
             save_path = default_storage.save(save_path, f)
+            breakpoint()
             process.delay(fq_id, dm_id, save_path, project_name)
         messages.success(
             self.request, "Processing uploads - please refresh page later..."
