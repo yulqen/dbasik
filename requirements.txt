@@ -5,3 +5,4 @@ behave-django
 factory_boy
 selenium
 openpyxl
+Pillow
