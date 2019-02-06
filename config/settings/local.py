@@ -57,7 +57,6 @@ LOGGING = {
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 INSTALLED_APPS.append("django_extensions")
-INSTALLED_APPS.append("behave_django")
 
 ALLOWED_HOSTS.append("localhost")
 
