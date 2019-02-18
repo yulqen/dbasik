@@ -27,6 +27,15 @@ class ProcessPopulatedTemplate(FormView):
     def get_success_url(self):
         return str(reverse_lazy("returns:return_data", args=[self.kwargs['return_id']]))
 
+    def form_invalid(self, form):
+        error_msg = form.errors.get('source_file')
+        if error_msg:
+            messages.add_message(self.request, messages.ERROR, f"{error_msg}")
+            return redirect("excelparser:process_populated", self.kwargs['return_id'])
+        else:
+            return redirect("excelparser:process_populated", self.kwargs['return_id'])
+
+
     def form_valid(self, form):
         logger.info("Trying to parse form {}".format(form))
         uploaded_file: UploadedFile = self.request.FILES['source_file']

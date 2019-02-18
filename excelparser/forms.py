@@ -20,7 +20,7 @@ from returns.models import Return
 acceptable_types = ["xlsm"]
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=acceptable_types, message="Needs to be a valid Excel file type."
+    allowed_extensions=acceptable_types, message="Source file needs to have extension .xlsm."
 )
 
 
