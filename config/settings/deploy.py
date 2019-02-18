@@ -73,6 +73,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'excelparser.helpers.parser': {
+            'handlers': ['file', 'returns_console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
 
