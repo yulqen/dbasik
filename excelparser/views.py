@@ -12,6 +12,9 @@ from django.views.generic import FormView
 from excelparser.forms import ProcessPopulatedTemplateForm
 from excelparser.helpers.parser import ParsedSpreadsheet
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 
 class ProcessPopulatedTemplate(FormView):
     form_class = ProcessPopulatedTemplateForm
@@ -31,6 +34,7 @@ class ProcessPopulatedTemplate(FormView):
         return_obj = form.cleaned_data['return_obj']
         datamap = form.cleaned_data['datamap']
         try:
+            logger.debug("Trying to parse spreadsheet {}".format(save_path))
             parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
         except Exception:
             messages.add_message(self.request, messages.ERROR, f"ERROR uploading file: {uploaded_file}. Please check that it is a valid template.")
