@@ -28,6 +28,7 @@ class ProcessPopulatedTemplate(FormView):
         return str(reverse_lazy("returns:return_data", args=[self.kwargs['return_id']]))
 
     def form_valid(self, form):
+        logger.debug("Trying to parse form {}".format(form))
         uploaded_file: UploadedFile = self.request.FILES['source_file']
         save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', uploaded_file.name)
         path = default_storage.save(save_path, uploaded_file)

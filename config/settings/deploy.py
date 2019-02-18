@@ -70,7 +70,7 @@ LOGGING = {
         },
         'excelparser.views': {
             'handlers': ['file', 'returns_console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
     }
