@@ -69,6 +69,71 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 #         "NAME": "db.sqlite3",
 #     }
 # }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(pathname)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'datamap_console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'returns_console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 5, # 5MB
+            'backupCount': 5,
+            'filename': f'{BASE_DIR}/logs/dbasik.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'datamap.views': {
+            'handlers': ['file', 'datamap_console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'returns.views': {
+            'handlers': ['file', 'returns_console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'excelparser.views': {
+            'handlers': ['file', 'returns_console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'excelparser.helpers.parser': {
+            'handlers': ['file', 'returns_console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

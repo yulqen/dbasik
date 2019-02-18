@@ -113,13 +113,16 @@ class ParsedSpreadsheet:
             sheet=sheet_name
         )
         for dml in relevant_dmls:
+            logger.debug(f"Processing {dml.key} in {dml.sheet}")
             _return_param = self._map_to_keyword_param(sheet[dml.key])
+            logger.debug(f"_return_param: {_return_param}")
             _value_dict = {_return_param: sheet[dml.key].value}
+            logger.debug(f"_value_dict: {_value_dict}")
             _other_params = self._return_params - set([_return_param])
+            logger.debug(f"_other_params: {_other_params}")
             _combined_params = {k: None for k in list(_other_params)}
             _combined_params.update(_value_dict)
-            # TODO remove this and replace with logging
-            print(f"DOING {dml.key}")
+            logger.debug(f"_combined_params: {_combined_params}")
             ReturnItem.objects.create(
                 parent=self.return_obj, datamapline=dml, **_combined_params
             )
