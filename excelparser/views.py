@@ -28,7 +28,7 @@ class ProcessPopulatedTemplate(FormView):
         return str(reverse_lazy("returns:return_data", args=[self.kwargs['return_id']]))
 
     def form_valid(self, form):
-        logger.debug("Trying to parse form {}".format(form))
+        logger.info("Trying to parse form {}".format(form))
         uploaded_file: UploadedFile = self.request.FILES['source_file']
         save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', uploaded_file.name)
         path = default_storage.save(save_path, uploaded_file)
@@ -36,7 +36,7 @@ class ProcessPopulatedTemplate(FormView):
         return_obj = form.cleaned_data['return_obj']
         datamap = form.cleaned_data['datamap']
         try:
-            logger.debug("Trying to parse spreadsheet {}".format(save_path))
+            logger.info("Trying to parse spreadsheet {}".format(save_path))
             parsed_spreadsheet = ParsedSpreadsheet(path, project, return_obj, datamap)
         except Exception:
             messages.add_message(self.request, messages.ERROR, f"ERROR uploading file: {uploaded_file}. Please check that it is a valid template.")
