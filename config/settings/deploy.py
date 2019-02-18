@@ -39,7 +39,7 @@ LOGGING = {
             'formatter': 'simple'
         },
         'returns_console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
