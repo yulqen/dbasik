@@ -17,6 +17,13 @@ class TemplateList(LoginRequiredMixin, ListView):
 class TemplateDetail(LoginRequiredMixin, DetailView):
     model = Template
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cells = [{"cellref": "A1", "value": "Col A Key 1"}]
+        sheets = [{"Test Sheet": cells}]
+        context.update({"submitted_template": sheets})
+        return context
+
 
 class TemplateDelete(LoginRequiredMixin, DeleteView):
     model = Template

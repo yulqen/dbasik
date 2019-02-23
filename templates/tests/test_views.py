@@ -34,7 +34,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-    def test_template_detail(self):
+    def test_template_detail_basic(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse("templates:template_detail", args=[self.tmpl.slug]))
         self.assertEqual(response.status_code, 200)
@@ -51,3 +51,19 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         list_response = self.client.get(reverse("templates:list"))
         self.assertContains(list_response, "Test Template", html=True)
+
+
+    def test_template_detail(self):
+        self.client.force_login(self.user)
+        with open(self.mock_template_file, "rb") as template_f:
+            response = self.client.post(
+                reverse("templates:create"),
+                {'name': "Test Template",
+                 'descripton': "Test Description",
+                 'source_file': template_f}
+            )
+        self.assertEqual(response.status_code, 200)
+        detail_response = self.client.get(reverse("templates:template_detail", args=["test-template"]))
+        self.assertEqual(detail_response.status_code, 200)
+        a1_cell_dict = {"cellref": "A1", "value": "Col A Key 1"}
+        self.assertEqual(detail_response.context["submitted_template"][0]["Test Sheet"][0], a1_cell_dict)
