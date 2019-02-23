@@ -65,5 +65,5 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         detail_response = self.client.get(reverse("templates:template_detail", args=["test-template"]))
         self.assertEqual(detail_response.status_code, 200)
-        a1_cell_dict = {"cellref": "A1", "value": "Col A Key 1"}
+        a1_cell_dict = {"A1": "Col A Key 1"}
         self.assertEqual(detail_response.context["submitted_template"][0]["Test Sheet"][0], a1_cell_dict)

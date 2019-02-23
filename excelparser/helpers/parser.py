@@ -24,6 +24,7 @@ class ParsedBlankTemplate:
         self._template_path = path
         self._dict = {}
         self._get_sheets()
+        self.parse_sheets()
 
     def __getitem__(self, key):
         return self._dict.get(key)
@@ -34,6 +35,19 @@ class ParsedBlankTemplate:
         except ImportError:
             raise
         self.sheetnames = wb.sheetnames
+
+    def parse_sheets(self):
+        _cells = []
+        wb = load_workbook(filename=self._template_path, read_only=True)
+        for sheet in wb.sheetnames:
+            data = wb[sheet]
+            for row in data.rows:
+                for cell in row:
+                    try:
+                        _cells.append({cell.coordinate: cell.value})
+                    except AttributeError:
+                        pass
+            self._dict.update({sheet: _cells})
 
 
 class MissingSheetError(Exception):

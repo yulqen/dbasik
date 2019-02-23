@@ -15,5 +15,4 @@ class ParseBlankSpreadsheet(TestCase):
 
     def test_parse_blank_template(self):
         parsed = ParsedBlankTemplate(self.blank)
-#       self.assertEqual(parsed["Test Sheet"][0]["cell_ref"], "A1")
-        self.assertEqual(parsed.sheetnames, ["Test Sheet"])
+        self.assertEqual(parsed["Test Sheet"][0]["A1"], "Col A Key 1")
