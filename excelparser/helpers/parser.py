@@ -19,6 +19,23 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+class ParsedBlankTemplate:
+    def __init__(self, path):
+        self._template_path = path
+        self._dict = {}
+        self._get_sheets()
+
+    def __getitem__(self, key):
+        return self._dict.get(key)
+
+    def _get_sheets(self) -> None:
+        try:
+            wb = load_workbook(self._template_path)
+        except ImportError:
+            raise
+        self.sheetnames = wb.sheetnames
+
+
 class MissingSheetError(Exception):
     pass
 
