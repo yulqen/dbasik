@@ -1,22 +1,27 @@
-import os
-import factory
-import pytest
+from django.test import TestCase
 
-from templates import models
+from templates.models import Template, TemplateDataLine
 
 
-class TemplateFactory(factory.Factory):
-    class Meta:
-        model = models.Template
+class TemplateModelTests(TestCase):
+    def setUp(self):
+        self.template = Template.objects.create(
+            name="Test",
+            description="Description",
+            source_file="/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/templates/tests/macro_enabled_template.xlsm",
+        )
+        self.data = TemplateDataLine.objects.create(
+            template=self.template, sheet="Test Sheet", cellref="A1", value="Test Value"
+        )
 
-    name = "Test Factory Template"
-    description = "Test Factory Description"
-    source_file = "macro_enabled_template.xlsm"
-    slug = "test-factory-template"
+    def test_basic_model(self):
+        self.assertEqual(self.template.name, "Test")
+        self.assertEqual(
+            self.template.source_file,
+            "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/templates/tests/macro_enabled_template.xlsm",
+        )
 
-
-def test_basic_model():
-    template_obj = TemplateFactory.create()
-    assert template_obj.name == "Test Factory Template"
-    assert template_obj.source_file == "macro_enabled_template.xlsm"
-
+    def test_template_data(self):
+        self.assertEqual(
+            self.template.data.get(cellref="A1").value, "Test Value"
+        )

@@ -15,4 +15,14 @@ class Template(models.Model):
         return reverse('templates:template_detail', args=[str(self.slug)])
 
     def __str__(self):
-        return f"Template<{self.name}>"
+        return f"Template({self.name})"
+
+
+class TemplateDataLine(models.Model):
+    """When data is pulled from a blank template, it is put in here."""
+    template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name="data")
+    sheet = models.CharField(max_length=255, blank=False)
+    cellref = models.CharField(max_length=10, blank=False)
+    value = models.CharField(max_length=255, blank=True, null=True)
+
+

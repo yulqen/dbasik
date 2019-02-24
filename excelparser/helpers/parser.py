@@ -44,7 +44,7 @@ class ParsedBlankTemplate:
             for row in data.rows:
                 for cell in row:
                     try:
-                        _cells.append({cell.coordinate: cell.value})
+                        _cells.append({"cellref": cell.coordinate, "value": cell.value})
                     except AttributeError:
                         pass
             self._dict.update({sheet: _cells})

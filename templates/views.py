@@ -6,8 +6,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 
+from excelparser.helpers.parser import ParsedBlankTemplate
 from templates.forms import TemplateCreateForm
-from templates.models import Template
+from templates.models import Template, TemplateDataLine
 
 
 class TemplateList(LoginRequiredMixin, ListView):
@@ -38,7 +39,7 @@ class TemplateUpdate(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         existing_objects = Template.objects.all()
-        context['existing_objects'] = existing_objects
+        context["existing_objects"] = existing_objects
         return context
 
 
@@ -49,12 +50,24 @@ def template_create(request):
     if request.method == "POST":
         form = TemplateCreateForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/templates')
+            # here we need to parse the template
+            parsed = ParsedBlankTemplate(form.cleaned_data["source_file"])
+            parsed.parse_sheets()
+            template = form.save()
+            breakpoint()
+            for sheet in parsed.sheetnames:
+                for cell in parsed[sheet]:
+                    TemplateDataLine.objects.create(
+                        template=template,
+                        sheet=sheet,
+                        cellref=cell["cellref"],
+                        value=cell["value"],
+                    )
+            return HttpResponseRedirect("/templates")
         else:
             messages.error(
-                request,
-                "You can only upload a macro-enabled Excel file here (.xlsm). ")
+                request, "You can only upload a macro-enabled Excel file here (.xlsm). "
+            )
             form = TemplateCreateForm()
     else:
         form = TemplateCreateForm()
