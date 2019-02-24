@@ -8,14 +8,15 @@
         <h3 id="show-datamap-table">Templates</h3>
         <table class="table table-hover">
             <thead>
-                <th scope="col" class="col-sm-4">Template name</th>
-                <th scope="col" class="col-sm-2">Source File</th>
+                <th scope="col">Template name</th>
+                <th scope="col">Description</th>
+                <th scope="col"></th>
             </thead>
             {% if object_list %}
                 {% for template in object_list %}
                     <tr>
-                        <td id="template-title"><a href="{% url 'templates:template_detail' template.slug %}">{{ template.name }}</a></td>
-                        <td> {{ template.source_file }}</td>
+                        <td id="template-title"><a href="{{ MEDIA_URL }}{{template.source_file }}">{{ template.name }}</a></td>
+                        <td> {{ template.description }}</td>
                         <td> <a class="btn btn-danger" href="{% url 'templates:delete' template.slug %}">DELETE</a></td>
                     </tr>
                 {% endfor %}

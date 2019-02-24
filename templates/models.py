@@ -8,7 +8,7 @@ class Template(models.Model):
     """A template used to collect data from a user."""
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
-    source_file = models.FileField(upload_to="uploaded_templates/")
+    source_file = models.FileField(upload_to="uploads/")
     slug = AutoSlugField(populate_from=['name'])
 
     def get_absolute_url(self):
