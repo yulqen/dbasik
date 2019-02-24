@@ -8,7 +8,6 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 
-from excelparser.helpers.parser import ParsedBlankTemplate
 from templates.forms import TemplateCreateForm
 from templates.models import Template, TemplateDataLine
 
@@ -33,7 +32,7 @@ class TemplateDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("templates:list")
 
     def get(self, request, *args, **kwargs):
-        source_file = Template.objects.get(slug=kwargs['slug'])source_file.url
+        source_file = Template.objects.get(slug=kwargs['slug']).source_file.url
         os.remove(source_file)
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
