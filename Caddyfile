@@ -1,0 +1,7 @@
+dbasik.com {
+	root /dbasik/code/dbasik-dftgovernance/
+	proxy / localhost:8000 {
+		transparent
+		except /static
+	}
+}
