@@ -1,5 +1,5 @@
-django==2.1.6
-Celery==4.2.1
+django>=2.2.24
+Celery>=5.2.2
 django-crispy-forms
 django-extensions
 factory_boy
