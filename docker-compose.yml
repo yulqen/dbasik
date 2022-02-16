@@ -1,0 +1,37 @@
+# from tutorial at https://londonappdeveloper.com/deploying-django-with-docker-compose/
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./dbasik:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
+      - ./data/web:/vol/web
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+      - DJANGO_SETTINGS_MODULE=config.settings_new
+    command: > # POST-TUTORIAL-NOTE: does this override the CMD line in the Dockerfile? Would seem right.
+      sh -c "python manage.py wait_for_db &&
+            python manage.py migrate &&
+            python manage.py create_financial_quarters 2019 2020 2021 2022
+            python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+volumes:
+  data-volume:
