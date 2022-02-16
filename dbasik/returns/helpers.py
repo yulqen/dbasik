@@ -26,7 +26,7 @@ def _get_populated_param(
         param for param in getmembers(return_item) if param[0] in RETURN_ITEM_PARM_STRS
     ]
     _non_none_params = [
-        param for param in _ri_params if param[1] is not None and param[1] is not ""
+        param for param in _ri_params if param[1] is not None and param[1] != ""
     ]
     if len(_non_none_params) > 1:
         raise ValueError(

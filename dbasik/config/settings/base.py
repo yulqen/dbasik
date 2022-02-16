@@ -50,20 +50,21 @@ ACCEPTABLE_CONTENT = [
 CELERY_BROKER_URL = "amqp://localhost"
 
 # SECRETS
-with open("secrets.json") as f:
-    secrets = json.loads(f.read())
+# with open("secrets.json") as f:
+#     secrets = json.loads(f.read())
+#
+#
+# def get_secret(setting, secrets=secrets):
+#     """Get the secret variable or return explicit exception."""
+#     try:
+#         return secrets[setting]
+#     except KeyError:
+#         error_msg = f"Set the {setting} environment variable."
+#         raise ImproperlyConfigured(error_msg)
 
 
-def get_secret(setting, secrets=secrets):
-    """Get the secret variable or return explicit exception."""
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = f"Set the {setting} environment variable."
-        raise ImproperlyConfigured(error_msg)
-
-
-SECRET_KEY = get_secret("SECRET_KEY")
+#SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = '1234'
 
 ALLOWED_HOSTS = []
 

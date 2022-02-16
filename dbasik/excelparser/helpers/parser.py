@@ -7,7 +7,7 @@ from typing import Any, Dict, List, NamedTuple, Iterable
 
 from openpyxl import Workbook as OpenpyxlWorkbook
 from openpyxl import load_workbook
-from openpyxl.worksheet import Worksheet as OpenpyxlWorksheet
+from openpyxl.worksheet.worksheet import Worksheet as OpenpyxlWorksheet
 
 from datamap.models import Datamap, DatamapLine
 from register.models import Project

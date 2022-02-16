@@ -10,7 +10,8 @@ DEBUG = False
 
 INSTALLED_APPS.append('django_extensions')
 
-ALLOWED_HOSTS = ['209.97.142.1', 'staging.dbasik.com']
+#ALLOWED_HOSTS = ['209.97.142.1', 'staging.dbasik.com']
+ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

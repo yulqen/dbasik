@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -26,3 +28,12 @@ urlpatterns = [
     path('excelparser/', include('excelparser.urls', namespace="excelparser")),
     path('returns/', include('returns.urls', namespace="returns")),
 ]
+
+# doing this for https://londonappdeveloper.com/deploying-django-with-docker-compose/
+# this is just for seeing the context of MEDIA_ROOT during development. This is not used
+# in development - just so we can serve files through our development server.
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )
