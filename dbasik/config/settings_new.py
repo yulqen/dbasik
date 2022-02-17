@@ -33,9 +33,10 @@ ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
     filter(
         None,
-        os.environ.get("ALLOWED_HOSTS", '').split(" ")
+        os.environ.get("ALLOWED_HOSTS", '').split(",")
     )
 )
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
