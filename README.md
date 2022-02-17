@@ -30,6 +30,7 @@ The objective here is to deploy the application using Docker in 2022. Because I 
 ### Running the production server
 
 * The production configuration is far more robust and uses nginx as a reverse proxy, with uswgi as the Django application server. This is intended to be run on a production server but can be tested locally too in the same way that the development server is run.
+* You need an `.env` file in the root of the project (not included in the repo as it is intended to contain secrets). For testing, copy `.env.sample` to `.env` and provide some different settings or just use the ones provided - they're fine for testing.
 * To run the production containers: `docker-compose -f docker-compose-deploy.yml up`. The site will be available at `127.0.0.1/admin` (note: `:8000` not required as this is running on default browser port 80).
 * Take the same steps as above to stop the server and create a superuser: Ctrl-C the running containers, `docker-compose -f docker-compose-deploy.yml run app sh -c "python manage.py createsuperuser"`, then `docker-compose -f docker-compose-deploy.yml up` to get it running again.
 * To stop the server, Ctrl-C, then `docker-compose -f docker-compose-deploy.yml down`.
