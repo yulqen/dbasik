@@ -7,6 +7,7 @@
       "name": "Python: Remote Attach",
       "type": "python",
       "request": "attach",
+      "justMyCode": false,
       "connect": {
         "host": "127.0.0.1",
         "port": 5678
