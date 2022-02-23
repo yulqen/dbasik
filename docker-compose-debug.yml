@@ -23,7 +23,6 @@ services:
       sh -c "pip install debugpy -t /tmp
             python manage.py wait_for_db &&
             python manage.py migrate &&
-            python manage.py create_financial_quarters 2019 2020 2021 2022 &&
             python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"
     depends_on:
       - db
