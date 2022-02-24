@@ -34,3 +34,10 @@ The objective here is to deploy the application using Docker in 2022. Because I 
 * To run the production containers: `docker-compose -f docker-compose-deploy.yml up`. The site will be available at `127.0.0.1/admin` (note: `:8000` not required as this is running on default browser port 80).
 * Take the same steps as above to stop the server and create a superuser: Ctrl-C the running containers, `docker-compose -f docker-compose-deploy.yml run app sh -c "python manage.py createsuperuser"`, then `docker-compose -f docker-compose-deploy.yml up` to get it running again.
 * To stop the server, Ctrl-C, then `docker-compose -f docker-compose-deploy.yml down`.
+
+### Debugging with VSCode
+
+* Remove existing volumes - `docker images prune`.
+* Run `make COMPOSEFILE=docker-compose-debug.yml clean-rebuild-and-run`.
+* Run `make createsuperuser`.
+* Run `make create-financial-quarters`.

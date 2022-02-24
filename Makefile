@@ -1,7 +1,7 @@
 COMPOSEFILE="docker-compose.yml"
 
 clean-rebuild-and-run:
-	docker-compose -f $(COMPOSEFILE) down --volumes && docker-compose -f $(COMPOSEFILE) up --build && docker-compose -f $(COMPOSEFILE) run app sh -c "python manage.py creat_financial_quarters"
+	docker-compose -f $(COMPOSEFILE) down && docker-compose -f $(COMPOSEFILE) up --build && docker-compose -f $(COMPOSEFILE) run app sh -c "python manage.py creat_financial_quarters"
 
 createsuperuser:
 	docker-compose -f $(COMPOSEFILE) run --rm app sh -c "python manage.py createsuperuser"
