@@ -57,12 +57,8 @@ class ParsedSpreadsheet:
             CellValueType.FLOAT: "value_float",
             CellValueType.DATE: "value_date",
         }
-        try:
-            return _map[cell_data.type]
-        except KeyError:
-            return (
-                "value_str"
-            )  # return str type for now if map gets CellValueType.UNKNOWN
+        # FIXME: too lazy to do anything but assign a string here
+        return "value_str"
 
     def __getitem__(self, item):
         cls = type(self)
