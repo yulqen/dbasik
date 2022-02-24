@@ -35,6 +35,11 @@ The objective here is to deploy the application using Docker in 2022. Because I 
 * Take the same steps as above to stop the server and create a superuser: Ctrl-C the running containers, `docker-compose -f docker-compose-deploy.yml run app sh -c "python manage.py createsuperuser"`, then `docker-compose -f docker-compose-deploy.yml up` to get it running again.
 * To stop the server, Ctrl-C, then `docker-compose -f docker-compose-deploy.yml down`.
 
+#### On production server
+
+* `sudo docker-compose -f docker-compose-deploy.yml up -d`
+* `sudo docker-compose logs -f` (Ctrl+C to quit logs)
+
 ### Debugging with VSCode
 
 * Remove existing volumes - `docker images prune`.
