@@ -2,6 +2,8 @@
 version: "3.9"
 
 services:
+  redis:
+    image: redis:6-alpine
   app:
     build:
       context: .
@@ -17,6 +19,8 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=changeme
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKED=redis://redis:6379/0
       - DJANGO_SETTINGS_MODULE=config.settings_new
     command: > # POST-TUTORIAL-NOTE: does this override the CMD line in the Dockerfile? Would seem right.
       sh -c "python manage.py wait_for_db &&
@@ -24,6 +28,7 @@ services:
             python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+      - redis
   db:
     image: postgres:13-alpine
     volumes:
@@ -32,5 +37,25 @@ services:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
+  celery_worker: # we just use the Django container for this
+    restart: always
+    build:
+      context: .
+    image: django_celery_worker
+    command: celery -A config worker -l INFO
+    volumes:
+      - ./dbasik:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
+      - ./data/web:/vol/web
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKED=redis://redis:6379/0
+    depends_on:
+      - redis
+      - db
+      - app
 volumes:
   data-volume:

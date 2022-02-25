@@ -74,7 +74,7 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
         for f in files:
             project_name = f.name.split(".")[0]
             save_path = os.path.join(settings.MEDIA_ROOT, "uploads", str(f))
-            save_path = default_storage.save(save_path, f)
+            default_storage.save(save_path, f)
             process.delay(fq_id, dm_id, save_path, project_name)
         messages.success(
             self.request, "Processing uploads - please refresh page later..."
