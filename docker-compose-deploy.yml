@@ -30,7 +30,7 @@ services:
     command: celery -A config worker -l INFO
     volumes:
       - ./dbasik:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
-      - static-data/web:/vol/web
+      - static-data:/vol/web
     environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
