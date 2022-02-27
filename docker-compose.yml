@@ -11,7 +11,7 @@ services:
       - 8000:8000
     volumes:
       - ./dbasik:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
-      - ./data/web:/vol/web
+      - static-data:/vol/web
     environment:
       - SECRET_KEY=devsecretkey
       - DEBUG=1
@@ -41,11 +41,11 @@ services:
     restart: always
     build:
       context: .
-    image: django_celery_worker
+    image: dbasik_celery_worker
     command: celery -A config worker -l INFO
     volumes:
       - ./dbasik:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
-      - ./data/web:/vol/web
+      - static-data:/vol/web
     environment:
       - DB_HOST=db
       - DB_NAME=devdb
@@ -59,3 +59,4 @@ services:
       - app
 volumes:
   data-volume:
+  static-data:

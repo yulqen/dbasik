@@ -111,11 +111,12 @@ def download_master(request, fqid: int):
     first_return_obj_item = return_obj_sample.return_returnitems.first()
     datamap = first_return_obj_item.datamapline.datamap
     file_name = f"Master_for_Q{fq.quarter}_{fq.year}.xlsx"
-    generate_master(fq, file_name, datamap)
-    with open(file_name, "rb") as excel:
+    save_path = os.path.join(settings.MEDIA_ROOT, 'downloads', file_name)
+    generate_master(fq, save_path, datamap)
+    with open(save_path, "rb") as excel:
         data = excel.read()
         response = HttpResponse(data, content_type="application/vnd.ms-excel")
-        response["Content-Disposition"] = f"attachment; filename={file_name}"
+        response["Content-Disposition"] = f"attachment; filename={save_path}"
         return response
 
 
