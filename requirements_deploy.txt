@@ -1,3 +1,0 @@
-gunicorn
-setproctitle
-django-crispy-forms
