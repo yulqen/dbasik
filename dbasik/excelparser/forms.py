@@ -41,7 +41,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
         queryset=Datamap.objects.all(),
         label="Datamap",
         help_text=mark_safe(
-            f"Please select an existing Datamap. <a href='/datamaps{datamap_create_url}'>Create new Datamap</a>"
+            f"Please select an existing Datamap.<br>If you need to create a new Datamap, do so here: <a href='/datamaps{datamap_create_url}'>Create new Datamap</a>"
         ),
     )
 
@@ -58,7 +58,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
         self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Fieldset(
-                f"Process a populated template for {project_being_done}",
+                f"Upload a populated template for {project_being_done}",
                 "datamap",
                 "source_file",
             ),
