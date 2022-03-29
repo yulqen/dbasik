@@ -22,12 +22,11 @@
       dbasik
     </div>
     <div>
-        {% if is_logged_in %}
-            <a href="/account">Account</a>
-            <a href="/account/logout">Log Out</a>
+        {% if request.user.is_authenticated %}
+        <a href="#">{{ user }}</a>
+            <a href="{% url 'logout' %}">Log Out</a>
         {% else %}
-            <a href="/account/login">Log In</a>
-            <a href="/account/register">Register</a>
+        <a href="{% url 'login' %}">Log In</a>
         {% endif %}
     </div>
 </nav>
@@ -38,10 +37,10 @@
 <!-- The sidebar -->
 <div class="sidebar">
   <ul>
-    <li><a href="{% url 'index'  %}">Home</a></li>
+    <li><a href="{% url 'dashboard'  %}">Home</a></li>
     <li><a href="{% url 'datamaps:datamap_list'  %}">Datamaps</a></li>
     <li><a href="{% url 'register:project_list'  %}">Projects</a></li>
-    <li><a href="#about">About</a>
+    <li><a href="{% url 'dashboard' %}">Dashboard</a>
   </ul>
 </div>
 {% endblock %}
