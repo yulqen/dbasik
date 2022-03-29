@@ -21,7 +21,7 @@
     <div class="title">
       dbasik
     </div>
-    <div>
+    <div style="text-align: right">
         {% if request.user.is_authenticated %}
         <a href="#">{{ user }}</a>
             <a href="{% url 'logout' %}">Log Out</a>
@@ -40,6 +40,7 @@
     <li><a href="{% url 'dashboard'  %}">Home</a></li>
     <li><a href="{% url 'datamaps:datamap_list'  %}">Datamaps</a></li>
     <li><a href="{% url 'register:project_list'  %}">Projects</a></li>
+    <li><a href="{% url 'returns:returns_list'  %}">Returns</a></li>
     <li><a href="{% url 'dashboard' %}">Dashboard</a>
   </ul>
 </div>
