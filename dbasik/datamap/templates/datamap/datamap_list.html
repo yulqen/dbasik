@@ -3,34 +3,35 @@
 {% block title %}Datamaps{% endblock %}
 
 {% block content %}
+
+<div class="container">
+
+    <h3 id="show-datamap-table">Datamaps</h3>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Datamap name</th>
+                <th scope="col">Tier</th>
+                <th scope="col">Active</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        {% if object_list %}
+        {% for datamap in object_list %}
+        <tr>
+            <td id="datamap-title"><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
+            <td> {{ datamap.tier }} </td>
+            <td> {{ datamap.active }} </td>
+            <td> <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' datamap.slug %}">DELETE</a></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <td>There are no datamaps.</td>
+        {% endif %}
+    </table>
     <div class="container">
-        
-        <h3 id="show-datamap-table">Datamaps</h3>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Datamap name</th>
-                    <th scope="col">Tier</th>
-                    <th scope="col">Active</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            {% if object_list %}
-                {% for datamap in object_list %}
-                <tr>
-                    <td id="datamap-title"><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
-                    <td> {{ datamap.tier }} </td>
-                    <td> {{ datamap.active }} </td>
-                    <td> <a class="btn btn-danger" href="{% url 'datamaps:datamap_delete' datamap.slug %}">DELETE</a></td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <td>There are no datamaps.</td>
-            {% endif %}
-        </table>
-        <div class="container">
-            <a class="btn btn-primary" href="{% url 'datamaps:datamap-create' %}">Create a datamap</a>
-        </div>
+        <a class="btn btn-primary" href="{% url 'datamaps:datamap-create' %}">Create a datamap</a>
     </div>
+</div>
 
 {% endblock %}

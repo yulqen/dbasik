@@ -37,7 +37,6 @@ class DatamapForm(forms.ModelForm):
         cancel_redirect = reverse("datamaps:datamap_list")
 
         self.helper = FormHelper(self)
-        self.helper.form_class = "form-group"
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Fieldset("Create/Edit Datamap", "name", "tier", "active"),

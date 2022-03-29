@@ -6,25 +6,27 @@
 {% block title %}Create datamap{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            {% crispy form %}
-        </div>
+    <div style="margin: 10px 0px; 10px 0px;">
+        <h3>Instructions</h3>
+        <p>Datamaps are used for this and that. They are very useful for certain things.
+            Think about that - VERY useful for certain things.</p>
 
-        <div class="col-sm-6">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title" id="card-title">Current datamaps in system</h5>
-                    {% for item in existing_objects %}
-                    <ul id="current-datamap-list" class="list-group">
-                        <li class="list-group-item card-text" id="datamap-in-system"><a href="{%  url 'datamaps:datamap_detail' item.slug %}">{{ item.name }}</a></li>
-                    </ul>
-                    {% endfor %}
-                </div> 
-            </div>
-        </div>
+        <p>Use the <strong>Create a new Datamap</strong> form below to upload a CSV file 
+            into the system.</p>
+
     </div>
+<div id="new-datamap-form">
+    {% crispy form %}
+</div>
 
+<div class="flex-container">
+    <div id="callout-box">
+        <strong>Current datamaps in system</strong>
+        {% for item in existing_objects %}
+        <ul>
+            <li><a href="{%  url 'datamaps:datamap_detail' item.slug %}">{{ item.name }}</a></li>
+        </ul>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
