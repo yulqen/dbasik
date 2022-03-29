@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+    font-family: "Roboto Slab";
+}
+
+.container h1 {
+  font-size: 2em;
+}
+
+.title {
+  font-size: 2.4em;  
+}
+
+/* forms */
+.form-container {
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    border-radius: 6px;
+    background-color: #a7d2ae;
+}
+
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 2px 20px 0;
+    border-radius: 3px;
+    border: 1px solid green;
+}
+
+body {
+    background: #ebf9f6;
+}
+
+
+#register-intro {
+    padding: 1px;
+}
+
+#register-header {
+    margin: auto;
+    width: 40%;
+    padding-bottom: 10px;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 2px;
+    margin: 8px;
+    color: white;
+    padding: 12px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+ /* The side navigation menu */
+.sidebar {
+  margin: 0;
+  padding: 0;
+  padding-top: 10px;
+  width: 200px;
+  background-color: #ebf9f6;
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: row wrap;
+  height 200px;
+}
+
+#callout-box {
+  background-color: #DCE3D5;
+  border-color: gray;
+  border-radius: 2px;
+  padding: 10px;
+  margin-top: 10px;
+  width: 18%;
+}
+
+#new-datamap-form {
+  background-color: #D3D5CF;
+  padding: 10px;
+  border-color: gray;
+  border-radius: 2px;
+  margin-left: 50px;
+  margin-top: 10px;
+  width: 50%;
+}
+
+
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  padding-top: 10px;
+  height: 1000px;
+}
+
+.content h1 {
+  margin: inherit;
+}
+
+table.info {
+  width: 80%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-spacing: 2px;
+  margin-top: 10px;
+}
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+} 
