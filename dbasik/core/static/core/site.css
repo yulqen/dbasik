@@ -37,6 +37,16 @@ body {
     padding: 1px;
 }
 
+table, th, td {
+  table-layout: fixed;
+  width: 76%;
+  border: 1px solid;
+  border-collapse: collapse;
+  padding: 5px;
+}
+/* tr:nth-child(even) {background-color: #f2f2f2;} */
+
+
 #register-header {
     margin: auto;
     width: 40%;

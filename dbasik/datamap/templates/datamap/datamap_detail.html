@@ -5,13 +5,11 @@
 {% block content %}
 
 
-    <div class="container">
-        <div class="p-3 mb-4 bg-primary text-white">
+        <div>
             <p><strong>WARNING:</strong> The <strong>Data Type</strong>, <strong>Max Length</strong> and <strong>Required</strong> fields are not currently 
                 implemented. They will be in a future verison.</p>
         </div>
-        <div class="container">
-            <div class="row">
+            <div>
                 {% if messages %}
                     <ul>
                         {% for message in messages %}
@@ -22,14 +20,12 @@
                     </ul>
                 {% endif %}
             </div>
-        </div>
 
 
-        <div class="row">
-            <h3 id="show-datamap-table">{{ dm_name }} </h3>
-            <table class="table-sm table-bordered table-hover">
+            <h3>{{ dm_name }} </h3>
+            <table>
                 <thead>
-                    <tr id="datamap-detail-header-row" class="table-active">
+                    <tr>
                         <th scope="col" class="col-sm-3">Key</th>
                         <th scope="col" class="col-sm-1">Data Type</th>
                         <th scope="col" class="col-sm-1">Max Length</th>
@@ -59,15 +55,14 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
 
 
 
-        <div class="m-3 p-2 buttonHolder">
-            <a class="btn btn-primary" id="add-line-to-datamap-button"  href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
-            <a class="btn btn-primary" id="edit-datamap-button" href="{% url 'datamaps:datamap_update' dm.slug %}">Edit</a>
-            <a class="btn btn-primary" id="upload-csv-button" href="{% url 'datamaps:uploaddatamap' dm.slug %}">Upload CSV</a>
-            <a class="btn btn-danger" id="delete-datamap-button" href="{% url 'datamaps:datamap_delete' dm.slug %}">Delete this datamap</a>
+        <div class="buttonHolder">
+            <a class="button" id="add-line-to-datamap-button"  href="{% url 'datamaps:datamapline-create' dm.slug %}">Add line to this datamap</a>
+            <a class="button" id="edit-datamap-button" href="{% url 'datamaps:datamap_update' dm.slug %}">Edit</a>
+            <a class="button" id="upload-csv-button" href="{% url 'datamaps:uploaddatamap' dm.slug %}">Upload CSV</a>
+            <a class="button" id="delete-datamap-button" href="{% url 'datamaps:datamap_delete' dm.slug %}">Delete this datamap</a>
         </div>
     </div>
     </div>
