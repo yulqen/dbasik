@@ -4,87 +4,64 @@
 
 {% block content %}
 
-    <div class="container">
-        <h3>Project: {{ object.name }}</h3>
-        <!--<div class="container">-->
+    <div>
+        <h2>{{ object.name }} ({{ object.tier }} - {{ object.project_type }})</h2>
         <!--{% if object.dependencies %}-->
             <!--<p class="w-75 p-3 border">{{ object.dependencies }}</p>-->
         <!--{% else %}-->
             <!--<p>There are no dependencies for this Project.</p>-->
         <!--{% endif %}-->
         <!--</div>-->
-        <div class="mt-4 row">
-            <div class="col-8">
-                <table class="table table-hover">
-                    <tr>
-                        <td class="col-2"><strong>Tier:</td></strong><td class="col-5">{{ object.tier }}</td>  
-                    </tr>
-                    <tr>
-                        <td class="col-3"><strong>Project Type:</td></strong><td>{{ object.project_type }}</td>  
-                    </tr>
-                    <tr>
-                        <td class="col-3"><strong>Stage:</td></strong><td>{{ object.stage }}</td>  
-                    </tr>
-                    <tr>
-                        <td class="col-3"><strong>Start Date:</td></strong><td>{{ object.start_date|date:"j M Y" }}</td>
-                    </tr>
-                    <tr>
-                        <td class="col-3"><strong>Planned End Date:</td></strong><td>{{ object.planned_end_date|date:"j M Y" }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-2"><strong>SRO Full Name:</strong></td><td>{{ sro_full_name }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-2"><strong>Working Contact:</strong></td><td>{{ working_contact }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-2"><strong>Tel:</strong></td><td>{{ working_contact_phone }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-2"><strong>DfT Group:</strong></td><td>{{ dft_group }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-2"><strong>DfT Division:</strong></td><td>{{ dft_division }}</td>
-                    </tr>
-                    <tr>
-                </table>
-            </div>
-            <div class="col-4">
-                <div class="card text-dark bg-light mb-3">
-                    {% if fq %}
-                        <div class="card-header">Key Data - {{ fq }} return</div>
-                        <div class="card-body">
-                            <table>
-                                <tr>
-                                    <td class="px-2"><strong>Current RAG:</strong></td><td style="background: #{{ rag_c }}"><span style="color: white">{{ rag }}</span></td>
-                                </tr> 
-                            </table>
-                        </div> 
-                    {% else %}
-                        <div class="card-header">Key Data - no current return</div>
-                        <div class="card-body">
-                            <table>
-                                <tr>
-                                    <td class="px-2"><strong>Current RAG:</strong></td><td>-</td>
-                                </tr> 
-                            </table>
-                        </div> 
-                    {% endif %}
-                </div>
-            </div>
-        </div> 
-        {% if fq %}
-            <div class="row">
-            <div class="col">
-                <h4>DCA Narrative: {{ fq }}</h4>
-                <p>{{ dca_narrative }}</p>
-            </div> 
-            </div>
-        {% endif %}
-        <div class="buttonHolder">
-            <a class="btn btn-primary" href="{% url 'register:project_update' object.slug %}">Edit</a>
-            <a class="btn btn-danger" href="{% url 'register:project_delete' object.slug %}">Delete</a>
+        <div style="padding: 2px;">
+        {{ dft_group }}
+        {{ dft_division }}
+        </div>
+        <div style="margin-top: 20px;">
+            <strong>SRO</strong>:<br>
+            - {{ sro_full_name }}
+        </div>
+        <div>
+            <strong>Working Contact:</strong><br>
+            - {{ working_contact }} (Tel: {{ working_contact_phone }})
         </div>
 
+        <table class="table-light">
+           <tr>
+            <td class="row-light"><strong>Stage:</strong></td>
+            <td class="row-light">{{ object.stage }}</td>
+           </tr>
+           <tr>
+            <td class="row-light"><strong>Start Date:</strong></td>
+            <td class="row-light">{{ object.start_date|date:"j M Y" }}</td>
+           </tr>
+           <tr>
+           <td class="row-light"><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>
+           </tr>
+        </table>
+        
+        <h3>Returns</h3>
+
+        {% if returns %}
+            {% for r in returns  %}
+                <h4>{{ r }}</h4>
+                <table>
+                    <tr>
+                        <td><strong>Current RAG:</strong></td>
+                        <td style="background: #{{ r.rag_c }}"><span style="color: white">{{ r.rag }}</span></td>
+                    </tr> 
+                    <tr>
+                        <td><strong>DCA Narrative:</strong></td>
+                        <td> {{ r.dca_narrative }}</td>
+                    </tr>
+                </table>
+            {% endfor %}
+        {% else %}
+            <div>Key Data - no current return</div>
+        {% endif %}
+        <div>
+
+        <a class="button" href="{% url 'register:project_update' object.slug %}">Edit</a>
+        <a class="button danger" href="{% url 'register:project_delete' object.slug %}">Delete</a>
+        </div>
     </div>
 {% endblock %}

@@ -37,9 +37,17 @@ body {
     padding: 1px;
 }
 
-table, th, td {
+.table-light {
   table-layout: fixed;
-  width: 76%;
+}
+
+.row-light {
+  border: 0;
+}
+
+table, th, td {
+  table-layout: auto;
+  width: 86%;
   border: 1px solid;
   border-collapse: collapse;
   padding: 5px;

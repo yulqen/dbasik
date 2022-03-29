@@ -4,101 +4,62 @@
 
 {% block content %}
 
-    <div class="container">
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div id="message-test" class="alert alert-dismissible alert-secondary">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </ul>
-        {% endif %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</ul>
+{% endif %}
 
 
-        <div class="p-3 mb-4 bg-primary text-white">
-        <p><strong>NOTE:</strong> Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
+<div>
+    <p><strong>NOTE:</strong> Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
         the file name must match exactly the name of the project it corresponds with.</p>
 
-        e.g. the file for East Coast Mainline Programme must be called <code class="text-white">East Coast Mainline Programme.xlsm</code>.
-        Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
-        reported when uploading individually.
-        </div>
+    e.g. the file for East Coast Mainline Programme must be called <code class="text-white">East Coast Mainline Programme.xlsm</code>.
+    Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
+    reported when uploading individually.
+</div>
+<hr>
+{% if valid_fqs %}
+    <h3>Current returns in system:</h3>
+{% for fq in valid_fqs %}
 
-        {% if valid_fqs %}
-            <h3>Current returns in system:</h3>
-            {% for fq in valid_fqs %}
+    <div>
+        <h4>{{ fq }}</h4>
 
-                <div class="card border-dark mb-5">
-                    <div class="card-body">
+        <ul>
+        {% for r in object_list %}
+            {% if r.financial_quarter == fq %}
+                <li>
+                    {% if r.return_returnitems.count < 1 %}
+                        <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                        <span><i></i>Check errors/progress</span>
+                        <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
+                    {% else %}
+                        <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                        <span>[{{ r.return_returnitems.count }} rows]</span>
+                        <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        <a href="{% url "returns:download_master" fq.id %}" class="button">Download Master for {{ fq }}</a>
+        <hr>
+    </div>
 
-                <div class"card-title">
-                    <h4 class="bg-light text-primary">{{ fq }}</h4>
-                </div>
+{% endfor %}
+{% else %}
+<div>
+    <p class="text-muted">There are no Return Items.</p>
+</div>
+{% endif %}
 
-                    {% for r in object_list %}
-                        {% if r.financial_quarter == fq %}
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {% if r.return_returnitems.count < 1 %}
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
-                                                </div>
-                                                <div class="col-3">
-                                                    <span class="badge badge-warning badge-pill"><i class="fas fa-exclamation-triangle"></i>Check errors/progress</span>
-                                                </div>
-                                                <div class="col-1">
-                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">Delete</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
-                                                </div>
-                                                <div class="col-3">
-                                                    <span class="badge badge-success badge-pill"><i class="fas fa-database"></i> {{ r.return_returnitems.count }}</span>
-                                                </div>
-                                                <div class="col-1">
-                                                    <a href="{% url "returns:return_delete" r.pk %}" class="btn btn-danger float-right">Delete</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </li>
-                        {% endif %}
-                    {% endfor %}
-                            <li class="list-group-item align-self-end">
-                                <a href="{% url "returns:download_master" fq.id %}" class="btn btn-primary">Download Master</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            {% endfor %}
-        {% else %}
-            <div class="container">
-                <p class="text-muted">There are no Return Items.</p>
-            </div>
-        {% endif %}
-
-            <div class="row">
-                <div class="col-sm-2">
-                    <a class="btn btn-primary" href="{% url 'returns:return_create' %}">Create a new Return</a>
-                </div>
-                <div class="col-sm-2">
-                    <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
-                </div>
-            </div>
+<div>
+    <a href="{% url 'returns:return_create' %}">Create a new Return</a> <br>
+    <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
+</div>
 
 {% endblock %}

@@ -1,8 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 
 from .models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
 from .forms import (
@@ -12,8 +11,7 @@ from .forms import (
     StrategicAlignmentForm,
     ProjectForm,
 )
-from returns.models import Return, ReturnItem
-from datamap.models import DatamapLine
+from returns.models import ReturnItem
 
 
 class ProjectTypeDelete(LoginRequiredMixin, DeleteView):
@@ -207,15 +205,16 @@ class ProjectDetail(LoginRequiredMixin, DetailView):
         returns_count = returns_for.count()
         if returns_count > 0:
             if ReturnItem.objects.filter(parent=first).count() > 1:
+                context["returns"] = returns_for
                 context["fq"] = returns_for.first().financial_quarter
                 context["sro_full_name"] = first.data_by_key('SRO Full Name')['value_str']
                 context["dca_narrative"] = first.data_by_key("Departmental DCA Narrative")['value_str']
                 context["working_contact"] = first.data_by_key("Working Contact Name")['value_str']
                 context["working_contact_phone"] = first.data_by_key("Working Contact Telephone")['value_str']
                 context["dft_group"] = first.data_by_key("DfT Group")['value_str']
-                context["dft_division"] = first.data_by_key("DfT Division")['value_str']
-                context["rag"] = first.data_by_key("SRO assurance confidence RAG external")['value_str']
-                context["rag_c"] = self.rag_colours.get(first.data_by_key("SRO assurance confidence RAG external")['value_str'])
+                # context["dft_division"] = first.data_by_key("DfT Division")['value_str']
+                # context["rag"] = first.data_by_key("SRO assurance confidence RAG external")['value_str']
+                # context["rag_c"] = self.rag_colours.get(first.data_by_key("SRO assurance confidence RAG external")['value_str'])
                 return context
             else:
                 return context

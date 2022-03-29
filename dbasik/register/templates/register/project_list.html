@@ -5,25 +5,21 @@
 {% block content %}
 <h3>Projects</h3>
 <p>List of projects in the system.</p>
-<table>
-    <tr>
-        <th scope="col">Project</th>
-        <th scope="col">Tier</th>
-        <th scope="col">Type</th>
-        <th scope="col">Stage</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">Planned End Date</th>
-    </tr>
-    {% for item in object_list %}
-    <tr>
-        <td><a href="{% url "register:project_detail" item.slug %}">{{ item }}</a></td>
-        <td>{{ item.tier }}</td>
-        <td>{{ item.project_type }}</td>
-        <td>{{ item.stage}}</td>
-        <td>{{ item.start_date|date:"j M Y" }}</td>
-        <td>{{ item.planned_end_date|date:"j M Y" }}</td>
-    </tr>
-    {% endfor %}
+
+{% for item in object_list %}
+    <ul>
+      <li>
+        <div>
+        <a href="{% url "register:project_detail" item.slug %}">{{ item }}</a>
+        ({{ item.tier }}
+        {{ item.project_type }}
+        {{ item.stage}}
+        {{ item.start_date|date:"j M Y" }}
+        {{ item.planned_end_date|date:"j M Y" }})
+        </div>
+      </li>  
+    </ul>
+{% endfor %}
 
 </table>
 <div class="buttonHolder">
