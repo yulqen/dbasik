@@ -6,7 +6,7 @@ from django.urls import reverse
 from datamap.validators import file_validator, cell_ref_validator
 from .models import Datamap, DatamapLine
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden
+from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden, Field
 
 
 class CSVForm(forms.ModelForm):
@@ -39,14 +39,15 @@ class DatamapForm(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.form_method = "post"
         self.helper.layout = Layout(
-            Fieldset("Create/Edit Datamap", "name", "tier", "active"),
+            Field("name"),
+            Field("tier", style="width: 100%;"),
             ButtonHolder(
-                Submit("submit", "Submit"),
+                Submit("submit", "Submit", css_class="button"),
                 Button(
                     "cancel",
                     "Cancel",
                     onclick=f"location.href='{cancel_redirect}';",
-                    css_class="btn btn-danger",
+                    css_class="button danger",
                 ),
             ),
         )

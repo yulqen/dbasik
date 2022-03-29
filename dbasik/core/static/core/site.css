@@ -66,6 +66,10 @@ table, th, td {
     font-size: 15px;
 }
 
+.button.danger {
+  background-color: red;
+}
+
  /* The side navigation menu */
 .sidebar {
   margin: 0;
