@@ -12,6 +12,7 @@ ENV PYTHONUNBUFFERED 1
 # this tutorial uses a separate /app directory with the Django project
 # but we're doing everything from the base directory
 COPY ./requirements.txt /requirements.txt
+COPY ./requirements_dev.txt /requirements_dev.txt
 COPY ./dbasik /app
 COPY ./scripts /scripts
 
@@ -34,6 +35,7 @@ RUN python -m venv /py && \
     apk add --update --no-cache --virtual .tmp-deps \
       build-base postgresql-dev linux-headers musl-dev && \
     /py/bin/pip install -r /requirements.txt && \
+    /py/bin/pip install -r /requirements_dev.txt && \
     apk del .tmp-deps && \
     adduser --disabled-password --no-create-home app && \
     mkdir -p /vol/web/static && \
