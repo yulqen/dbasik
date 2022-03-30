@@ -1,4 +1,5 @@
 import datetime
+import pathlib
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -15,7 +16,8 @@ from excelparser.forms import ProcessPopulatedTemplateForm
 
 class UploadPopulatedTemplateTests(TestCase):
     def setUp(self):
-        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
+        # self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
+        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated_template.xlsm"
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         self.dml1 = DatamapLine.objects.create(datamap=self.datamap)
@@ -28,17 +30,12 @@ class UploadPopulatedTemplateTests(TestCase):
     def test_form_fields_are_valid(self):
         self.assertTrue(self.form.fields["datamap"].label == "Datamap")
 
-        # because we haven't explicitly set label on the source_file or project fields...
-        self.assertTrue(
-            self.form.fields["source_file"].label == "Source file"
-            or self.form.fields["source_file"].label is None
-        )
+        # # because we haven't explicitly set label on the source_file or project fields...
+        # self.assertTrue(
+        #     self.form.fields["source_file"].label == "Source file"
+        #     or self.form.fields["source_file"].label is None
+        # )
 
-    def test_help_text_on_each_field(self):
-        self.assertEqual(
-            self.form.fields["datamap"].help_text,
-            "Please select an existing Datamap. <a href='/datamaps/create/'>Create new Datamap</a>",
-        )
 
     def test_valid_form(self):
         f = open(self.populated_template, "rb")

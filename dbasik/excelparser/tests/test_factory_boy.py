@@ -8,7 +8,7 @@ class EnsureFactoryBoyObjects(TestCase):
     def setUp(self):
         self.dmf = DatamapFactory()
         self.dml = DatamapLineFactory()
-        self.dml_params = DatamapLineFactory(key="Test Own Key", sheet="Test Own Sheet", cell_ref="Test Own Cell_Ref")
+        self.dml_params = DatamapLineFactory(key="Test Own Key", sheet="Test Own Sheet", cell_ref="A10")
 
     def test_can_create_datamap_factory(self):
         self.assertTrue(self.dmf.name, "Test Datamap from Factory")
