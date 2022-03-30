@@ -4,15 +4,15 @@
 
 {% block content %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</ul>
-{% endif %}
-
 <div class="w3-container">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <div class="w3-panel w3-border">
         <p><strong>NOTE:</strong> Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
             the file name must match exactly the name of the project it corresponds with.</p>
@@ -21,47 +21,45 @@
         Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
         reported when uploading individually.
     </div>
-    <hr>
+
     {% if valid_fqs %}
     <h3>Current returns in system:</h3>
+
     {% for fq in valid_fqs %}
-
-    <div>
+    <div class="w3-panel w3-border">
         <h4>{{ fq }}</h4>
-
-        <ul>
+        <ul class="w3-ul">
             {% for r in object_list %}
-            {% if r.financial_quarter == fq %}
-            <li>
-                {% if r.return_returnitems.count < 1 %}
-                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
-                <span><i></i>Check errors/progress</span>
-                <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
-                {% else %}
-                <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
-                <span>[{{ r.return_returnitems.count }} rows]</span>
-                <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
+                {% if r.financial_quarter == fq %}
+                <li>
+                    {% if r.return_returnitems.count < 1 %}
+                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                    <span><i></i>Check errors/progress</span>
+                    <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
+                    {% else %}
+                    <a href="{% url "returns:return_data" r.pk %}">{{ r }}</a>
+                    <span>[{{ r.return_returnitems.count }} rows]</span>
+                    <a href="{% url "returns:return_delete" r.pk %}">Delete</a>
+                    {% endif %}
+                </li>
                 {% endif %}
-            </li>
-            {% endif %}
             {% endfor %}
         </ul>
         <a href="{% url "returns:download_master" fq.id %}" class="button">Download Master for {{ fq }}</a>
-        <hr>
     </div>
 
-</div>
 
-{% endfor %}
-{% else %}
-<div>
-    <p class="text-muted">There are no Return Items.</p>
-</div>
-{% endif %}
+    {% endfor %}
+    {% else %}
+    <div>
+        <p class="text-muted">There are no Return Items.</p>
+    </div>
+    {% endif %}
 
-<div>
-    <a href="{% url 'returns:return_create' %}">Create a new Return</a> <br>
-    <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
+    <div>
+        <a href="{% url 'returns:return_create' %}">Create a new Return</a> <br>
+        <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
+    </div>
 </div>
 
 {% endblock %}
