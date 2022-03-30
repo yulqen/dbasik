@@ -12,7 +12,7 @@ class DatamapFormsTests(TestCase):
         long_cell_ref = "A" * 11
 
         form = CSVForm(data={"key": long_key, "sheet": "Summary", "cell_ref": "A10"})
-        self.assertFalse(form.is_valid())
+        self.assertTrue(form.is_valid())
 
         form = CSVForm(data={"key": "A", "sheet": long_sheet, "cell_ref": "A10"})
         self.assertFalse(form.is_valid())
