@@ -3,6 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
+from collections import defaultdict
+
 from .models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
 from .forms import (
     ProjectTypeForm,
@@ -182,6 +184,18 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
 
 class ProjectList(LoginRequiredMixin, ListView):
     model = Project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        projects = Project.objects.all()
+        tiers = set([p.tier for p in projects])
+        p_per_tier = defaultdict(list)
+        for t in tiers:
+            for p in projects:
+                if p.tier == t:
+                    p_per_tier[t].append(p)
+        context["p_per_tier"] = p_per_tier.items()
+        return context
 
     def get_queryset(self):
         qs = Project.objects.all().order_by("name")

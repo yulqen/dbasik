@@ -3,45 +3,40 @@
 {% block title %}{{ object }}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                            <div id="message-test" class="alert alert-dismissible alert-danger">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
+<div class="w3-container">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <div id="message-test" class="alert alert-dismissible alert-danger">
+            {{ message }}
         </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-        <h3 id="show-datamap-table">Return Item: {{ object }} </h3>
-        <table class="table table-hover">
-            <thead>
-            <tr id="datamap-detail-header-row">
-                <th scope="col">Key</th>
-                <th scope="col" class="col-sm-1">Sheet</th>
-                <th scope="col" class="col-sm-1">String Value</th>
-                <th scope="col" class="col-sm-1">Integer Value</th>
-                <th scope="col" class="col-sm-2">Float Value</th>
-                <th scope="col" class="col-sm-1">Date Value</th>
-            </tr>
-            </thead>
+    <h3>Return Item: {{ object }} </h3>
+    <table class="w3-table-all">
+        <thead>
             <tr>
-                <td scope="col">{{ object.datamapline.key }}</td>
-                <td scope="col">{{ object.datamapline.sheet }}</td>
-                <td scope="col">{{ object.value_str }}</td>
-                <td scope="col">{{ object.value_int }}</td>
-                <td scope="col">{{ object.value_float }}</td>
-                <td scope="col">{{ object.value_date }}</td>
+                <th>Key</th>
+                <th>Sheet</th>
+                <th>String Value</th>
+                <th>Integer Value</th>
+                <th>Float Value</th>
+                <th>Date Value</th>
             </tr>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    </div>
+        </thead>
+        <tr>
+            <td>{{ object.datamapline.key }}</td>
+            <td>{{ object.datamapline.sheet }}</td>
+            <td>{{ object.value_str }}</td>
+            <td>{{ object.value_int }}</td>
+            <td>{{ object.value_float }}</td>
+            <td>{{ object.value_date }}</td>
+        </tr>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

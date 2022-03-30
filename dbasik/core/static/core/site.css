@@ -1,7 +1,9 @@
 * {
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     font-family: "Roboto Slab";
 }
+
+body,h1,h2,h3,h4,h5,h6{font-family: "Roboto Slab"}
 
 .container h1 {
   font-size: 2em;
@@ -45,13 +47,13 @@ body {
   border: 0;
 }
 
-table, th, td {
-  table-layout: auto;
-  width: 86%;
-  border: 1px solid;
-  border-collapse: collapse;
-  padding: 5px;
-}
+/* table, th, td { */
+/*   table-layout: auto; */
+/*   width: 86%; */
+/*   border: 1px solid; */
+/*   border-collapse: collapse; */
+/*   padding: 5px; */
+/* } */
 /* tr:nth-child(even) {background-color: #f2f2f2;} */
 
 
@@ -84,17 +86,17 @@ table, th, td {
   padding: 0;
   padding-top: 10px;
   width: 200px;
-  background-color: #ebf9f6;
+  background-color: white;
   position: absolute;
   height: 100%;
   overflow: auto;
 }
 
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+/* .sidebar ul { */
+/*   list-style-type: none; */
+/*   padding: 0; */
+/*   margin: 0; */
+/* } */
 
 .flex-container {
   display: flex;
@@ -125,16 +127,16 @@ table, th, td {
 
 
 /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
-  margin-left: 200px;
-  padding: 1px 16px;
-  padding-top: 10px;
-  height: 1000px;
-}
+/* div.content { */
+/*   margin-left: 200px; */
+/*   padding: 1px 16px; */
+/*   padding-top: 10px; */
+/*   height: 1000px; */
+/* } */
 
-.content h1 {
-  margin: inherit;
-}
+/* .content h1 { */
+/*   margin: inherit; */
+/* } */
 
 table.info {
   width: 80%;
@@ -145,20 +147,20 @@ table.info {
 }
 
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 700px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sidebar a {float: left;}
-  div.content {margin-left: 0;}
-}
+/* @media screen and (max-width: 700px) { */
+/*   .sidebar { */
+/*     width: 100%; */
+/*     height: auto; */
+/*     position: relative; */
+/*   } */
+/*   .sidebar a {float: left;} */
+/*   div.content {margin-left: 0;} */
+/* } */
 
 /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-@media screen and (max-width: 400px) {
-  .sidebar a {
-    text-align: center;
-    float: none;
-  }
-} 
+/* @media screen and (max-width: 400px) { */
+/*   .sidebar a { */
+/*     text-align: center; */
+/*     float: none; */
+/*   } */
+/* } */ 

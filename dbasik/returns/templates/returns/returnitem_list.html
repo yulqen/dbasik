@@ -3,23 +3,23 @@
 {% block title %}Return Items{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h3 id="show-datamap-table">{{ return }}</h3>
-        <table class="table table-sm table-striped">
+    <div class="w3-container">
+        <h3>{{ return }}</h3>
+        <table class="w3-table-all">
             <thead>
                 <tr>
-                    <th scope="col" class="col-sm-3">Return Item</th>
-                    <th scope="col" class="col-sm-1">Sheet</th>
-                    <th scope="col" class="col-sm-4">Text Value</th>
-                    <th scope="col" class="col-sm-1">Integer Value</th>
-                    <th scope="col" class="col-sm-1">Float Value</th>
-                    <th scope="col" class="col-sm-2">Date Value</th>
+                    <th>Return Item</th>
+                    <th>Sheet</th>
+                    <th>Text Value</th>
+                    <th>Integer Value</th>
+                    <th>Float Value</th>
+                    <th>Date Value</th>
                 </tr>
             </thead>
             {% if object_list %}
                 {% for obj in object_list %}
                 <tr>
-                    <td class="font-weight-bold">{{ obj.datamapline.key }}</td>
+                    <td>{{ obj.datamapline.key }}</td>
                     <td>{{ obj.datamapline.sheet }}</td>
                     <td>{{ obj.value_str|default:"-" }}</td>
                     <td>{{ obj.value_int|default:"-"  }}</td>
