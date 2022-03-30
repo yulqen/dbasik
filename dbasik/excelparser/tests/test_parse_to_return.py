@@ -1,4 +1,5 @@
 import unittest
+import pathlib
 
 from datetime import datetime, date
 
@@ -52,7 +53,7 @@ class TestParseToReturn(TestCase):
             cell_ref="B1",
         )
 
-        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
+        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
         self.parsed_spreadsheet = ParsedSpreadsheet(
             template_path=self.populated_template,
             project=self.project,

@@ -17,7 +17,7 @@ from excelparser.forms import ProcessPopulatedTemplateForm
 class UploadPopulatedTemplateTests(TestCase):
     def setUp(self):
         # self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
-        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated_template.xlsm"
+        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         self.dml1 = DatamapLine.objects.create(datamap=self.datamap)
