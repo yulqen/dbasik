@@ -57,6 +57,7 @@ class TestParseToReturn(TestCase):
             key="Corkys Phone",
             sheet="Test Sheet 1",
             cell_ref="B6",
+            data_type="Phone",
         )
 
         self.populated_template = (

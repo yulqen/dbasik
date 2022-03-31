@@ -47,7 +47,7 @@ class ParsedSpreadsheet:
         self._check_sheets_present()
 
         self._return_params = set(
-            ["value_str", "value_int", "value_float", "value_date"]
+            ["value_str", "value_int", "value_float", "value_date", "value_phone"]
         )
 
     def _map_to_keyword_param(self, cell_data: "CellData") -> str:
@@ -56,6 +56,7 @@ class ParsedSpreadsheet:
             CellValueType.INTEGER: "value_int",
             CellValueType.FLOAT: "value_float",
             CellValueType.DATE: "value_date",
+            CellValueType.PHONE: "value_phone",
         }
         # FIXME: too lazy to do anything but assign a string here
         return _map.get(cell_data.type, "value_str")
@@ -109,6 +110,7 @@ class ParsedSpreadsheet:
             sheet=sheet_name
         )
         for dml in relevant_dmls:
+            breakpoint()
             logger.debug(f"Processing {dml.key} in {dml.sheet}")
             _return_param = self._map_to_keyword_param(sheet[dml.key])
             logger.debug(f"_return_param: {_return_param}")
@@ -144,6 +146,7 @@ class CellValueType(Enum):
     STRING = auto()
     DATE = auto()
     FLOAT = auto()
+    PHONE = auto()
     UNKNOWN = auto()
 
 
@@ -167,6 +170,7 @@ class WorkSheetFromDatamap:
     """
 
     def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap) -> None:
+        breakpoint()
         self._data: Dict[str, CellData] = {}
         self._openpyxl_worksheet = openpyxl_worksheet
         self._datamap = datamap
@@ -194,12 +198,14 @@ class WorkSheetFromDatamap:
                 _parsed_value = _parsed_value.date()
             _sheet_title = self._openpyxl_worksheet.title
             try:
+                breakpoint()
+                # TODO - in here we need to convert he phone number to a str
                 _value = CellData(
                     _key,
                     _sheet_title,
                     _parsed_value,
                     _dml.cell_ref,
-                    _detect_cell_type(_parsed_value),
+                    _detect_cell_type(_parsed_value, _dml),
                 )
                 self._data[_key] = _value
             except ValueError:
@@ -213,7 +219,7 @@ class WorkSheetFromDatamap:
                 self._data[_key] = _value
 
 
-def _detect_cell_type(obj: Any) -> CellValueType:
+def _detect_cell_type(obj: Any, dml: DatamapLine) -> CellValueType:
     """
     Takes an object and maps its type to the CellValueType enum.
     Raises ValueError exception if the object is not an enum type
@@ -224,7 +230,10 @@ def _detect_cell_type(obj: Any) -> CellValueType:
     :rtype: None
     """
     if isinstance(obj, numbers.Integral):
-        return CellValueType.INTEGER
+        if dml.data_type == "Phone":
+            return CellValueType.PHONE
+        else:
+            return CellValueType.INTEGER
     if isinstance(obj, str):
         return CellValueType.STRING
     if isinstance(obj, float):
