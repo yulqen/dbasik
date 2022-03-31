@@ -11,7 +11,7 @@ from excelparser.helpers.parser import ParsedSpreadsheet, CellData, CellValueTyp
 from factories.datamap_factories import DatamapFactory
 from factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
-from returns.models import Return
+from returns.models import Return, ReturnItem
 
 
 class TestParseToReturn(TestCase):
@@ -52,8 +52,16 @@ class TestParseToReturn(TestCase):
             sheet="Test Sheet 2",
             cell_ref="B1",
         )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Corkys Phone",
+            sheet="Test Sheet 1",
+            cell_ref="B6",
+        )
 
-        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
+        self.populated_template = (
+            pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
+        )
         self.parsed_spreadsheet = ParsedSpreadsheet(
             template_path=self.populated_template,
             project=self.project,
@@ -63,9 +71,17 @@ class TestParseToReturn(TestCase):
 
     def test_return_parser(self):
         self.parsed_spreadsheet.process()
-        return_item = Return.objects.get(id=self.return_obj.id).return_returnitems.first()
+        return_item = Return.objects.get(
+            id=self.return_obj.id
+        ).return_returnitems.first()
         self.assertEqual(return_item.datamapline.key, "Project Name")
         self.assertEqual(return_item.value_str, "Testable Project")
+
+    def test_phone_number_is_handled_as_str(self):
+        self.parsed_spreadsheet.process()
+        dml = DatamapLine.objects.filter(key="Corkys Phone")
+        return_item = ReturnItem.objects.filter(datamapline_id=dml.first().id).first()
+        self.assertEqual(return_item.value_phone, "7844695632")
 
     def test_celldata_mapper(self):
         self.parsed_spreadsheet.process()

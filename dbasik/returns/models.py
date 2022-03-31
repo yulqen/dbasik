@@ -19,7 +19,7 @@ class Return(models.Model):
     )
 
     class Meta:
-        unique_together = ['project', 'financial_quarter']
+        unique_together = ["project", "financial_quarter"]
 
     def __str__(self):
         return f"{self.project} - {self.financial_quarter} return"
@@ -41,8 +41,6 @@ class Return(models.Model):
         }
 
 
-
-
 class ReturnItem(models.Model):
     """
     A model in which to store parsed template data. The value should
@@ -50,7 +48,9 @@ class ReturnItem(models.Model):
     a routine to select appropriately.
     """
 
-    parent = models.ForeignKey(Return, on_delete=models.CASCADE, related_name="return_returnitems")
+    parent = models.ForeignKey(
+        Return, on_delete=models.CASCADE, related_name="return_returnitems"
+    )
     datamapline = models.ForeignKey(
         DatamapLine,
         on_delete=models.CASCADE,
@@ -58,7 +58,7 @@ class ReturnItem(models.Model):
         related_name="return_datamaplines",
     )
     value_str = models.CharField(null=True, blank=True, max_length=4096, default="")
-    value_int = models.IntegerField(blank=True, null=True)
+    value_int = models.BigIntegerField(blank=True, null=True)
     value_float = models.DecimalField(
         blank=True, max_digits=9, decimal_places=2, null=True
     )
