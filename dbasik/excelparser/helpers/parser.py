@@ -58,7 +58,7 @@ class ParsedSpreadsheet:
             CellValueType.DATE: "value_date",
         }
         # FIXME: too lazy to do anything but assign a string here
-        return "value_str"
+        return _map.get(cell_data.type, "value_str")
 
     def __getitem__(self, item):
         cls = type(self)

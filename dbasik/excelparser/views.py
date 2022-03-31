@@ -22,33 +22,38 @@ class ProcessPopulatedTemplate(FormView):
     template_name = "excelparser/process_populated_template.html"
 
     def get_initial(self):
-        return {'return_obj': self.kwargs['return_id']}
+        return {"return_obj": self.kwargs["return_id"]}
 
     def get_success_url(self):
-        return str(reverse_lazy("returns:return_data", args=[self.kwargs['return_id']]))
+        return str(reverse_lazy("returns:return_data", args=[self.kwargs["return_id"]]))
 
     def form_invalid(self, form):
-        error_msg = form.errors.get('source_file')
+        error_msg = form.errors.get("source_file")
         if error_msg:
             messages.add_message(self.request, messages.ERROR, f"{error_msg}")
-            return redirect("excelparser:process_populated", self.kwargs['return_id'])
+            return redirect("excelparser:process_populated", self.kwargs["return_id"])
         else:
-            return redirect("excelparser:process_populated", self.kwargs['return_id'])
-
+            return redirect("excelparser:process_populated", self.kwargs["return_id"])
 
     def form_valid(self, form):
         logger.info("Trying to parse form {}".format(form))
-        uploaded_file: UploadedFile = self.request.FILES['source_file']
-        save_path = os.path.join(settings.MEDIA_ROOT, 'uploads', uploaded_file.name)
+        uploaded_file: UploadedFile = self.request.FILES["source_file"]
+        save_path = os.path.join(settings.MEDIA_ROOT, "uploads", uploaded_file.name)
         path = default_storage.save(save_path, uploaded_file)
-        project = form.cleaned_data['return_obj'].project
-        return_obj = form.cleaned_data['return_obj']
-        datamap = form.cleaned_data['datamap']
+        project = form.cleaned_data["return_obj"].project
+        return_obj = form.cleaned_data["return_obj"]
+        datamap = form.cleaned_data["datamap"]
         try:
             logger.info("Trying to parse spreadsheet {}".format(save_path))
-            parsed_spreadsheet = ParsedSpreadsheet(save_path, project, return_obj, datamap)
+            parsed_spreadsheet = ParsedSpreadsheet(
+                save_path, project, return_obj, datamap
+            )
         except Exception:
-            messages.add_message(self.request, messages.ERROR, f"ERROR uploading file: {uploaded_file}. Please check that it is a valid template.")
-            return redirect("excelparser:process_populated", self.kwargs['return_id'])
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                f"ERROR uploading file: {uploaded_file}. Please check that it is a valid template.",
+            )
+            return redirect("excelparser:process_populated", self.kwargs["return_id"])
         parsed_spreadsheet.process()
         return HttpResponseRedirect(self.get_success_url())

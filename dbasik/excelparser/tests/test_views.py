@@ -1,3 +1,4 @@
+import pathlib
 from django.test import TestCase
 from django.urls import reverse
 
@@ -10,7 +11,9 @@ from returns.models import Return
 
 class TestExcelParserViews(TestCase):
     def setUp(self):
-        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
+        self.populated_template = (
+            pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
+        )
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         self.dml1 = DatamapLine(datamap=self.datamap)
@@ -24,9 +27,12 @@ class TestExcelParserViews(TestCase):
             reverse("excelparser:process_populated", args=[self.return_obj.id])
         )
         self.assertTrue(response.status_code, 200)
-        self.assertContains(response, f"<legend>Process a populated template for Test Project</legend>")
+        self.assertContains(
+            response, f"<legend>Process a populated template for Test Project</legend>"
+        )
 
     def test_view_receives_uploaded_file(self):
+        breakpoint()
         response = self.client.post(
             f"/excelparser/process-populated/{self.return_obj.id}/",
             {
