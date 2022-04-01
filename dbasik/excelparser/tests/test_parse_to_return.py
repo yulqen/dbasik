@@ -7,7 +7,12 @@ from django.test import TestCase
 from django.utils import timezone
 
 from datamap.models import DatamapLine
-from excelparser.helpers.parser import ParsedSpreadsheet, CellData, CellValueType
+from excelparser.helpers.parser import (
+    ParsedSpreadsheet,
+    CellData,
+    CellValueType,
+    _filter_phone_ints,
+)
 from factories.datamap_factories import DatamapFactory
 from factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
@@ -68,6 +73,28 @@ class TestParseToReturn(TestCase):
             project=self.project,
             return_obj=self.return_obj,
             datamap=self.datamap,
+        )
+
+    def test_convert_phone_ints_to_str(self):
+        d = CellData("nothing", "no sheet", 7823232231, "A1", CellValueType.PHONE)
+        out = _filter_phone_ints(d)
+        self.assertEqual(
+            out,
+            CellData("nothing", "no sheet", "7823232231", "A1", CellValueType.PHONE),
+        )
+
+    def test_convert_phone_ints_to_str_passthru(self):
+        d = CellData("nothing", "no sheet", 7823232231, "A1", CellValueType.INTEGER)
+        d2 = CellData("nothing", "no sheet", "7823232231", "A1", CellValueType.STRING)
+        out = _filter_phone_ints(d)
+        out2 = _filter_phone_ints(d2)
+        self.assertEqual(
+            out,
+            CellData("nothing", "no sheet", 7823232231, "A1", CellValueType.INTEGER),
+        )
+        self.assertEqual(
+            out2,
+            CellData("nothing", "no sheet", "7823232231", "A1", CellValueType.STRING),
         )
 
     def test_return_parser(self):

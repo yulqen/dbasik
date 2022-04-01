@@ -110,7 +110,6 @@ class ParsedSpreadsheet:
             sheet=sheet_name
         )
         for dml in relevant_dmls:
-            breakpoint()
             logger.debug(f"Processing {dml.key} in {dml.sheet}")
             _return_param = self._map_to_keyword_param(sheet[dml.key])
             logger.debug(f"_return_param: {_return_param}")
@@ -170,7 +169,6 @@ class WorkSheetFromDatamap:
     """
 
     def __init__(self, openpyxl_worksheet: OpenpyxlWorksheet, datamap: Datamap) -> None:
-        breakpoint()
         self._data: Dict[str, CellData] = {}
         self._openpyxl_worksheet = openpyxl_worksheet
         self._datamap = datamap
@@ -198,7 +196,6 @@ class WorkSheetFromDatamap:
                 _parsed_value = _parsed_value.date()
             _sheet_title = self._openpyxl_worksheet.title
             try:
-                breakpoint()
                 # TODO - in here we need to convert he phone number to a str
                 _value = CellData(
                     _key,
@@ -216,7 +213,22 @@ class WorkSheetFromDatamap:
                     _dml.cell_ref,
                     CellValueType.UNKNOWN,
                 )
+                _filter_phone_ints(_value)
                 self._data[_key] = _value
+
+
+def _filter_phone_ints(data: CellData) -> CellData:
+    """
+    Tests whether a CellData.value and CellData.type is an int and
+    CellValueType.PHONE respectively. Converts the int to a str if true.
+    """
+    if isinstance(data.value, numbers.Integral) and data.type == CellValueType.PHONE:
+        out = CellData(
+            data.key, data.sheet, str(data.value), data.source_cell, data.type
+        )
+        return out
+    else:
+        return data
 
 
 def _detect_cell_type(obj: Any, dml: DatamapLine) -> CellValueType:
