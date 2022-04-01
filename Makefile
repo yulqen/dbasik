@@ -13,4 +13,10 @@ clean:
 	provision/clean_and_repopulate_database.sh
 
 test:
-	pytest --driver Firefox --driver-path /home/lemon/bin/geckodriver --tb=short  -v --ds=config.settings.local --html report.html -sx
+	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test"
+
+test-fail:
+	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test --failfast"
+
+test-fail-pdb:
+	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test --failfast --pdb"
