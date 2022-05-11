@@ -18,6 +18,70 @@ from factories.datamap_factories import ProjectFactory
 from register.models import FinancialQuarter
 from returns.models import Return, ReturnItem
 
+class TestErroneousFigure(TestCase):
+    """Figures in the template in form of 1m should not be parsed as dates."""
+    def setUp(self):
+        self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
+        self.project = ProjectFactory()
+        self.datamap = DatamapFactory()
+        self.return_obj = Return.objects.create(
+            project=self.project, financial_quarter=self.financial_quarter
+        )
+        # This is a sanity check to test that the int 1_000_000 with no formatting works
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="PoC email",
+            sheet="rpt_template",
+            cell_ref="E59",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Total Costs Spent",
+            sheet="rpt_template",
+            cell_ref="E111",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Total Costs Remaining",
+            sheet="rpt_template",
+            cell_ref="E112",
+        )
+
+        self.populated_template = (
+            pathlib.Path(__file__).parent.absolute() / "project_sheet_with_1m_numbers.xlsm"
+        )
+        self.parsed_spreadsheet = ParsedSpreadsheet(
+            template_path=self.populated_template,
+            project=self.project,
+            return_obj=self.return_obj,
+            datamap=self.datamap,
+        )
+
+    def test_return_1m_ok(self):
+        """ testing 1_000_000 is fine."""
+        self.parsed_spreadsheet.process()
+        return_items = Return.objects.get(
+            id=self.return_obj.id
+        ).return_returnitems.all()
+        poc_r = return_items[0]
+        self.assertEqual(poc_r.datamapline.key, "PoC email")
+        self.assertEqual(poc_r.value_int, 1_000_000)
+        self.assertEqual(poc_r.value_date, None)
+
+
+    @unittest.skip("TODO - FAILS FOR SOME UNKNOWN REASON")
+    def test_return_parser(self):
+        """ testing use of '\£#\m' format code, which needs to be parsed correctly"""
+        self.parsed_spreadsheet.process()
+        breakpoint()
+        return_items = Return.objects.get(
+            id=self.return_obj.id
+        ).return_returnitems.all()
+        total_line = return_items[1]
+        self.assertEqual(total_line.datamapline.key, "Total Costs Spent")
+        self.assertEqual(total_line.value_int, 1_000_000)
+        self.assertEqual(total_line.value_date, None)
+
 
 class TestParseToReturn(TestCase):
     def setUp(self):

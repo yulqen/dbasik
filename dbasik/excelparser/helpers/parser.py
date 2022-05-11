@@ -187,11 +187,14 @@ class WorkSheetFromDatamap:
         :return: None
         :rtype: None
         """
-        breakpoint()
         for _dml in self._datamap.datamaplines.filter(
             sheet__exact=self._openpyxl_worksheet.title
         ):
             _key = _dml.key
+
+            # TODO the incorrect value is coming out here
+            #  - it is coming out as date when using '\£#\m' format code
+
             _parsed_value = self._openpyxl_worksheet[_dml.cell_ref].value
             if isinstance(_parsed_value, datetime.datetime):
                 _parsed_value = _parsed_value.date()
