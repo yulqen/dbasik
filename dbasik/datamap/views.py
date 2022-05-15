@@ -16,14 +16,24 @@ from django.views.generic import (CreateView, DeleteView, FormView, ListView,
 
 from datamap.helpers import parse_kwargs_to_error_string
 from register.models import Tier
+from rest_framework import viewsets
 
-from .forms import (CSVForm, DatamapForm, DatamapLineEditForm, DatamapLineForm,
-                    UploadDatamap)
+from .forms import (CSVForm, DatamapForm, DatamapLineEditForm, DatamapLineForm, UploadDatamap)
 from .models import Datamap, DatamapLine
+from .serializers import DatamapSerializer, DatamapLineSerializer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+# API viewsets
+
+class DatamapLineViewSet(viewsets.ModelViewSet):
+    queryset = DatamapLine.objects.all()
+    serializer_class = DatamapLineSerializer
+
+class DatamapViewSet(viewsets.ModelViewSet):
+    queryset = Datamap.objects.all()
+    serializer_class = DatamapSerializer
 
 # datamap view functions
 

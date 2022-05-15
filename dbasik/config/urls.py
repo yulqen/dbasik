@@ -17,43 +17,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from datamap.models import Datamap, DatamapLine
-from register.models import Tier
+from datamap import views as dmviews
+from register import views as regviews
 from rest_framework import routers, serializers, viewsets
 
-class TierSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Tier
-        fields = ['name', 'slug', 'description']
-
-class TierViewSet(viewsets.ModelViewSet):
-    queryset = Tier.objects.all()
-    serializer_class = TierSerializer
-
-
-class DatamapLineSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = DatamapLine
-        fields = ['datamap', 'key', 'data_type', 'required', 'max_length', 'sheet', 'cell_ref']
-
-class DatamapLineViewSet(viewsets.ModelViewSet):
-    queryset = DatamapLine.objects.all()
-    serializer_class = DatamapLineSerializer
-
-
-class DatamapSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Datamap
-        fields = ['name', 'tier', 'active', 'slug']
-
-class DatamapViewSet(viewsets.ModelViewSet):
-    queryset = Datamap.objects.all()
-    serializer_class = DatamapSerializer
-
+# API routes
 router = routers.DefaultRouter()
-router.register(r'datamaps', DatamapViewSet)
-router.register(r'tiers', TierViewSet)
-router.register(r'datamaplines', DatamapLineViewSet)
+router.register(r'datamaps', dmviews.DatamapViewSet)
+router.register(r'datamaplines', dmviews.DatamapLineViewSet)
+router.register(r'tiers', regviews.TierViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

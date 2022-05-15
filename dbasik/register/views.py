@@ -14,7 +14,18 @@ from .forms import (
     ProjectForm,
 )
 from returns.models import ReturnItem
+from .serializers import TierSerializer
+from rest_framework import viewsets
 
+
+# API viewsets
+
+class TierViewSet(viewsets.ModelViewSet):
+    queryset = Tier.objects.all()
+    serializer_class = TierSerializer
+
+
+# regular views
 
 class ProjectTypeDelete(LoginRequiredMixin, DeleteView):
     model = ProjectType
