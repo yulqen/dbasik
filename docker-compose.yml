@@ -22,6 +22,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKED=redis://redis:6379/0
       - DJANGO_SETTINGS_MODULE=config.settings_new
+      - ALLOWED_HOSTS=100.64.1.3
     command: > # POST-TUTORIAL-NOTE: does this override the CMD line in the Dockerfile? Would seem right.
       sh -c "python manage.py wait_for_db &&
             python manage.py migrate &&
