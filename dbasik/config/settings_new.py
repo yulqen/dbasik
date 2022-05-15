@@ -61,7 +61,17 @@ INSTALLED_APPS = [
     "excelparser.apps.ExcelparserConfig",
     "returns.apps.ReturnsConfig",
     "crispy_forms",
+    "rest_framework",
 ]
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+	# TODO we will want to change this when we use real data
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

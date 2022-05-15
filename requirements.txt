@@ -10,3 +10,4 @@ openpyxl==2.6.4
 # Pillow
 # setproctitle
 uWSGI>=2.0.19.1,<2.1
+djangorestframework>=3.13.1,<3.14

@@ -17,9 +17,37 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from datamap.models import Datamap
+from register.models import Tier
+from rest_framework import routers, serializers, viewsets
+
+class TierSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Tier
+        fields = ['name', 'slug', 'description']
+
+class TierViewSet(viewsets.ModelViewSet):
+    queryset = Tier.objects.all()
+    serializer_class = TierSerializer
+
+
+class DatamapSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Datamap
+        fields = ['name', 'tier', 'active', 'slug']
+
+class DatamapViewSet(viewsets.ModelViewSet):
+    queryset = Datamap.objects.all()
+    serializer_class = DatamapSerializer
+
+router = routers.DefaultRouter()
+router.register(r'datamaps', DatamapViewSet)
+router.register(r'tiers', TierViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('core.urls')),
     path('datamaps/', include('datamap.urls', namespace="datamaps")),
