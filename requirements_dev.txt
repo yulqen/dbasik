@@ -1,1 +1,4 @@
 pdbpp
+isort
+black
+flake8
