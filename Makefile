@@ -20,3 +20,6 @@ test-fail:
 
 test-fail-pdb:
 	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test --failfast --pdb"
+
+test-api:
+	docker-compose run --rm app sh -c 'python manage.py test --pattern="test_api.py"'
