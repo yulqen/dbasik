@@ -34,5 +34,6 @@ class TestDatamapAPIEndpoints(TestCase):
 
     def test_datamaplines(self):
         response = self.client.get("/api/datamaplines/")
-        self.assertTrue(response.status_code, 200)
-        self.assertTrue(response.json()[1]["cell_ref"], "A2")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[1]["cell_ref"], "A2")
+        self.assertEqual(response.json()[1]["data_type"], "Text")  # this is default
