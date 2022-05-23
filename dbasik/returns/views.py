@@ -1,29 +1,40 @@
-import os
 import logging
-
+import os
 from typing import List
 
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, FormView, ListView, DeleteView
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.contrib import messages
-
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView
 from excelparser.helpers.parser import ParsedSpreadsheet
 from register.models import FinancialQuarter, Project
+from rest_framework import viewsets
+
 from returns.forms import ReturnBatchCreateForm, ReturnCreateForm
 from returns.helpers import generate_master
 from returns.models import Return, ReturnItem
-
 from returns.tasks import process_batch as process
 
+from .serializers import ReturnItemSerializer, ReturnSerializer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+# API viewsets
+
+
+class ReturnViewSet(viewsets.ModelViewSet):
+    queryset = Return.objects.all()
+    serializer_class = ReturnSerializer
+
+
+# class ReturnItemViewSet(viewsets.ModelViewSet):
+#     queryset = Datamap.objects.all()
+#     serializer_class = DatamapSerializer
 
 
 class DeleteReturn(LoginRequiredMixin, DeleteView):
@@ -111,7 +122,7 @@ def download_master(request, fqid: int):
     first_return_obj_item = return_obj_sample.return_returnitems.first()
     datamap = first_return_obj_item.datamapline.datamap
     file_name = f"Master_for_Q{fq.quarter}_{fq.year}.xlsx"
-    save_path = os.path.join(settings.MEDIA_ROOT, 'downloads', file_name)
+    save_path = os.path.join(settings.MEDIA_ROOT, "downloads", file_name)
     generate_master(fq, save_path, datamap)
     with open(save_path, "rb") as excel:
         data = excel.read()

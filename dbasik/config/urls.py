@@ -13,29 +13,31 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from datamap import views as dmviews
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-from datamap import views as dmviews
+from django.urls import include, path
 from register import views as regviews
 from rest_framework import routers, serializers, viewsets
+from returns import views as retviews
 
 # API routes
 router = routers.DefaultRouter()
-router.register(r'datamaps', dmviews.DatamapViewSet)
-router.register(r'datamaplines', dmviews.DatamapLineViewSet)
-router.register(r'tiers', regviews.TierViewSet)
+router.register(r"datamaps", dmviews.DatamapViewSet)
+router.register(r"datamaplines", dmviews.DatamapLineViewSet)
+router.register(r"tiers", regviews.TierViewSet)
+router.register(r"returns", retviews.ReturnViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/', include(router.urls)),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('core.urls')),
-    path('datamaps/', include('datamap.urls', namespace="datamaps")),
-    path('register/', include('register.urls', namespace="register")),
-    path('templates/', include('templates.urls', namespace="templates")),
-    path('excelparser/', include('excelparser.urls', namespace="excelparser")),
-    path('returns/', include('returns.urls', namespace="returns")),
+    path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
+    path("api/", include(router.urls)),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("", include("core.urls")),
+    path("datamaps/", include("datamap.urls", namespace="datamaps")),
+    path("register/", include("register.urls", namespace="register")),
+    path("templates/", include("templates.urls", namespace="templates")),
+    path("excelparser/", include("excelparser.urls", namespace="excelparser")),
+    path("returns/", include("returns.urls", namespace="returns")),
 ]
