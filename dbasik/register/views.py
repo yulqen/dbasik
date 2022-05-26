@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from collections import defaultdict
 
 from .models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
+from .serializers import ProjectSerializer, TierSerializer
 from .forms import (
     ProjectTypeForm,
     TierForm,
@@ -14,8 +15,10 @@ from .forms import (
     ProjectForm,
 )
 from returns.models import ReturnItem
-from .serializers import TierSerializer
+from register.models import Project
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 # API viewsets
@@ -23,6 +26,15 @@ from rest_framework import viewsets
 class TierViewSet(viewsets.ModelViewSet):
     queryset = Tier.objects.all()
     serializer_class = TierSerializer
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    List projects in the system.
+    """
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
 
 
 # regular views

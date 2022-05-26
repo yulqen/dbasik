@@ -110,7 +110,7 @@ urlpatterns = [
     path(
         "project/<slug:slug>",
         ProjectDetail.as_view(),
-        name="project-detail",
+        name="project_detail",
     ),
     path("project/", ProjectList.as_view(), name="project_list"),
     path(

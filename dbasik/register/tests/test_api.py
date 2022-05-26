@@ -15,3 +15,7 @@ class TestRegisterAPIEndpoints(TestCase):
         response = self.client.get("/api/tiers/1/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["name"], "Tier 1")
+
+    def test_project_list(self):
+        response = self.client.get("/api/projects/")
+        self.assertEqual(response.status_code, 200)
