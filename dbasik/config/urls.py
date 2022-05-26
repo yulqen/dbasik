@@ -29,6 +29,7 @@ router.register(r"datamaplines", dmviews.DatamapLineViewSet)
 router.register(r"tiers", regviews.TierViewSet)
 router.register(r"returns", retviews.ReturnViewSet)
 router.register(r"projects", regviews.ProjectViewSet)
+router.register(r"financialquarters", regviews.FinancialQuarterViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

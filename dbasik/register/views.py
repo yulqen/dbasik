@@ -5,8 +5,15 @@ from django.urls import reverse_lazy
 
 from collections import defaultdict
 
-from .models import ProjectType, Tier, ProjectStage, StrategicAlignment, Project
-from .serializers import ProjectSerializer, TierSerializer
+from .models import (
+    ProjectType,
+    Tier,
+    ProjectStage,
+    StrategicAlignment,
+    Project,
+    FinancialQuarter,
+)
+from .serializers import ProjectSerializer, TierSerializer, FinancialQuarterSerializer
 from .forms import (
     ProjectTypeForm,
     TierForm,
@@ -23,6 +30,7 @@ from rest_framework.response import Response
 
 # API viewsets
 
+
 class TierViewSet(viewsets.ModelViewSet):
     queryset = Tier.objects.all()
     serializer_class = TierSerializer
@@ -32,12 +40,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     List projects in the system.
     """
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
 
+class FinancialQuarterViewSet(viewsets.ModelViewSet):
+    queryset = FinancialQuarter.objects.all()
+    serializer_class = FinancialQuarterSerializer
+
 
 # regular views
+
 
 class ProjectTypeDelete(LoginRequiredMixin, DeleteView):
     model = ProjectType
@@ -228,12 +242,7 @@ class ProjectList(LoginRequiredMixin, ListView):
 class ProjectDetail(LoginRequiredMixin, DetailView):
     model = Project
 
-    rag_colours = {
-        "Amber": "eab735",
-        "Green": "3d7f2b",
-        "Amber/Green": "98aa3f"
-    }
-
+    rag_colours = {"Amber": "eab735", "Green": "3d7f2b", "Amber/Green": "98aa3f"}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -244,11 +253,19 @@ class ProjectDetail(LoginRequiredMixin, DetailView):
             if ReturnItem.objects.filter(parent=first).count() > 1:
                 context["returns"] = returns_for
                 context["fq"] = returns_for.first().financial_quarter
-                context["sro_full_name"] = first.data_by_key('SRO Full Name')['value_str']
-                context["dca_narrative"] = first.data_by_key("Departmental DCA Narrative")['value_str']
-                context["working_contact"] = first.data_by_key("Working Contact Name")['value_str']
-                context["working_contact_phone"] = first.data_by_key("Working Contact Telephone")['value_str']
-                context["dft_group"] = first.data_by_key("DfT Group")['value_str']
+                context["sro_full_name"] = first.data_by_key("SRO Full Name")[
+                    "value_str"
+                ]
+                context["dca_narrative"] = first.data_by_key(
+                    "Departmental DCA Narrative"
+                )["value_str"]
+                context["working_contact"] = first.data_by_key("Working Contact Name")[
+                    "value_str"
+                ]
+                context["working_contact_phone"] = first.data_by_key(
+                    "Working Contact Telephone"
+                )["value_str"]
+                context["dft_group"] = first.data_by_key("DfT Group")["value_str"]
                 # context["dft_division"] = first.data_by_key("DfT Division")['value_str']
                 # context["rag"] = first.data_by_key("SRO assurance confidence RAG external")['value_str']
                 # context["rag_c"] = self.rag_colours.get(first.data_by_key("SRO assurance confidence RAG external")['value_str'])
