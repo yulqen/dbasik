@@ -226,36 +226,12 @@ class PortfolioInitialisation(AppModel):
 class Project(AppModel):
     name = models.CharField(max_length=255, blank=False)
     slug = AutoSlugField(populate_from=['name'])
-    dependencies = models.ManyToManyField("Project", blank=True)
-#   mandate = models.OneToOneField(Mandate, on_delete=models.CASCADE)
-#   portfolio_initialisation = models.OneToOneField(
-#       PortfolioInitialisation, on_delete=models.CASCADE, related_name="project_portfolio_initialisation"
-#   )
-#   mandate_active = models.BooleanField(default=False)
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE, null=True)
     stage = models.ForeignKey(ProjectStage, on_delete=models.CASCADE, null=True)
-#   dft_group = models.ForeignKey(DfTGroup, on_delete=models.CASCADE, null=True)
-#   sro = models.ForeignKey(
-#       Employee,
-#       on_delete=models.CASCADE,
-#       blank=True,
-#       null=True,
-#       related_name="project_sro",
-#   )
-#   director = models.ForeignKey(
-#       Employee,
-#       on_delete=models.CASCADE,
-#       blank=True,
-#       null=True,
-#       related_name="project_director",
-#   )
-#   agency_delivery_partner = models.ForeignKey(
-#       Organisation, on_delete=models.CASCADE, blank=True, null=True
-#   )
-    start_date = models.DateField(blank=True, null=True, )
-    planned_end_date = models.DateField(blank=True, null=True)
-    baseline_wlc = models.FloatField(blank=True, null=True)
+    abbreviation = models.CharField(max_length=20, null=False, blank=False)
+    dft_group = models.ForeignKey(DfTGroup, on_delete=models.CASCADE, null=False, blank=False)
+    gmpp = models.BooleanField(default=False, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('register:project_list')

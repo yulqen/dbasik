@@ -12,13 +12,13 @@
                     <td><strong>Stage:</strong></td>
                     <td>{{ object.stage }}</td>
                 </tr>
-                <tr>
-                    <td><strong>Start Date:</strong></td>
-                    <td>{{ object.start_date|date:"j M Y" }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>
-                </tr>
+{#                <tr>#}
+{#                    <td><strong>Start Date:</strong></td>#}
+{#                    <td>{{ object.start_date|date:"j M Y" }}</td>#}
+{#                </tr>#}
+{#                <tr>#}
+{#                    <td><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>#}
+{#                </tr>#}
             </table>
     <h3>Description</h3>
     <div class="w3-panel w3-border">
@@ -30,22 +30,22 @@
     </div>
     <div class="w3-panel w3-border">
 
-        <div class="w3-cell-row">
-            <div class="w3-container w3-cell">
-                <h3>Key Contacts</h3>
-                    <div class="w3-border">
-                        <header class="w3-container">
-                            <h4>SRO:</h4>
-                            <p> {{ sro_full_name|default:"[ - No SRO Given -]" }}</p>
-                        </header>
-                    </div>
-                    <div class="w3-border">
-                        <header class="w3-container">
-                            <h4>Working Contact:</h4>
-                            <p>{{ working_contact|default:"[ - No Working Contact Given -]"  }} (Tel: {{ working_contact_phone|default:"[ - No Working Contact Phone Given -]"  }})</p>
-                        </header>
-                    </div>
-            </div>  
+{#        <div class="w3-cell-row">#}
+{#            <div class="w3-container w3-cell">#}
+{#                <h3>Key Contacts</h3>#}
+{#                    <div class="w3-border">#}
+{#                        <header class="w3-container">#}
+{#                            <h4>SRO:</h4>#}
+{#                            <p> {{ sro_full_name|default:"[ - No SRO Given -]" }}</p>#}
+{#                        </header>#}
+{#                    </div>#}
+{#                    <div class="w3-border">#}
+{#                        <header class="w3-container">#}
+{#                            <h4>Working Contact:</h4>#}
+{#                            <p>{{ working_contact|default:"[ - No Working Contact Given -]"  }} (Tel: {{ working_contact_phone|default:"[ - No Working Contact Phone Given -]"  }})</p>#}
+{#                        </header>#}
+{#                    </div>#}
+{#            </div>  #}
 
             <div class="w3-container w3-cell">
             <h3>Returns</h3>
