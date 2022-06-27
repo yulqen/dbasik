@@ -1,0 +1,3 @@
+# needed to accommodate two styles of docker-compose/docker compose invocation
+
+alias make='make CMD="docker compose"'

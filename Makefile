@@ -1,25 +1,26 @@
 COMPOSEFILE="docker-compose.yml"
+CMD="docker-compose" # this can be overridden on systems that use 'docker compose' plugin rather than 'docker-compose'
 
 clean-rebuild-and-run:
-	docker-compose -f $(COMPOSEFILE) down && docker-compose -f $(COMPOSEFILE) up --build && docker-compose -f $(COMPOSEFILE) run app sh -c "python manage.py creat_financial_quarters"
+	$(CMD) -f $(COMPOSEFILE) down && $(CMD) -f $(COMPOSEFILE) up --build && $(CMD) -f $(COMPOSEFILE) run app sh -c "python manage.py creat_financial_quarters"
 
 createsuperuser:
-	docker-compose -f $(COMPOSEFILE) run --rm app sh -c "python manage.py createsuperuser"
+	$(CMD) -f $(COMPOSEFILE) run --rm app sh -c "python manage.py createsuperuser"
 
 create-financial-quarters:
-	docker-compose -f $(COMPOSEFILE) run --rm app sh -c "python manage.py create_financial_quarters 2021 2022 2023 2024 2025 2026 2027 2028"
+	$(CMD) -f $(COMPOSEFILE) run --rm app sh -c "python manage.py create_financial_quarters 2021 2022 2023 2024 2025 2026 2027 2028"
 
 clean:
 	provision/clean_and_repopulate_database.sh
 
 test:
-	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test"
+	$(CMD) -f $(COMPOSEFILE) run --rm app sh -c "python manage.py test"
 
 test-fail:
-	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test --failfast"
+	$(CMD) -f $(COMPOSEFILE) run --rm app sh -c "python manage.py test --failfast"
 
 test-fail-pdb:
-	docker-compose -f docker-compose.yml run --rm app sh -c "python manage.py test --failfast --pdb"
+	$(CMD) -f $(COMPOSEFILE) run --rm app sh -c "python manage.py test --failfast --pdb"
 
 test-api:
-	docker-compose run --rm app sh -c 'python manage.py test --pattern="test_api.py"'
+	$(CMD) run --rm app sh -c 'python manage.py test --pattern="test_api.py"'
