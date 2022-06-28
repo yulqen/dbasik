@@ -28,6 +28,7 @@ router.register(r"datamaps", dmviews.DatamapViewSet)
 router.register(r"datamaplines", dmviews.DatamapLineViewSet)
 router.register(r"tiers", regviews.TierViewSet)
 router.register(r"returns", retviews.ReturnViewSet)
+router.register(r"returnitems", retviews.ReturnItemViewSet)
 router.register(r"projects", regviews.ProjectViewSet)
 router.register(r"financialquarters", regviews.FinancialQuarterViewSet)
 

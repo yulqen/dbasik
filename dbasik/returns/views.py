@@ -31,6 +31,10 @@ class ReturnViewSet(viewsets.ModelViewSet):
     queryset = Return.objects.all()
     serializer_class = ReturnSerializer
 
+class ReturnItemViewSet(viewsets.ModelViewSet):
+    queryset = ReturnItem.objects.all()
+    serializer_class = ReturnItemSerializer
+
 
 # class ReturnItemViewSet(viewsets.ModelViewSet):
 #     queryset = Datamap.objects.all()
