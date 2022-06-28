@@ -6,7 +6,7 @@ from returns.models import Return, ReturnItem
 class ReturnSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Return
-        fields = ["project", "financial_quarter"]
+        fields = ["id", "project", "financial_quarter"]
 
 
 class ReturnItemSerializer(serializers.HyperlinkedModelSerializer):

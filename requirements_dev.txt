@@ -2,3 +2,4 @@ pdbpp
 isort
 black
 flake8
+requests
