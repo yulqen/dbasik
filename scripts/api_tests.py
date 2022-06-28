@@ -10,13 +10,13 @@ def get_returns():
         print("Cannot reach API - is the server running?")
 
 
-def get_items_for_return(rid):
+def get_items_for_return(rid, host="localhost"):
     """Get list of ReturnItem dicts for Return id of rid"""
-    response = requests.get("http://100.64.1.3:8000/api/returnitems/")
+    response = requests.get(f"http://{host}:8000/api/returnitems/")
     if response:
         out = []
         items = response.json()
-        parent_url = "http://100.64.1.3:8000/api/returns/"
+        parent_url = f"http://{host}:8000/api/returns/"
         for i in items:
             if "".join([parent_url, str(rid), "/"]) == i["parent"]:
                 out.append(i)
@@ -25,8 +25,8 @@ def get_items_for_return(rid):
         print("Cannot reach API - is the server running?")
 
 
-def print_key_values_from_return(rid):
-    ret_items = get_items_for_return(rid)
+def print_key_values_from_return(rid, host="localhost"):
+    ret_items = get_items_for_return(rid, host)
     for r in ret_items:
         kval = ""
         vval = ""
