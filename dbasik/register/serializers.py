@@ -1,5 +1,6 @@
-from register.models import Tier, Project, FinancialQuarter
 from rest_framework import serializers
+
+from register.models import FinancialQuarter, Project, Tier
 
 
 class TierSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,9 +19,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             "tier",
             "project_type",
             "stage",
-            "start_date",
-            "planned_end_date",
-            "baseline_wlc",
+            "abbreviation",
+            "dft_group",
+            "gmpp",
         ]
 
 
