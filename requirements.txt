@@ -3,7 +3,7 @@ celery[redis]==5.2.2,<5.3
 django-crispy-forms
 django-extensions
 factory_boy
-psycopg2>=2.8.6,<2.9
+#psycopg2>=2.8.6,<2.9
 pdbpp>=0.10.3,<0.11.0
 # selenium
 openpyxl==2.6.4
