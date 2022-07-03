@@ -35,8 +35,8 @@ ALLOWED_HOSTS = ["100.64.1.3", "localhost", "127.0.0.1"]
 ALLOWED_HOSTS.extend(filter(None, os.environ.get("ALLOWED_HOSTS", "").split(",")))
 print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379"
 
 # We can maybe get this running for prod.
 # CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
