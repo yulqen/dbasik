@@ -1,32 +1,32 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, DetailView
-from django.urls import reverse_lazy
-
 from collections import defaultdict
 
-from .models import (
-    ProjectType,
-    Tier,
-    ProjectStage,
-    StrategicAlignment,
-    Project,
-    FinancialQuarter,
-)
-from .serializers import ProjectSerializer, TierSerializer, FinancialQuarterSerializer
-from .forms import (
-    ProjectTypeForm,
-    TierForm,
-    ProjectStageForm,
-    StrategicAlignmentForm,
-    ProjectForm,
-)
-from returns.models import ReturnItem
-from register.models import Project
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework import viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from returns.models import ReturnItem
 
+from register.models import Project
+
+from .forms import (
+    ProjectForm,
+    ProjectStageForm,
+    ProjectTypeForm,
+    StrategicAlignmentForm,
+    TierForm,
+)
+from .models import (
+    FinancialQuarter,
+    Project,
+    ProjectStage,
+    ProjectType,
+    StrategicAlignment,
+    Tier,
+)
+from .serializers import FinancialQuarterSerializer, ProjectSerializer, TierSerializer
 
 # API viewsets
 

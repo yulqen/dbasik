@@ -1,14 +1,12 @@
-from typing import List, Tuple, Union
 import datetime
-
 from inspect import getmembers
+from typing import List, Tuple, Union
 
-from openpyxl import Workbook
-from openpyxl import utils
-
-from register.models import FinancialQuarter
-from returns.models import ReturnItem
 from datamap.models import Datamap
+from openpyxl import Workbook, utils
+from register.models import FinancialQuarter
+
+from returns.models import ReturnItem
 
 RETURN_ITEM_PARM_STRS = [
     "value_str",
@@ -20,7 +18,7 @@ RETURN_ITEM_PARM_STRS = [
 
 
 def _get_populated_param(
-    return_item: ReturnItem
+    return_item: ReturnItem,
 ) -> Tuple[str, Union[str, int, float, datetime.datetime, datetime.date]]:
     _ri_params = [
         param for param in getmembers(return_item) if param[0] in RETURN_ITEM_PARM_STRS
@@ -46,8 +44,8 @@ def generate_master(
     financial_quarter: FinancialQuarter, output: str, datamap: Datamap
 ) -> None:
     # we need to get all returns for a FinancialQuarter
-    all_returns = financial_quarter.return_financial_quarters.all().order_by('project')
-    keys: List = [dml.key for dml in datamap.datamaplines.all().order_by('pk')]
+    all_returns = financial_quarter.return_financial_quarters.all().order_by("project")
+    keys: List = [dml.key for dml in datamap.datamaplines.all().order_by("pk")]
     wb = Workbook()
     ws = wb.active
 
