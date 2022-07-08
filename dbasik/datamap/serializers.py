@@ -1,4 +1,4 @@
-from datamap.models import Datamap, DatamapLine
+from dbasik.datamap.models import Datamap, DatamapLine
 from rest_framework import serializers
 
 class DatamapLineSerializer(serializers.HyperlinkedModelSerializer):

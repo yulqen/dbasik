@@ -1,5 +1,5 @@
 from django.test import TestCase
-from register.models import FinancialQuarter, Project, Tier
+from dbasik.register.models import FinancialQuarter, Project, Tier
 from returns.models import Return
 
 

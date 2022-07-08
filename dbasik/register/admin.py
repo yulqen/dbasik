@@ -1,25 +1,25 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-# from register.models import Classification
-# from register.models import Constraint
-# from register.models import Deliverable
-from register.models import FinancialQuarter
-# from register.models import Mandate
-# from register.models import Milestone
-from register.models import Objective
-from register.models import Organisation
-# from register.models import PortfolioInitialisation
-from register.models import Project
-from register.models import ProjectStage
-from register.models import ProjectType
-# from register.models import RAGColour
-# from register.models import RiskRPA
-# from register.models import StrategicAlignment
-# from register.models import StrategicOutcome
-from register.models import Tier
-from users.models import DfTDivision
-from users.models import DfTGroup
+# from dbasik.register.models import Classification
+# from dbasik.register.models import Constraint
+# from dbasik.register.models import Deliverable
+from dbasik.register.models import FinancialQuarter
+# from dbasik.register.models import Mandate
+# from dbasik.register.models import Milestone
+from dbasik.register.models import Objective
+from dbasik.register.models import Organisation
+# from dbasik.register.models import PortfolioInitialisation
+from dbasik.register.models import Project
+from dbasik.register.models import ProjectStage
+from dbasik.register.models import ProjectType
+# from dbasik.register.models import RAGColour
+# from dbasik.register.models import RiskRPA
+# from dbasik.register.models import StrategicAlignment
+# from dbasik.register.models import StrategicOutcome
+from dbasik.register.models import Tier
+from dbasik.users.models import DfTDivision
+from dbasik.users.models import DfTGroup
 # from users.models import Employee
 
 

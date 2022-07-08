@@ -3,7 +3,7 @@ import csv
 from collections import OrderedDict, Counter
 from typing import List, Tuple, Any, Set, Dict
 
-from datamap.models import Datamap
+from dbasik.datamap.models import Datamap
 
 
 class _DataLine:

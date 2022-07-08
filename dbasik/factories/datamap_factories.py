@@ -1,11 +1,11 @@
 import factory
 
-from datamap.models import Datamap
-from datamap.models import DatamapLine
-from register.models import Project
-from register.models import ProjectStage
-from register.models import ProjectType
-from register.models import Tier
+from dbasik.datamap.models import Datamap
+from dbasik.datamap.models import DatamapLine
+from dbasik.register.models import Project
+from dbasik.register.models import ProjectStage
+from dbasik.register.models import ProjectType
+from dbasik.register.models import Tier
 
 
 class TierFactory(factory.django.DjangoModelFactory):

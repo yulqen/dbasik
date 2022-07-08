@@ -2,7 +2,7 @@ from datetime import date
 
 from django.test import TestCase
 
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 
 
 class ModelTests(TestCase):

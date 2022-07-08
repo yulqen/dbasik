@@ -4,10 +4,10 @@ import unittest
 from django.test import TestCase
 from django.urls import reverse
 
-from datamap.models import DatamapLine
+from dbasik.datamap.models import DatamapLine
 from factories.datamap_factories import DatamapFactory
 from factories.datamap_factories import ProjectFactory
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 from returns.models import Return
 
 

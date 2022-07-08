@@ -1,6 +1,6 @@
-from datamap.models import Datamap, DatamapLine
+from dbasik.datamap.models import Datamap, DatamapLine
 from django.test import Client, TestCase
-from register.models import Tier
+from dbasik.register.models import Tier
 
 
 class TestDatamapAPIEndpoints(TestCase):

@@ -2,8 +2,8 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 
-from datamap.validators import cell_ref_validator
-from register.models import Tier
+from dbasik.datamap.validators import cell_ref_validator
+from dbasik.register.models import Tier
 
 import uuid
 

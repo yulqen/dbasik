@@ -4,7 +4,7 @@ from django import forms
 from django.forms import BooleanField, CharField, ModelChoiceField
 from django.urls import reverse
 
-from register.models import ProjectStage, ProjectType, Tier
+from dbasik.register.models import ProjectStage, ProjectType, Tier
 
 from . import models
 

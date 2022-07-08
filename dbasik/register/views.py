@@ -7,9 +7,9 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from returns.models import ReturnItem
+from dbasik.returns.models import ReturnItem
 
-from register.models import Project
+from dbasik.register.models import Project
 
 from .forms import (
     ProjectForm,

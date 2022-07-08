@@ -6,9 +6,9 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 
-from users.models import DfTGroup
-from users.models import Employee
-from users.models import Organisation
+from dbasik.users.models import DfTGroup
+# from users.models import Employee
+from dbasik.users.models import Organisation
 
 
 ###############

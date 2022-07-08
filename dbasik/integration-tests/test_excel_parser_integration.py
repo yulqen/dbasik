@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase
 from django.urls import reverse
 
-from datamap.models import DatamapLine
+from dbasik.datamap.models import DatamapLine
 from excelparser.helpers.parser import (
     CellData,
     CellValueType,
@@ -17,7 +17,7 @@ from factories.datamap_factories import (
     DatamapLineFactory,
     ProjectFactory,
 )
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 from returns.models import Return
 
 

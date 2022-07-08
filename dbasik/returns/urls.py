@@ -1,13 +1,13 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from returns.views import FinancialQuartersList
-from returns.views import ReturnItem
-from returns.views import ReturnCreate
-from returns.views import ReturnBatchCreate
-from returns.views import ReturnDetail
-from returns.views import DeleteReturn
-from returns.views import ReturnLines
+from dbasik.returns.views import FinancialQuartersList
+# from returns.views import ReturnItem
+from dbasik.returns.views import ReturnCreate
+from dbasik.returns.views import ReturnBatchCreate
+from dbasik.returns.views import ReturnDetail
+from dbasik.returns.views import DeleteReturn
+from dbasik.returns.views import ReturnLines
 from . views import ReturnsList, download_master
 
 app_name = "returns"

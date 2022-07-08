@@ -3,7 +3,7 @@ import tempfile
 
 from django.test import TestCase
 
-from datamap.helpers import check_duplicate_lines
+from dbasik.datamap.helpers import check_duplicate_lines
 
 
 class TestDuplicateCSVLines(TestCase):

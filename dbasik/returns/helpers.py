@@ -2,11 +2,11 @@ import datetime
 from inspect import getmembers
 from typing import List, Tuple, Union
 
-from datamap.models import Datamap
+from dbasik.datamap.models import Datamap
 from openpyxl import Workbook, utils
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 
-from returns.models import ReturnItem
+from dbasik.returns.models import ReturnItem
 
 RETURN_ITEM_PARM_STRS = [
     "value_str",

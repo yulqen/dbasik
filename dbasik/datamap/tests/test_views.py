@@ -2,9 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from datamap.models import Datamap
-from datamap.tests.fixtures import csv_correct_headers
-from register.models import Tier
+from dbasik.datamap.models import Datamap
+from dbasik.datamap.tests.fixtures import csv_correct_headers
+from dbasik.register.models import Tier
 
 
 class CsvUploadViewTest(TestCase):
