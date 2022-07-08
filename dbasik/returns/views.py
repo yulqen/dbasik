@@ -10,14 +10,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView
-from excelparser.helpers.parser import ParsedSpreadsheet
-from register.models import FinancialQuarter, Project
+# from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
+from dbasik.register.models import FinancialQuarter, Project
 from rest_framework import viewsets
 
-from returns.forms import ReturnBatchCreateForm, ReturnCreateForm
-from returns.helpers import generate_master
-from returns.models import Return, ReturnItem
-from returns.tasks import process_batch as process
+from dbasik.returns.forms import ReturnBatchCreateForm, ReturnCreateForm
+from dbasik.returns.helpers import generate_master
+from dbasik.returns.models import Return, ReturnItem
+from dbasik.returns.tasks import process_batch as process
 
 from .serializers import ReturnItemSerializer, ReturnSerializer
 

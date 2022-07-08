@@ -2,8 +2,8 @@ from collections import OrderedDict
 
 from django.test import TestCase
 
-from datamap.models import Datamap
-from register.models import Tier
+from dbasik.datamap.models import Datamap
+from dbasik.register.models import Tier
 
 from ..helpers import parse_kwargs_to_error_string
 

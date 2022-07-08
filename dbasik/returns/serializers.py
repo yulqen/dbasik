@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from returns.models import Return, ReturnItem
+from dbasik.returns.models import Return, ReturnItem
 
 
 class ReturnSerializer(serializers.HyperlinkedModelSerializer):

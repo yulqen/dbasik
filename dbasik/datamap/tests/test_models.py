@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from datamap.models import DatamapLine, Datamap
-from register.models import Tier
+from dbasik.datamap.models import DatamapLine, Datamap
+from dbasik.register.models import Tier
 
 
 class DatamapModelTests(TestCase):

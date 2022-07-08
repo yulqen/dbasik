@@ -10,8 +10,8 @@ from django.core.files.uploadedfile import UploadedFile
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from excelparser.forms import ProcessPopulatedTemplateForm
-from excelparser.helpers.parser import ParsedSpreadsheet
+from dbasik.excelparser.forms import ProcessPopulatedTemplateForm
+from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

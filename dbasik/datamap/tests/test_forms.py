@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from datamap.forms import CSVForm
+from dbasik.datamap.forms import CSVForm
 
 
 class DatamapFormsTests(TestCase):

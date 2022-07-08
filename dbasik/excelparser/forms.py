@@ -12,10 +12,10 @@ from django.forms import forms
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from datamap import urls as datamap_urls
-from register.models import Project
-from datamap.models import Datamap
-from returns.models import Return
+from dbasik.datamap import urls as datamap_urls
+from dbasik.register.models import Project
+from dbasik.datamap.models import Datamap
+from dbasik.returns.models import Return
 
 acceptable_types = ["xlsm"]
 

@@ -7,10 +7,10 @@ from django.http import HttpResponseRedirect
 from django.utils.crypto import get_random_string
 from django.core.files.storage import default_storage
 
-from register.models import FinancialQuarter, ProjectStage, Project
-from returns.models import Return
-from excelparser.helpers.parser import ParsedSpreadsheet
-from datamap.models import Datamap
+from dbasik.register.models import FinancialQuarter, ProjectStage, Project
+from dbasik.returns.models import Return
+from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
+from dbasik.datamap.models import Datamap
 
 
 @shared_task

@@ -14,8 +14,8 @@ from django.utils.text import slugify
 from django.views.generic import (CreateView, DeleteView, FormView, ListView,
                                   UpdateView)
 
-from datamap.helpers import parse_kwargs_to_error_string
-from register.models import Tier
+from dbasik.datamap.helpers import parse_kwargs_to_error_string
+from dbasik.register.models import Tier
 from rest_framework import viewsets
 
 from .forms import (CSVForm, DatamapForm, DatamapLineEditForm, DatamapLineForm, UploadDatamap)

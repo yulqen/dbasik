@@ -6,7 +6,7 @@ from datetime import datetime, date
 from django.test import TestCase
 from django.utils import timezone
 
-from datamap.models import DatamapLine
+from dbasik.datamap.models import DatamapLine
 from excelparser.helpers.parser import (
     ParsedSpreadsheet,
     CellData,
@@ -15,7 +15,7 @@ from excelparser.helpers.parser import (
 )
 from factories.datamap_factories import DatamapFactory
 from factories.datamap_factories import ProjectFactory
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 from returns.models import Return, ReturnItem
 
 class TestErroneousFigure(TestCase):

@@ -4,12 +4,12 @@ import pathlib
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from datamap.models import DatamapLine
+from dbasik.datamap.models import DatamapLine
 from excelparser.helpers.financial_quarter import check_date_in_quarter
 from factories.datamap_factories import DatamapFactory
 from factories.datamap_factories import ProjectFactory
 
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 from returns.models import Return
 from excelparser.forms import ProcessPopulatedTemplateForm
 

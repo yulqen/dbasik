@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelChoiceField
 from django.urls import reverse
 
-from datamap.models import Datamap
-from register.models import FinancialQuarter, Project
+from dbasik.datamap.models import Datamap
+from dbasik.register.models import FinancialQuarter, Project
 
 from . import models
 

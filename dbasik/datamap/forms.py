@@ -3,7 +3,7 @@ from django.forms import CharField
 from django.urls import reverse
 
 # from django.core.exceptions import ValidationError
-from datamap.validators import file_validator, cell_ref_validator
+from dbasik.datamap.validators import file_validator, cell_ref_validator
 from .models import Datamap, DatamapLine
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden, Field

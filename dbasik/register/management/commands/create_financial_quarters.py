@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 
 
 class Command(BaseCommand):

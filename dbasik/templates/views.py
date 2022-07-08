@@ -8,8 +8,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 
-from templates.forms import TemplateCreateForm
-from templates.models import Template, TemplateDataLine
+from dbasik.templates.forms import TemplateCreateForm
+from dbasik.templates.models import Template, TemplateDataLine
 
 
 class TemplateList(LoginRequiredMixin, ListView):

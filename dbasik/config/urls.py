@@ -13,14 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from datamap import views as dmviews
+from dbasik.datamap import views as dmviews
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from register import views as regviews
+from dbasik.register import views as regviews
 from rest_framework import routers, serializers, viewsets
-from returns import views as retviews
+from dbasik.returns import views as retviews
 
 # API routes
 router = routers.DefaultRouter()
@@ -37,10 +37,10 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include(router.urls)),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("", include("core.urls")),
-    path("datamaps/", include("datamap.urls", namespace="datamaps")),
-    path("register/", include("register.urls", namespace="register")),
-    path("templates/", include("templates.urls", namespace="templates")),
-    path("excelparser/", include("excelparser.urls", namespace="excelparser")),
-    path("returns/", include("returns.urls", namespace="returns")),
+    path("", include("dbasik.core.urls")),
+    path("datamaps/", include("dbasik.datamap.urls", namespace="datamaps")),
+    path("register/", include("dbasik.register.urls", namespace="register")),
+    path("templates/", include("dbasik.templates.urls", namespace="templates")),
+    path("excelparser/", include("dbasik.excelparser.urls", namespace="excelparser")),
+    path("returns/", include("dbasik.returns.urls", namespace="returns")),
 ]

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from register.models import Tier
+from dbasik.register.models import Tier
 
 
 class TestRegisterAPIEndpoints(TestCase):

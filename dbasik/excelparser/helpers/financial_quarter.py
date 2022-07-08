@@ -1,6 +1,6 @@
 import datetime
 
-from register.models import FinancialQuarter
+from dbasik.register.models import FinancialQuarter
 
 
 def check_date_in_quarter(

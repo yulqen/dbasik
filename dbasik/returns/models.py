@@ -3,9 +3,9 @@ from django.db import models
 
 from django.urls import reverse
 
-from datamap.models import DatamapLine
-from register.models import FinancialQuarter
-from register.models import Project
+from dbasik.datamap.models import DatamapLine
+from dbasik.register.models import FinancialQuarter
+from dbasik.register.models import Project
 
 
 class Return(models.Model):

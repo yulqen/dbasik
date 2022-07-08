@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from register.models import FinancialQuarter, Project, Tier
+from dbasik.register.models import FinancialQuarter, Project, Tier
 
 
 class TierSerializer(serializers.HyperlinkedModelSerializer):
