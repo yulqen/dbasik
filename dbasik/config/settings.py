@@ -9,7 +9,7 @@ DJANGO_SETTINGS_MODULE = os.environ.get("DJANGO_SETTINGS_MODULE")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["100.64.1.3", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["100.64.1.3", "localhost", "127.0.0.1", "10.0.0.10"]
 ALLOWED_HOSTS.extend(filter(None, os.environ.get("ALLOWED_HOSTS", "").split(",")))
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
