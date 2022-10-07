@@ -33,13 +33,19 @@ def check_duplicate_lines(f_path: str):
         csv_reader = csv.DictReader(f)
         _data_lines = []
         for line in csv_reader:
-            _data_lines.append(_DataLine(line["cell_key"], line["template_sheet"], line["cell_reference"]))
+            _data_lines.append(
+                _DataLine(
+                    line["cell_key"], line["template_sheet"], line["cell_reference"]
+                )
+            )
         s = list(set(_data_lines))
         for x in s:
             _data_lines.remove(x)
 
         _intro = "Check duplicated lines:\n"
-        return "".join([_intro, *[f"{x.key}: {x.sheet}, {x.cell_ref}\n" for x in _data_lines]])
+        return "".join(
+            [_intro, *[f"{x.key}: {x.sheet}, {x.cell_ref}\n" for x in _data_lines]]
+        )
 
 
 def parse_kwargs_to_error_string(datamap: Datamap, csv_dict_items: OrderedDict) -> str:
@@ -70,5 +76,6 @@ def parse_kwargs_to_error_string(datamap: Datamap, csv_dict_items: OrderedDict) 
     for x in err_lst:
         err_stmt.append(f"{x[0]}: {x[1]}")
     return (
-        f"Database Error: {' '.join([x for x in err_stmt])}" f" already appears in this Datamap"
+        f"Database Error: {' '.join([x for x in err_stmt])}"
+        f" already appears in this Datamap"
     )

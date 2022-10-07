@@ -16,7 +16,9 @@ from dbasik.returns.models import Return
 class UploadPopulatedTemplateTests(TestCase):
     def setUp(self):
         # self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/populated.xlsm"
-        self.populated_template = pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
+        self.populated_template = (
+            pathlib.Path(__file__).parent.absolute() / "populated.xlsm"
+        )
         self.project = ProjectFactory()
         self.datamap = DatamapFactory()
         self.dml1 = DatamapLine.objects.create(datamap=self.datamap)
@@ -24,7 +26,9 @@ class UploadPopulatedTemplateTests(TestCase):
         self.return_obj = Return.objects.create(
             project=self.project, financial_quarter=self.fq
         )
-        self.form = ProcessPopulatedTemplateForm(initial={'return_obj': self.return_obj.id})
+        self.form = ProcessPopulatedTemplateForm(
+            initial={"return_obj": self.return_obj.id}
+        )
 
     def test_form_fields_are_valid(self):
         self.assertTrue(self.form.fields["datamap"].label == "Datamap")
@@ -42,7 +46,9 @@ class UploadPopulatedTemplateTests(TestCase):
             "datamap": self.datamap.id,
         }
         file = {"source_file": SimpleUploadedFile(f.name, f.read())}
-        form = ProcessPopulatedTemplateForm(data, file, initial={"return_obj": self.return_obj.id})
+        form = ProcessPopulatedTemplateForm(
+            data, file, initial={"return_obj": self.return_obj.id}
+        )
         self.assertTrue(form.is_valid())
         f.close()
 

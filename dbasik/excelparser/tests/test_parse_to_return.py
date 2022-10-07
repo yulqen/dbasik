@@ -2,23 +2,22 @@ import pathlib
 import unittest
 from datetime import date
 
-from django.test import TestCase
-
 from dbasik.datamap.models import DatamapLine
 from dbasik.excelparser.helpers.parser import (
-    ParsedSpreadsheet,
     CellData,
     CellValueType,
+    ParsedSpreadsheet,
     _filter_phone_ints,
 )
-from dbasik.factories.datamap_factories import DatamapFactory
-from dbasik.factories.datamap_factories import ProjectFactory
+from dbasik.factories.datamap_factories import DatamapFactory, ProjectFactory
 from dbasik.register.models import FinancialQuarter
 from dbasik.returns.models import Return, ReturnItem
+from django.test import TestCase
 
 
 class TestErroneousFigure(TestCase):
     """Figures in the template in form of 1m should not be parsed as dates."""
+
     def setUp(self):
         self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
         self.project = ProjectFactory()
@@ -47,7 +46,8 @@ class TestErroneousFigure(TestCase):
         )
 
         self.populated_template = (
-            pathlib.Path(__file__).parent.absolute() / "project_sheet_with_1m_numbers.xlsm"
+            pathlib.Path(__file__).parent.absolute()
+            / "project_sheet_with_1m_numbers.xlsm"
         )
         self.parsed_spreadsheet = ParsedSpreadsheet(
             template_path=self.populated_template,
@@ -57,7 +57,7 @@ class TestErroneousFigure(TestCase):
         )
 
     def test_return_1m_ok(self):
-        """ testing 1_000_000 is fine."""
+        """testing 1_000_000 is fine."""
         self.parsed_spreadsheet.process()
         return_items = Return.objects.get(
             id=self.return_obj.id
@@ -67,12 +67,10 @@ class TestErroneousFigure(TestCase):
         self.assertEqual(poc_r.value_int, 1_000_000)
         self.assertEqual(poc_r.value_date, None)
 
-
     @unittest.skip("TODO - FAILS FOR SOME UNKNOWN REASON")
     def test_return_parser(self):
-        """ testing use of '\£#\m' format code, which needs to be parsed correctly"""
+        """testing use of '\£#\m' format code, which needs to be parsed correctly"""
         self.parsed_spreadsheet.process()
-        breakpoint()
         return_items = Return.objects.get(
             id=self.return_obj.id
         ).return_returnitems.all()

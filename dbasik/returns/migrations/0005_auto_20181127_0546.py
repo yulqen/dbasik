@@ -7,37 +7,71 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('datamap', '0007_auto_20181116_1552'),
-        ('register', '0008_auto_20181122_1653'),
-        ('returns', '0004_auto_20181126_1956'),
+        ("datamap", "0007_auto_20181116_1552"),
+        ("register", "0008_auto_20181122_1653"),
+        ("returns", "0004_auto_20181126_1956"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Return',
+            name="Return",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('datamapline', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='return_datamaplines', to='datamap.DatamapLine')),
-                ('financial_quarter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='return_financial_quarters', to='register.FinancialQuarter')),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='return_projects', to='register.Project')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "datamapline",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="return_datamaplines",
+                        to="datamap.DatamapLine",
+                    ),
+                ),
+                (
+                    "financial_quarter",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="return_financial_quarters",
+                        to="register.FinancialQuarter",
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="return_projects",
+                        to="register.Project",
+                    ),
+                ),
             ],
         ),
         migrations.RemoveField(
-            model_name='returnitem',
-            name='datamapline',
+            model_name="returnitem",
+            name="datamapline",
         ),
         migrations.RemoveField(
-            model_name='returnitem',
-            name='financial_quarter',
+            model_name="returnitem",
+            name="financial_quarter",
         ),
         migrations.RemoveField(
-            model_name='returnitem',
-            name='project',
+            model_name="returnitem",
+            name="project",
         ),
         migrations.AddField(
-            model_name='returnitem',
-            name='parent',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='returns.Return'),
+            model_name="returnitem",
+            name="parent",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="returns.Return",
+            ),
             preserve_default=False,
         ),
     ]

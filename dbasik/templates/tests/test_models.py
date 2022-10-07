@@ -22,6 +22,4 @@ class TemplateModelTests(TestCase):
         )
 
     def test_template_data(self):
-        self.assertEqual(
-            self.template.data.get(cellref="A1").value, "Test Value"
-        )
+        self.assertEqual(self.template.data.get(cellref="A1").value, "Test Value")

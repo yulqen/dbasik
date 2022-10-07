@@ -5,7 +5,6 @@ from dbasik.datamap.forms import CSVForm
 
 
 class DatamapFormsTests(TestCase):
-
     def test_max_chars_based_on_model(self):
         long_key = "A" * 101
         long_sheet = "A" * 51

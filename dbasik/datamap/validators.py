@@ -6,5 +6,5 @@ file_validator = FileExtensionValidator(
 )
 cell_ref_validator = RegexValidator(
     regex=r"^([A-Z]|[a-z]){1,3}\d+$",
-    message="The cell_ref field must in Excel cell reference format, e.g. 'A10'."
+    message="The cell_ref field must in Excel cell reference format, e.g. 'A10'.",
 )

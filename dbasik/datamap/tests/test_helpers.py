@@ -9,12 +9,17 @@ from ..helpers import parse_kwargs_to_error_string
 
 
 class TestDatamapViewHelpers(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-        cls.csv_dict_items_correct = OrderedDict(key="Key 1", sheet="Sheet", cell_ref="A1")
-        cls.csv_dict_items_incorrect_1 = OrderedDict(cell_ref="A1", key="Key 1", sheet="Sheet")
-        cls.csv_dict_items_incorrect_2 = OrderedDict(key="Key 1", cell_ref="A1", sheet="Sheet")
+        cls.csv_dict_items_correct = OrderedDict(
+            key="Key 1", sheet="Sheet", cell_ref="A1"
+        )
+        cls.csv_dict_items_incorrect_1 = OrderedDict(
+            cell_ref="A1", key="Key 1", sheet="Sheet"
+        )
+        cls.csv_dict_items_incorrect_2 = OrderedDict(
+            key="Key 1", cell_ref="A1", sheet="Sheet"
+        )
         cls.datamap = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap",
@@ -31,7 +36,8 @@ class TestDatamapViewHelpers(TestCase):
 
     def test_parse_to_error_string(self):
         self.assertEqual(
-            self.expected_message, parse_kwargs_to_error_string(self.datamap, self.csv_dict_items_correct)
+            self.expected_message,
+            parse_kwargs_to_error_string(self.datamap, self.csv_dict_items_correct),
         )
 
     def test_parse_wrong_order_dict_to_error_string(self):

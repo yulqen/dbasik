@@ -7,18 +7,22 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('templates', '0003_templatedataline'),
+        ("templates", "0003_templatedataline"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='template',
-            name='source_file',
-            field=models.FileField(upload_to='uploads/'),
+            model_name="template",
+            name="source_file",
+            field=models.FileField(upload_to="uploads/"),
         ),
         migrations.AlterField(
-            model_name='templatedataline',
-            name='template',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='data', to='templates.Template'),
+            model_name="templatedataline",
+            name="template",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="data",
+                to="templates.Template",
+            ),
         ),
     ]

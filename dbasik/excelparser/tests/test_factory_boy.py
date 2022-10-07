@@ -4,11 +4,12 @@ from dbasik.factories.datamap_factories import DatamapFactory, DatamapLineFactor
 
 
 class EnsureFactoryBoyObjects(TestCase):
-
     def setUp(self):
         self.dmf = DatamapFactory()
         self.dml = DatamapLineFactory()
-        self.dml_params = DatamapLineFactory(key="Test Own Key", sheet="Test Own Sheet", cell_ref="A10")
+        self.dml_params = DatamapLineFactory(
+            key="Test Own Key", sheet="Test Own Sheet", cell_ref="A10"
+        )
 
     def test_can_create_datamap_factory(self):
         self.assertTrue(self.dmf.name, "Test Datamap from Factory")
@@ -23,5 +24,3 @@ class EnsureFactoryBoyObjects(TestCase):
         self.assertTrue(self.dml_params.key, "Test Own Key")
         self.assertTrue(self.dml_params.sheet, "Test Own Sheet")
         self.assertTrue(self.dml_params.cell_ref, "Test Own Cell_Ref")
-
-

@@ -7,24 +7,24 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('register', '0005_auto_20181119_1648'),
+        ("register", "0005_auto_20181119_1648"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='financialquarter',
-            name='end_date',
+            model_name="financialquarter",
+            name="end_date",
             field=models.DateField(default=django.utils.timezone.now),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='financialquarter',
-            name='label',
+            model_name="financialquarter",
+            name="label",
             field=models.CharField(blank=True, max_length=30),
         ),
         migrations.AlterField(
-            model_name='financialquarter',
-            name='start_date',
+            model_name="financialquarter",
+            name="start_date",
             field=models.DateField(default=django.utils.timezone.now),
             preserve_default=False,
         ),

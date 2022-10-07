@@ -9,6 +9,7 @@ from .views import (
     TemplateUpdate,
     TemplateDelete,
 )
+
 app_name = "templates"
 
 urlpatterns = [

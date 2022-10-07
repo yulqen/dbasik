@@ -16,14 +16,14 @@ def firefox_options(firefox_options):
 
 @pytest.fixture
 def mock_macro_template():
-    code_dir = os.path.abspath('.')
-    return os.path.join(code_dir, 'templates/tests/macro_enabled_template.xlsm')
+    code_dir = os.path.abspath(".")
+    return os.path.join(code_dir, "templates/tests/macro_enabled_template.xlsm")
 
 
 @pytest.fixture
 def mock_xlsx_template():
-    code_dir = os.path.abspath('.')
-    return os.path.join(code_dir, 'templates/tests/mock_xlsx_template.xlsx')
+    code_dir = os.path.abspath(".")
+    return os.path.join(code_dir, "templates/tests/mock_xlsx_template.xlsx")
 
 
 def test_create_new_template(selenium, mock_macro_template):
@@ -32,7 +32,11 @@ def test_create_new_template(selenium, mock_macro_template):
     selenium.find_element_by_id("id_description").send_keys("TEST TEMPLATE DESCRIPTION")
     selenium.find_element_by_id("id_source_file").send_keys(mock_macro_template)
     selenium.find_element_by_id("submit-id-submit").click()
-    title = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.ID, "show-datamap-table"))).text
+    title = (
+        WebDriverWait(selenium, 5)
+        .until(EC.presence_of_element_located((By.ID, "show-datamap-table")))
+        .text
+    )
     assert title == "Templates"
 
 

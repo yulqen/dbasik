@@ -6,22 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('register', '0003_auto_20180603_1044'),
+        ("register", "0003_auto_20180603_1044"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FinancialQuarter',
+            name="FinancialQuarter",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quarter', models.IntegerField()),
-                ('year', models.IntegerField()),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
-                ('label', models.CharField(max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quarter", models.IntegerField()),
+                ("year", models.IntegerField()),
+                ("start_date", models.DateField()),
+                ("end_date", models.DateField()),
+                ("label", models.CharField(max_length=30)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

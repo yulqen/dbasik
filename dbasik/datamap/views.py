@@ -11,14 +11,19 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
-from django.views.generic import (CreateView, DeleteView, FormView, ListView,
-                                  UpdateView)
+from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
 
 from dbasik.datamap.helpers import parse_kwargs_to_error_string
 from dbasik.register.models import Tier
 from rest_framework import viewsets
 
-from .forms import (CSVForm, DatamapForm, DatamapLineEditForm, DatamapLineForm, UploadDatamap)
+from .forms import (
+    CSVForm,
+    DatamapForm,
+    DatamapLineEditForm,
+    DatamapLineForm,
+    UploadDatamap,
+)
 from .models import Datamap, DatamapLine
 from .serializers import DatamapSerializer, DatamapLineSerializer
 
@@ -27,13 +32,16 @@ logger.setLevel(logging.DEBUG)
 
 # API viewsets
 
+
 class DatamapLineViewSet(viewsets.ModelViewSet):
     queryset = DatamapLine.objects.all()
     serializer_class = DatamapLineSerializer
 
+
 class DatamapViewSet(viewsets.ModelViewSet):
     queryset = Datamap.objects.all()
     serializer_class = DatamapSerializer
+
 
 # datamap view functions
 
@@ -94,10 +102,9 @@ class DatamapLineCreate(LoginRequiredMixin, CreateView):
     form_class = DatamapLineForm
 
     def get_context_data(self, **kwargs):
-        dm = Datamap.objects.get(slug=self.kwargs['slug'])
-        kwargs['datamap'] = dm
+        dm = Datamap.objects.get(slug=self.kwargs["slug"])
+        kwargs["datamap"] = dm
         return super().get_context_data(**kwargs)
-
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -178,14 +185,14 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         reader = csv.DictReader(x.decode("utf-8") for x in uploaded_file_data)
         _timeround = 0
         for line in reader:
-        #   line.pop("")
+            #   line.pop("")
             csv_form = CSVForm(line)
             if csv_form.is_valid():
                 try:
                     self._create_new_dml_with_line_from_csv(_timeround, line)
                 except IntegrityError:
                     self._add_database_error_to_messages(request, line)
-#                   return self.form_valid(main_form)
+                    #                   return self.form_valid(main_form)
                     continue
                 except ValueError:
                     self._send_errors_to_messages(request, csv_form)
@@ -209,7 +216,8 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         """
         err_str = parse_kwargs_to_error_string(self.datamap, line)
         messages.add_message(request, messages.ERROR, err_str)
-#       self._rollback_database()
+
+    #       self._rollback_database()
 
     def _rollback_database(self) -> None:
         """

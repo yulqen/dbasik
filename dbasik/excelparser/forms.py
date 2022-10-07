@@ -20,7 +20,8 @@ from dbasik.returns.models import Return
 acceptable_types = ["xlsm"]
 
 file_validator = FileExtensionValidator(
-    allowed_extensions=acceptable_types, message="Source file needs to have extension .xlsm."
+    allowed_extensions=acceptable_types,
+    message="Source file needs to have extension .xlsm.",
 )
 
 
@@ -34,7 +35,9 @@ class ProcessPopulatedTemplateForm(forms.Form):
 
     return_obj = ModelChoiceField(
         queryset=Return.objects.all(),
-        help_text=mark_safe("Please select an existing return. <a href='/returns/create/'>Create a new Return</a>"),
+        help_text=mark_safe(
+            "Please select an existing return. <a href='/returns/create/'>Create a new Return</a>"
+        ),
     )
 
     datamap = ModelChoiceField(
@@ -47,7 +50,7 @@ class ProcessPopulatedTemplateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        return_item = Return.objects.get(id=self.initial['return_obj'])
+        return_item = Return.objects.get(id=self.initial["return_obj"])
         project_being_done = Project.objects.get(id=return_item.project.id)
 
         cancel_redirect = reverse("templates:list")

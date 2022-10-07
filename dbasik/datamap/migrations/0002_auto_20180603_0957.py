@@ -6,23 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('datamap', '0001_initial'),
+        ("datamap", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='datamapline',
-            name='data_type',
-            field=models.CharField(choices=[('TEXT', 'Text'), ('INTEGER', 'Integer'), ('FLOAT', 'Float'), ('DATE', 'Date')], default='TEXT', max_length=10),
+            model_name="datamapline",
+            name="data_type",
+            field=models.CharField(
+                choices=[
+                    ("TEXT", "Text"),
+                    ("INTEGER", "Integer"),
+                    ("FLOAT", "Float"),
+                    ("DATE", "Date"),
+                ],
+                default="TEXT",
+                max_length=10,
+            ),
         ),
         migrations.AddField(
-            model_name='datamapline',
-            name='max_length',
+            model_name="datamapline",
+            name="max_length",
             field=models.IntegerField(default=100),
         ),
         migrations.AddField(
-            model_name='datamapline',
-            name='required',
+            model_name="datamapline",
+            name="required",
             field=models.BooleanField(default=True),
         ),
     ]

@@ -7,18 +7,22 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('returns', '0009_auto_20181130_1837'),
+        ("returns", "0009_auto_20181130_1837"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='returnitem',
-            name='parent',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='return_returnitems', to='returns.Return'),
+            model_name="returnitem",
+            name="parent",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="return_returnitems",
+                to="returns.Return",
+            ),
         ),
         migrations.AlterField(
-            model_name='returnitem',
-            name='value_str',
-            field=models.CharField(blank=True, default='', max_length=512, null=True),
+            model_name="returnitem",
+            name="value_str",
+            field=models.CharField(blank=True, default="", max_length=512, null=True),
         ),
     ]

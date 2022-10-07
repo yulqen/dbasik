@@ -73,6 +73,8 @@ class ViewTests(TestCase):
             reverse("templates:template_detail", args=["test-template"])
         )
         self.assertEqual(detail_response.status_code, 200)
+
+
 #       self.assertEqual(
 #           detail_response.context["submitted_template"]["Test Sheet"][0]["A1"],
 #           "Col A Key 1",

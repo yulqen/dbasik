@@ -10,36 +10,63 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('register', '0001_initial'),
+        ("register", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Datamap',
+            name="Datamap",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=25)),
-                ('active', models.BooleanField(default=False)),
-                ('slug', models.SlugField(blank=True, default=uuid.uuid1)),
-                ('tier', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='register.Tier')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=25)),
+                ("active", models.BooleanField(default=False)),
+                ("slug", models.SlugField(blank=True, default=uuid.uuid1)),
+                (
+                    "tier",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="register.Tier"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='DatamapLine',
+            name="DatamapLine",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(max_length=100)),
-                ('sheet', models.CharField(max_length=50)),
-                ('cell_ref', models.CharField(max_length=10)),
-                ('datamap', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='datamap.Datamap')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("key", models.CharField(max_length=100)),
+                ("sheet", models.CharField(max_length=50)),
+                ("cell_ref", models.CharField(max_length=10)),
+                (
+                    "datamap",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="datamap.Datamap",
+                    ),
+                ),
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='datamapline',
-            unique_together={('datamap', 'sheet', 'cell_ref')},
+            name="datamapline",
+            unique_together={("datamap", "sheet", "cell_ref")},
         ),
         migrations.AlterUniqueTogether(
-            name='datamap',
-            unique_together={('name', 'tier')},
+            name="datamap",
+            unique_together={("name", "tier")},
         ),
     ]

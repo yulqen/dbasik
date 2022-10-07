@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('register', '0008_auto_20181122_1653'),
-        ('returns', '0007_auto_20181127_0554'),
+        ("register", "0008_auto_20181122_1653"),
+        ("returns", "0007_auto_20181127_0554"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='returnitem',
-            name='value_datetime',
+            model_name="returnitem",
+            name="value_datetime",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterUniqueTogether(
-            name='return',
-            unique_together={('project', 'financial_quarter')},
+            name="return",
+            unique_together={("project", "financial_quarter")},
         ),
     ]

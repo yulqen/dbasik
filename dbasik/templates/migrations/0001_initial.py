@@ -8,18 +8,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Template',
+            name="Template",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(max_length=200)),
-                ('source_file', models.FilePathField()),
-                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, populate_from=['name'])),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(max_length=200)),
+                ("source_file", models.FilePathField()),
+                (
+                    "slug",
+                    django_extensions.db.fields.AutoSlugField(
+                        blank=True, editable=False, populate_from=["name"]
+                    ),
+                ),
             ],
         ),
     ]

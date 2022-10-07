@@ -6,7 +6,6 @@ from dbasik.register.models import Tier
 
 
 class DatamapModelTests(TestCase):
-
     def test_bad_cell_ref(self):
         dml = DatamapLine(
             datamap=Datamap.objects.create(

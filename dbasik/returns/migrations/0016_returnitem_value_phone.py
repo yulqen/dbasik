@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('returns', '0015_alter_returnitem_value_int'),
+        ("returns", "0015_alter_returnitem_value_int"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='returnitem',
-            name='value_phone',
-            field=models.CharField(blank=True, default='', max_length=45, null=True),
+            model_name="returnitem",
+            name="value_phone",
+            field=models.CharField(blank=True, default="", max_length=45, null=True),
         ),
     ]

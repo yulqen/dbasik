@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('datamap', '0005_auto_20180603_1012'),
+        ("datamap", "0005_auto_20180603_1012"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='datamapline',
-            name='max_length',
+            model_name="datamapline",
+            name="max_length",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

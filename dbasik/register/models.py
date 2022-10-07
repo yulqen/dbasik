@@ -7,6 +7,7 @@ from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 
 from dbasik.users.models import DfTGroup
+
 # from users.models import Employee
 from dbasik.users.models import Organisation
 
@@ -39,6 +40,7 @@ class AppModel(models.Model):
 # app classes#
 ##############
 
+
 class FinancialQuarter(AppModel):
     quarter = models.IntegerField()
     year = models.IntegerField()
@@ -50,7 +52,7 @@ class FinancialQuarter(AppModel):
         return self.label
 
     class Meta:
-        ordering = ['start_date']
+        ordering = ["start_date"]
 
 
 @receiver(post_save, sender=FinancialQuarter)
@@ -77,11 +79,11 @@ def calculate_start_end_date_receiver(sender, instance, created, **kwargs):
 
 class ProjectType(AppModel):
     name = models.CharField(max_length=50, blank=False, unique=True)
-    slug = AutoSlugField(populate_from=['name'])
+    slug = AutoSlugField(populate_from=["name"])
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:projecttype_detail', args=[str(self.slug)])
+        return reverse("register:projecttype_detail", args=[str(self.slug)])
 
     def __str__(self):
         return self.name
@@ -89,11 +91,11 @@ class ProjectType(AppModel):
 
 class Tier(AppModel):
     name = models.CharField(max_length=25, blank=False)
-    slug = AutoSlugField(populate_from=['name'])
+    slug = AutoSlugField(populate_from=["name"])
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:tier_list')
+        return reverse("register:tier_list")
 
     def __str__(self):
         return self.name
@@ -101,11 +103,11 @@ class Tier(AppModel):
 
 class ProjectStage(AppModel):
     name = models.CharField(max_length=100, blank=False)
-    slug = AutoSlugField(populate_from=['name'])
+    slug = AutoSlugField(populate_from=["name"])
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:projectstage_list')
+        return reverse("register:projectstage_list")
 
     def __str__(self):
         return self.name
@@ -113,11 +115,11 @@ class ProjectStage(AppModel):
 
 class StrategicAlignment(AppModel):
     name = models.CharField(max_length=100, blank=False)
-    slug = AutoSlugField(populate_from=['name'])
+    slug = AutoSlugField(populate_from=["name"])
     description = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:strategicalignment_list')
+        return reverse("register:strategicalignment_list")
 
     def __str__(self):
         return self.name
@@ -210,7 +212,9 @@ class PortfolioInitialisation(AppModel):
     project_methodology = models.TextField()
     start_date_at_initialisation = models.DateField(blank=True, null=True)
     planned_end_date_at_initialisation = models.DateField(blank=True, null=True)
-    key_milestones = models.ManyToManyField(Milestone, related_name="pi_initial_milestones")
+    key_milestones = models.ManyToManyField(
+        Milestone, related_name="pi_initial_milestones"
+    )
     sobc_approval = models.DateField(blank=True, null=True)
     obc_approval = models.DateField(blank=True, null=True)
     fbc_approval = models.DateField(blank=True, null=True)
@@ -218,29 +222,34 @@ class PortfolioInitialisation(AppModel):
     start_of_construction_build_at_initialisation = models.DateField(
         blank=True, null=True
     )
-    initial_project_assurance_milestones = models.ManyToManyField(Milestone, related_name="initial_milestones")
+    initial_project_assurance_milestones = models.ManyToManyField(
+        Milestone, related_name="initial_milestones"
+    )
 
 
 # pared-down class for prototype using existing objects
 
+
 class Project(AppModel):
     name = models.CharField(max_length=255, blank=False)
-    slug = AutoSlugField(populate_from=['name'])
+    slug = AutoSlugField(populate_from=["name"])
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
     project_type = models.ForeignKey(ProjectType, on_delete=models.CASCADE, null=True)
     stage = models.ForeignKey(ProjectStage, on_delete=models.CASCADE, null=True)
     abbreviation = models.CharField(max_length=20, null=False, blank=False)
-    dft_group = models.ForeignKey(DfTGroup, on_delete=models.CASCADE, null=False, blank=False)
+    dft_group = models.ForeignKey(
+        DfTGroup, on_delete=models.CASCADE, null=False, blank=False
+    )
     gmpp = models.BooleanField(default=False, null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('register:project_list')
+        return reverse("register:project_list")
 
     def __str__(self):
         return self.name
 
 
-#class Project(AppModel):
+# class Project(AppModel):
 #    name = models.CharField(max_length=255, blank=False)
 #    dependencies = models.ManyToManyField("Project", blank=True)
 #    mandate = models.OneToOneField(Mandate, on_delete=models.CASCADE)

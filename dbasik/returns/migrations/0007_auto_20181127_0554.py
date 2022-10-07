@@ -7,18 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('datamap', '0007_auto_20181116_1552'),
-        ('returns', '0006_auto_20181127_0547'),
+        ("datamap", "0007_auto_20181116_1552"),
+        ("returns", "0006_auto_20181127_0547"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='return',
-            name='datamap',
+            model_name="return",
+            name="datamap",
         ),
         migrations.AddField(
-            model_name='returnitem',
-            name='datamapline',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='return_datamaplines', to='datamap.DatamapLine'),
+            model_name="returnitem",
+            name="datamapline",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="return_datamaplines",
+                to="datamap.DatamapLine",
+            ),
         ),
     ]

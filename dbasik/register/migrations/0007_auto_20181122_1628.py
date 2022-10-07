@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('register', '0006_auto_20181122_1610'),
+        ("register", "0006_auto_20181122_1610"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='financialquarter',
-            options={'ordering': ['start_date']},
+            name="financialquarter",
+            options={"ordering": ["start_date"]},
         ),
         migrations.AlterField(
-            model_name='financialquarter',
-            name='end_date',
+            model_name="financialquarter",
+            name="end_date",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='financialquarter',
-            name='start_date',
+            model_name="financialquarter",
+            name="start_date",
             field=models.DateField(blank=True, null=True),
         ),
     ]

@@ -10,240 +10,482 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Classification',
+            name="Classification",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Constraint',
+            name="Constraint",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Deliverable',
+            name="Deliverable",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Mandate',
+            name="Mandate",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('current_position', models.TextField(blank=True)),
-                ('critical_success_factor', models.TextField(blank=True)),
-                ('external_organisations_affected', models.ManyToManyField(to='users.Organisation')),
-                ('internal_organisations_affected', models.ManyToManyField(to='users.DfTGroup')),
-                ('known_constraints', models.ManyToManyField(to='register.Constraint')),
-                ('major_deliverables', models.ManyToManyField(to='register.Deliverable')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("current_position", models.TextField(blank=True)),
+                ("critical_success_factor", models.TextField(blank=True)),
+                (
+                    "external_organisations_affected",
+                    models.ManyToManyField(to="users.Organisation"),
+                ),
+                (
+                    "internal_organisations_affected",
+                    models.ManyToManyField(to="users.DfTGroup"),
+                ),
+                ("known_constraints", models.ManyToManyField(to="register.Constraint")),
+                (
+                    "major_deliverables",
+                    models.ManyToManyField(to="register.Deliverable"),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Milestone',
+            name="Milestone",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('date', models.DateField()),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("date", models.DateField()),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Objective',
+            name="Objective",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='PortfolioInitialisation',
+            name="PortfolioInitialisation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('portfolio_reference', models.CharField(blank=True, max_length=5)),
-                ('project_methodology', models.TextField()),
-                ('start_date_at_initialisation', models.DateField(blank=True, null=True)),
-                ('planned_end_date_at_initialisation', models.DateField(blank=True, null=True)),
-                ('sobc_approval', models.DateField(blank=True, null=True)),
-                ('obc_approval', models.DateField(blank=True, null=True)),
-                ('fbc_approval', models.DateField(blank=True, null=True)),
-                ('start_of_operations_at_initialisation', models.DateField(blank=True, null=True)),
-                ('start_of_construction_build_at_initialisation', models.DateField(blank=True, null=True)),
-                ('classification', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='register.Classification')),
-                ('initial_project_assurance_milestones', models.ManyToManyField(related_name='initial_milestones', to='register.Milestone')),
-                ('key_milestones', models.ManyToManyField(related_name='pi_initial_milestones', to='register.Milestone')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("portfolio_reference", models.CharField(blank=True, max_length=5)),
+                ("project_methodology", models.TextField()),
+                (
+                    "start_date_at_initialisation",
+                    models.DateField(blank=True, null=True),
+                ),
+                (
+                    "planned_end_date_at_initialisation",
+                    models.DateField(blank=True, null=True),
+                ),
+                ("sobc_approval", models.DateField(blank=True, null=True)),
+                ("obc_approval", models.DateField(blank=True, null=True)),
+                ("fbc_approval", models.DateField(blank=True, null=True)),
+                (
+                    "start_of_operations_at_initialisation",
+                    models.DateField(blank=True, null=True),
+                ),
+                (
+                    "start_of_construction_build_at_initialisation",
+                    models.DateField(blank=True, null=True),
+                ),
+                (
+                    "classification",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="register.Classification",
+                    ),
+                ),
+                (
+                    "initial_project_assurance_milestones",
+                    models.ManyToManyField(
+                        related_name="initial_milestones", to="register.Milestone"
+                    ),
+                ),
+                (
+                    "key_milestones",
+                    models.ManyToManyField(
+                        related_name="pi_initial_milestones", to="register.Milestone"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('mandate_active', models.BooleanField(default=False)),
-                ('start_date', models.DateField(blank=True, null=True)),
-                ('planned_end_date', models.DateField(blank=True, null=True)),
-                ('baseline_wlc', models.FloatField(blank=True, null=True)),
-                ('agency_delivery_partner', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='users.Organisation')),
-                ('dependencies', models.ManyToManyField(blank=True, to='register.Project')),
-                ('dft_group', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='users.DfTGroup')),
-                ('director', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_director', to='users.Employee')),
-                ('mandate', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='register.Mandate')),
-                ('portfolio_initialisation', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='project_portfolio_initialisation', to='register.PortfolioInitialisation')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("mandate_active", models.BooleanField(default=False)),
+                ("start_date", models.DateField(blank=True, null=True)),
+                ("planned_end_date", models.DateField(blank=True, null=True)),
+                ("baseline_wlc", models.FloatField(blank=True, null=True)),
+                (
+                    "agency_delivery_partner",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.Organisation",
+                    ),
+                ),
+                (
+                    "dependencies",
+                    models.ManyToManyField(blank=True, to="register.Project"),
+                ),
+                (
+                    "dft_group",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.DfTGroup",
+                    ),
+                ),
+                (
+                    "director",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="project_director",
+                        to="users.Employee",
+                    ),
+                ),
+                (
+                    "mandate",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="register.Mandate",
+                    ),
+                ),
+                (
+                    "portfolio_initialisation",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="project_portfolio_initialisation",
+                        to="register.PortfolioInitialisation",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='ProjectStage',
+            name="ProjectStage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, populate_from=['name'])),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "slug",
+                    django_extensions.db.fields.AutoSlugField(
+                        blank=True, editable=False, populate_from=["name"]
+                    ),
+                ),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='ProjectType',
+            name="ProjectType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True)),
-                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, populate_from=['name'])),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, unique=True)),
+                (
+                    "slug",
+                    django_extensions.db.fields.AutoSlugField(
+                        blank=True, editable=False, populate_from=["name"]
+                    ),
+                ),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='RAGColour',
+            name="RAGColour",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('colour', models.CharField(max_length=10)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("colour", models.CharField(max_length=10)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='RiskRPA',
+            name="RiskRPA",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('background', models.TextField(blank=True)),
-                ('color', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='register.RAGColour')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("background", models.TextField(blank=True)),
+                (
+                    "color",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="register.RAGColour",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='StrategicAlignment',
+            name="StrategicAlignment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='StrategicOutcome',
+            name="StrategicOutcome",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Tier',
+            name="Tier",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=25)),
-                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, populate_from=['name'])),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=25)),
+                (
+                    "slug",
+                    django_extensions.db.fields.AutoSlugField(
+                        blank=True, editable=False, populate_from=["name"]
+                    ),
+                ),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AddField(
-            model_name='project',
-            name='project_type',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='register.ProjectType'),
+            model_name="project",
+            name="project_type",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="register.ProjectType",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='sro',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='project_sro', to='users.Employee'),
+            model_name="project",
+            name="sro",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="project_sro",
+                to="users.Employee",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='stage',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='register.ProjectStage'),
+            model_name="project",
+            name="stage",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="register.ProjectStage",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='tier',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='register.Tier'),
+            model_name="project",
+            name="tier",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="register.Tier"
+            ),
         ),
         migrations.AddField(
-            model_name='portfolioinitialisation',
-            name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='register.Project'),
+            model_name="portfolioinitialisation",
+            name="project",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="register.Project"
+            ),
         ),
         migrations.AddField(
-            model_name='portfolioinitialisation',
-            name='rpa_rating',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='register.RiskRPA'),
+            model_name="portfolioinitialisation",
+            name="rpa_rating",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="register.RiskRPA",
+            ),
         ),
         migrations.AddField(
-            model_name='mandate',
-            name='objectives',
-            field=models.ManyToManyField(to='register.Objective'),
+            model_name="mandate",
+            name="objectives",
+            field=models.ManyToManyField(to="register.Objective"),
         ),
         migrations.AddField(
-            model_name='mandate',
-            name='strategic_outcomes',
-            field=models.ManyToManyField(to='register.StrategicOutcome'),
+            model_name="mandate",
+            name="strategic_outcomes",
+            field=models.ManyToManyField(to="register.StrategicOutcome"),
         ),
     ]

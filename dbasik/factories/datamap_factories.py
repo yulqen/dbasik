@@ -21,7 +21,7 @@ class TierFactory(factory.django.DjangoModelFactory):
 class DatamapFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Datamap
-        django_get_or_create = ('name', 'tier')
+        django_get_or_create = ("name", "tier")
 
     name = "Test Datamap from Factory"
     tier = factory.SubFactory(TierFactory)
@@ -41,7 +41,7 @@ class ProjectTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProjectType
 
-    name = factory.Faker('name')
+    name = factory.Faker("name")
 
 
 class DfTGroupFactory(factory.django.DjangoModelFactory):

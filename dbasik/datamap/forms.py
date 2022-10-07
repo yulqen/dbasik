@@ -6,7 +6,15 @@ from django.urls import reverse
 from dbasik.datamap.validators import file_validator, cell_ref_validator
 from .models import Datamap, DatamapLine
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, ButtonHolder, Fieldset, Button, Hidden, Field
+from crispy_forms.layout import (
+    Submit,
+    Layout,
+    ButtonHolder,
+    Fieldset,
+    Button,
+    Hidden,
+    Field,
+)
 
 
 class CSVForm(forms.ModelForm):

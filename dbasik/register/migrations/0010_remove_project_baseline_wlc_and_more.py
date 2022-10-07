@@ -7,41 +7,45 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_dftdivision_id_alter_dftgroup_id_and_more'),
-        ('register', '0009_alter_classification_id_alter_constraint_id_and_more'),
+        ("users", "0002_alter_dftdivision_id_alter_dftgroup_id_and_more"),
+        ("register", "0009_alter_classification_id_alter_constraint_id_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='project',
-            name='baseline_wlc',
+            model_name="project",
+            name="baseline_wlc",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='dependencies',
+            model_name="project",
+            name="dependencies",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='planned_end_date',
+            model_name="project",
+            name="planned_end_date",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='start_date',
+            model_name="project",
+            name="start_date",
         ),
         migrations.AddField(
-            model_name='project',
-            name='abbreviation',
-            field=models.CharField(default='ABB', max_length=20),
+            model_name="project",
+            name="abbreviation",
+            field=models.CharField(default="ABB", max_length=20),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='project',
-            name='dft_group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='users.dftgroup'),
+            model_name="project",
+            name="dft_group",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="users.dftgroup",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='gmpp',
+            model_name="project",
+            name="gmpp",
             field=models.BooleanField(blank=True, default=False, null=True),
         ),
     ]

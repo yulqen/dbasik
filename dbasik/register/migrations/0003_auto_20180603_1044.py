@@ -7,41 +7,43 @@ import django_extensions.db.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('register', '0002_strategicalignment_slug'),
+        ("register", "0002_strategicalignment_slug"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='project',
-            name='agency_delivery_partner',
+            model_name="project",
+            name="agency_delivery_partner",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='dft_group',
+            model_name="project",
+            name="dft_group",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='director',
+            model_name="project",
+            name="director",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='mandate',
+            model_name="project",
+            name="mandate",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='mandate_active',
+            model_name="project",
+            name="mandate_active",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='portfolio_initialisation',
+            model_name="project",
+            name="portfolio_initialisation",
         ),
         migrations.RemoveField(
-            model_name='project',
-            name='sro',
+            model_name="project",
+            name="sro",
         ),
         migrations.AddField(
-            model_name='project',
-            name='slug',
-            field=django_extensions.db.fields.AutoSlugField(blank=True, editable=False, populate_from=['name']),
+            model_name="project",
+            name="slug",
+            field=django_extensions.db.fields.AutoSlugField(
+                blank=True, editable=False, populate_from=["name"]
+            ),
         ),
     ]

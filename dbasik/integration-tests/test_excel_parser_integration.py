@@ -230,49 +230,50 @@ class ExcelParserIntegrationTests(TestCase):
 
 
 class ExcelParserExceptionHandling(TestCase):
-        """
-        This tests strange exception when opening openpyxl opens a badly
-        formed template and immediately wants to import PIL for some reason.
+    """
+    This tests strange exception when opening openpyxl opens a badly
+    formed template and immediately wants to import PIL for some reason.
 
-        The bad spreadsheet must be kept locally for test to run.
-        """
-        def setUp(self):
-            self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
-            self.project = ProjectFactory()
-            self.datamap = DatamapFactory()
-            self.return_obj = Return.objects.create(
-                project=self.project, financial_quarter=self.financial_quarter
-            )
-            DatamapLine.objects.create(
-                datamap=self.datamap,
-                key="Project Name",
-                sheet="Test Sheet 1",
-                cell_ref="B1",
-            )
-            DatamapLine.objects.create(
-                datamap=self.datamap, key="Total Cost", sheet="Test Sheet 1", cell_ref="B2"
-            )
-            DatamapLine.objects.create(
-                datamap=self.datamap, key="SRO", sheet="Test Sheet 1", cell_ref="B3"
-            )
-            DatamapLine.objects.create(
-                datamap=self.datamap,
-                key="SRO Retirement Date",
-                sheet="Test Sheet 1",
-                cell_ref="B4",
-            )
-            DatamapLine.objects.create(
-                datamap=self.datamap,
-                key="Janitor's Favourite Colour",
-                sheet="Test Sheet 2",
-                cell_ref="B1",
-            )
+    The bad spreadsheet must be kept locally for test to run.
+    """
 
-            self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/does_not_open_workbook.xlsm"
+    def setUp(self):
+        self.financial_quarter = FinancialQuarter.objects.create(quarter=4, year=2018)
+        self.project = ProjectFactory()
+        self.datamap = DatamapFactory()
+        self.return_obj = Return.objects.create(
+            project=self.project, financial_quarter=self.financial_quarter
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Project Name",
+            sheet="Test Sheet 1",
+            cell_ref="B1",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="Total Cost", sheet="Test Sheet 1", cell_ref="B2"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap, key="SRO", sheet="Test Sheet 1", cell_ref="B3"
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="SRO Retirement Date",
+            sheet="Test Sheet 1",
+            cell_ref="B4",
+        )
+        DatamapLine.objects.create(
+            datamap=self.datamap,
+            key="Janitor's Favourite Colour",
+            sheet="Test Sheet 2",
+            cell_ref="B1",
+        )
 
-        def test_throws_exception(self):
-            with self.assertRaises(ImportError, msg="Hmm"):
-                parsed_spreadsheet = ParsedSpreadsheet(
+        self.populated_template = "/home/lemon/code/python/dbasik-dev/dbasik-dftgovernance/excelparser/tests/does_not_open_workbook.xlsm"
+
+    def test_throws_exception(self):
+        with self.assertRaises(ImportError, msg="Hmm"):
+            parsed_spreadsheet = ParsedSpreadsheet(
                 template_path=self.populated_template,
                 project=self.project,
                 return_obj=self.return_obj,

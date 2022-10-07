@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_dftdivision_id_alter_dftgroup_id_and_more'),
-        ('register', '0010_remove_project_baseline_wlc_and_more'),
+        ("users", "0002_alter_dftdivision_id_alter_dftgroup_id_and_more"),
+        ("register", "0010_remove_project_baseline_wlc_and_more"),
     ]
-

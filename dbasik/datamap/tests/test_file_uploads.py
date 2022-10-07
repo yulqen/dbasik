@@ -16,8 +16,7 @@ class TestDuplicateCSVLines(TestCase):
             f.write("Second row col 1,Sheetname,A15\n")
             f.write("Third row col 1,Other Sheetname,A16\n")
             self.expected_str = (
-                "Check duplicated lines:\n"
-                "Second row col 1: Sheetname, A15\n"
+                "Check duplicated lines:\n" "Second row col 1: Sheetname, A15\n"
             )
 
     def test_duplicate_lines(self):
