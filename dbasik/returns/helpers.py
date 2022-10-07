@@ -3,10 +3,9 @@ from inspect import getmembers
 from typing import List, Tuple, Union
 
 from dbasik.datamap.models import Datamap
-from openpyxl import Workbook, utils
 from dbasik.register.models import FinancialQuarter
-
 from dbasik.returns.models import ReturnItem
+from openpyxl import Workbook, utils
 
 RETURN_ITEM_PARM_STRS = [
     "value_str",

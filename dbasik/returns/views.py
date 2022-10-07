@@ -1,7 +1,14 @@
 import logging
 import os
+import tempfile
 from typing import List
 
+# from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
+from dbasik.register.models import FinancialQuarter, Project
+from dbasik.returns.forms import ReturnBatchCreateForm, ReturnCreateForm
+from dbasik.returns.helpers import generate_master
+from dbasik.returns.models import Return, ReturnItem
+from dbasik.returns.tasks import process_batch as process
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,15 +17,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView
-
-# from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
-from dbasik.register.models import FinancialQuarter, Project
 from rest_framework import viewsets
-
-from dbasik.returns.forms import ReturnBatchCreateForm, ReturnCreateForm
-from dbasik.returns.helpers import generate_master
-from dbasik.returns.models import Return, ReturnItem
-from dbasik.returns.tasks import process_batch as process
 
 from .serializers import ReturnItemSerializer, ReturnSerializer
 
@@ -118,6 +117,7 @@ class ReturnBatchCreate(LoginRequiredMixin, FormView):
 
 def download_master(request, fqid: int):
     fq = FinancialQuarter.objects.get(pk=fqid)
+
     # TODO - for now we assume the datamap is the same
     # for all returns, but as long as we allow uploading
     # of seperate returns, the datamap could be different
@@ -128,7 +128,9 @@ def download_master(request, fqid: int):
     first_return_obj_item = return_obj_sample.return_returnitems.first()
     datamap = first_return_obj_item.datamapline.datamap
     file_name = f"Master_for_Q{fq.quarter}_{fq.year}.xlsx"
-    save_path = os.path.join(settings.MEDIA_ROOT, "downloads", file_name)
+
+    # TODO - test if downloads is there and if not, create it
+    save_path = os.path.join(tempfile.mkdtemp(), file_name)
     generate_master(fq, save_path, datamap)
     with open(save_path, "rb") as excel:
         data = excel.read()
