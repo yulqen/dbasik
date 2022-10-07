@@ -1,16 +1,11 @@
-import string
-import os
+from celery import shared_task
 
 from celery import shared_task
-from django.conf import settings
-from django.http import HttpResponseRedirect
-from django.utils.crypto import get_random_string
-from django.core.files.storage import default_storage
 
-from dbasik.register.models import FinancialQuarter, ProjectStage, Project
-from dbasik.returns.models import Return
-from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
 from dbasik.datamap.models import Datamap
+from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
+from dbasik.register.models import FinancialQuarter, Project
+from dbasik.returns.models import Return
 
 
 @shared_task

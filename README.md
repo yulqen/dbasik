@@ -1,9 +1,9 @@
 # dbasik
 
-
 ## TODO
 
-- Get celery running.
+- Get celery running. Like this: `celery -A dbasik.config worker --loglevel=INFO`. Never forget this - again.
+- Check out [Algolia](https://www.algolia.com/doc/).
 
 
 ## Revising the application in 2022
