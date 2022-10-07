@@ -1,17 +1,16 @@
 import logging
 import os
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from dbasik.excelparser.forms import ProcessPopulatedTemplateForm
+from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
 from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-
-from dbasik.excelparser.forms import ProcessPopulatedTemplateForm
-from dbasik.excelparser.helpers.parser import ParsedSpreadsheet
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

@@ -5,10 +5,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 from dbasik.datamap.models import DatamapLine
-from factories.datamap_factories import DatamapFactory
-from factories.datamap_factories import ProjectFactory
+from dbasik.factories.datamap_factories import DatamapFactory
+from dbasik.factories.datamap_factories import ProjectFactory
 from dbasik.register.models import FinancialQuarter
-from returns.models import Return
+from dbasik.returns.models import Return
 
 
 class TestExcelParserViews(TestCase):

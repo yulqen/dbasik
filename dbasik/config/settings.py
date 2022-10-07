@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("DBASIK_SECRET_KEY")
 
 DJANGO_SETTINGS_MODULE = os.environ.get("DJANGO_SETTINGS_MODULE")
 
@@ -109,7 +109,7 @@ USE_TZ = True
 STATIC_URL = "/static/static/"
 MEDIA_URL = "/static/media/"
 
-MEDIA_ROOT = "/var/www/dbasik/"
+MEDIA_ROOT = "/tmp/dbasik/"
 STATIC_ROOT = "/vol/web/static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -6,7 +6,6 @@ class AppQuerySet(models.QuerySet):
 
 
 class AppManager(models.Manager):
-
     queryset_class = AppQuerySet
 
     def get_query(self):
@@ -26,7 +25,6 @@ class Organisation(AppModel):
 
     def __str__(self):
         return self.name
-
 
 
 class DfTGroup(AppModel):
@@ -56,7 +54,6 @@ class Employee(AppModel):
     mobile = models.CharField(max_length=12)
     landline = models.CharField(max_length=25)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
 
     def __str__(self):
         return " ".join([self.first_name, self.last_name])

@@ -1,5 +1,11 @@
 # dbasik
 
+
+## TODO
+
+- Get celery running.
+
+
 ## Revising the application in 2022
 
 The objective here is to deploy the application using Docker in 2022. Because I don't know Docker, this is a learning experience and the K.I.S.S principle applies in handfuls.

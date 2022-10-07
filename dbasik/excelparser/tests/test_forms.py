@@ -5,13 +5,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from dbasik.datamap.models import DatamapLine
-from excelparser.helpers.financial_quarter import check_date_in_quarter
-from factories.datamap_factories import DatamapFactory
-from factories.datamap_factories import ProjectFactory
-
+from dbasik.excelparser.forms import ProcessPopulatedTemplateForm
+from dbasik.excelparser.helpers.financial_quarter import check_date_in_quarter
+from dbasik.factories.datamap_factories import DatamapFactory
+from dbasik.factories.datamap_factories import ProjectFactory
 from dbasik.register.models import FinancialQuarter
-from returns.models import Return
-from excelparser.forms import ProcessPopulatedTemplateForm
+from dbasik.returns.models import Return
 
 
 class UploadPopulatedTemplateTests(TestCase):
@@ -35,7 +34,6 @@ class UploadPopulatedTemplateTests(TestCase):
         #     self.form.fields["source_file"].label == "Source file"
         #     or self.form.fields["source_file"].label is None
         # )
-
 
     def test_valid_form(self):
         f = open(self.populated_template, "rb")

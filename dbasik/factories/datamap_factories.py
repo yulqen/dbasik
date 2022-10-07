@@ -6,6 +6,7 @@ from dbasik.register.models import Project
 from dbasik.register.models import ProjectStage
 from dbasik.register.models import ProjectType
 from dbasik.register.models import Tier
+from dbasik.users.models import DfTGroup
 
 
 class TierFactory(factory.django.DjangoModelFactory):
@@ -43,6 +44,13 @@ class ProjectTypeFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('name')
 
 
+class DfTGroupFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = DfTGroup
+
+    name = "Test DfTGroup from Factory"
+
+
 class ProjectStageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProjectStage
@@ -58,3 +66,4 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     tier = factory.SubFactory(TierFactory)
     project_type = factory.SubFactory(ProjectTypeFactory)
     stage = factory.SubFactory(ProjectStageFactory)
+    dft_group = factory.SubFactory(DfTGroupFactory)
