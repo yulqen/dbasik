@@ -59,9 +59,11 @@ class TestErroneousFigure(TestCase):
     def test_return_1m_ok(self):
         """testing 1_000_000 is fine."""
         self.parsed_spreadsheet.process()
-        return_items = Return.objects.get(
-            id=self.return_obj.id
-        ).return_returnitems.all()
+        return_items = (
+            Return.objects.get(id=self.return_obj.id)
+            .return_returnitems.all()
+            .order_by("datamapline_id")
+        )
         poc_r = return_items[0]
         self.assertEqual(poc_r.datamapline.key, "PoC email")
         self.assertEqual(poc_r.value_int, 1_000_000)
