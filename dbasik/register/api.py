@@ -15,7 +15,7 @@ class TierSchema(ModelSchema):
 
 
 @router.get("/tiers/{tier_id}", response=TierSchema)
-def tiers(request, tier_id: int):
+def tier(request, tier_id: int):
     return get_object_or_404(Tier, id=tier_id)
 
 
