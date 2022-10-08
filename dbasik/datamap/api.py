@@ -20,7 +20,7 @@ class DatamapSchema(ModelSchema):
 
 
 @router.get("/datamap", response=List[DatamapLineSchema])
-def datamap_detail_api(request, slug: str):
+def datamap(request, slug: str):
     return DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
 
 
