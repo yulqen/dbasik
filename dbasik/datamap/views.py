@@ -1,9 +1,7 @@
 import csv
 import logging
 from collections import OrderedDict
-from typing import List
 
-from dbasik.core.api import api
 from dbasik.datamap.helpers import parse_kwargs_to_error_string
 from dbasik.register.models import Tier
 from django.contrib import messages
@@ -16,8 +14,6 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
-from ninja import ModelSchema
-from rest_framework import viewsets
 
 from .forms import (
     CSVForm,
@@ -27,7 +23,6 @@ from .forms import (
     UploadDatamap,
 )
 from .models import Datamap, DatamapLine
-from .serializers import DatamapLineSerializer, DatamapSerializer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -67,28 +62,6 @@ class DatamapCreate(LoginRequiredMixin, CreateView):
         existing_objects = Datamap.objects.all()
         context["existing_objects"] = existing_objects
         return context
-
-
-class DatamapLineSchema(ModelSchema):
-    class Config:
-        model = DatamapLine
-        model_fields = ["id", "datamap", "key", "data_type", "sheet", "cell_ref"]
-
-
-class DatamapSchema(ModelSchema):
-    class Config:
-        model = Datamap
-        model_fields = ["id", "name", "tier", "active", "slug"]
-
-
-@api.get("/datamap", response=List[DatamapLineSchema])
-def datamap_detail_api(request, slug: str):
-    return DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
-
-
-@api.get("/datamaps", response=List[DatamapSchema])
-def datamaps(request):
-    return Datamap.objects.all()
 
 
 @login_required
