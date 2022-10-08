@@ -14,28 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from dbasik.datamap import views as dmviews
+from dbasik.register import views as regviews
+from dbasik.returns import views as retviews
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from dbasik.register import views as regviews
-from rest_framework import routers, serializers, viewsets
-from dbasik.returns import views as retviews
-
-# API routes
-router = routers.DefaultRouter()
-router.register(r"datamaps", dmviews.DatamapViewSet)
-router.register(r"datamaplines", dmviews.DatamapLineViewSet)
-router.register(r"tiers", regviews.TierViewSet)
-router.register(r"returns", retviews.ReturnViewSet)
-router.register(r"returnitems", retviews.ReturnItemViewSet)
-router.register(r"projects", regviews.ProjectViewSet)
-router.register(r"financialquarters", regviews.FinancialQuarterViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api-auth/", include("rest_framework.urls")),
-    path("api/", include(router.urls)),
     path("accounts/", include("django.contrib.auth.urls")),
     path("", include("dbasik.core.urls")),
     path("datamaps/", include("dbasik.datamap.urls", namespace="datamaps")),

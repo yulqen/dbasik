@@ -1,7 +1,11 @@
 import csv
 import logging
 from collections import OrderedDict
+from typing import List
 
+from dbasik.core.api import api
+from dbasik.datamap.helpers import parse_kwargs_to_error_string
+from dbasik.register.models import Tier
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,9 +16,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
-
-from dbasik.datamap.helpers import parse_kwargs_to_error_string
-from dbasik.register.models import Tier
+from ninja import ModelSchema
 from rest_framework import viewsets
 
 from .forms import (
@@ -25,25 +27,10 @@ from .forms import (
     UploadDatamap,
 )
 from .models import Datamap, DatamapLine
-from .serializers import DatamapSerializer, DatamapLineSerializer
+from .serializers import DatamapLineSerializer, DatamapSerializer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-# API viewsets
-
-
-class DatamapLineViewSet(viewsets.ModelViewSet):
-    queryset = DatamapLine.objects.all()
-    serializer_class = DatamapLineSerializer
-
-
-class DatamapViewSet(viewsets.ModelViewSet):
-    queryset = Datamap.objects.all()
-    serializer_class = DatamapSerializer
-
-
-# datamap view functions
 
 
 class DatamapDelete(LoginRequiredMixin, DeleteView):
@@ -82,8 +69,30 @@ class DatamapCreate(LoginRequiredMixin, CreateView):
         return context
 
 
+class DatamapLineSchema(ModelSchema):
+    class Config:
+        model = DatamapLine
+        model_fields = ["id", "datamap", "key", "data_type", "sheet", "cell_ref"]
+
+
+class DatamapSchema(ModelSchema):
+    class Config:
+        model = Datamap
+        model_fields = ["id", "name", "tier", "active", "slug"]
+
+
+@api.get("/datamap", response=List[DatamapLineSchema])
+def datamap_detail_api(request, slug: str):
+    return DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
+
+
+@api.get("/datamaps", response=List[DatamapSchema])
+def datamaps(request):
+    return Datamap.objects.all()
+
+
 @login_required
-def datamap_detail(request, slug):
+def datamap_detail(request, slug: str):
     dm_lines = DatamapLine.objects.filter(datamap__slug=slug).order_by("id")
     dms = Datamap.objects.all()
     dm_name = Datamap.objects.get(slug=slug).name
