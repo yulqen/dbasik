@@ -3,6 +3,7 @@ from typing import List
 from dbasik.datamap.api import DatamapLineSchema
 from dbasik.register.api import FQSchema, ProjectSchema
 from dbasik.returns.models import Return
+from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 
 router = Router()
@@ -29,3 +30,8 @@ class ReturnItemSchema(Schema):
 @router.get("/returns", response=List[ReturnSchema])
 def returns(request):
     return Return.objects.all()
+
+
+@router.get("/returns/{return_id}", response=ReturnSchema)
+def return_(request, return_id):
+    return get_object_or_404(Return, id=return_id)

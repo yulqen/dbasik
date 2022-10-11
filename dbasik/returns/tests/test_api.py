@@ -39,3 +39,10 @@ class TestReturnAPI(TestCase):
         """List of returns."""
         response = self.client.get("/api/returns/returns")
         self.assertEqual(response.status_code, 200)
+
+    def test_return(self):
+        """Single return by ID."""
+        response = self.client.get("/api/returns/returns/1")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["project"]["name"], "Test Project")
+        self.assertEqual(response.json()["financial_quarter"]["year"], 2022)
