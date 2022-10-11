@@ -72,3 +72,13 @@ def financialquarters(request):
 @router.get("/financialquarters/{fq_id}", response=FQSchema)
 def financialquarter(request, fq_id):
     return get_object_or_404(FinancialQuarter, id=fq_id)
+
+
+@router.get("/projecttypes", response=List[ProjectTypeSchema])
+def project_types(request):
+    return ProjectType.objects.all()
+
+
+@router.get("/projecttypes/{ptype_id}", response=ProjectTypeSchema)
+def project_types(request, ptype_id):
+    return get_object_or_404(ProjectType, id=ptype_id)
