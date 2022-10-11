@@ -1,7 +1,12 @@
+from dbasik.datamap.models import Datamap, DatamapLine
+from dbasik.factories.datamap_factories import (
+    ProjectFactory,
+    ProjectTypeFactory,
+    TierFactory,
+)
+from dbasik.register.models import FinancialQuarter
+from dbasik.returns.models import Return, ReturnItem
 from django.test import TestCase
-from dbasik.register.models import FinancialQuarter, Project, Tier
-from dbasik.returns.models import Return
-from dbasik.factories.datamap_factories import ProjectFactory, ProjectTypeFactory, TierFactory
 
 
 class TestReturnAPI(TestCase):
@@ -15,8 +20,22 @@ class TestReturnAPI(TestCase):
         cls.return_ = Return.objects.create(
             project=cls.project1, financial_quarter=cls.fq1
         )
+        cls.dm1 = Datamap.objects.create(
+            name="Test DM", tier=cls.tier1, active=True, slug="test-dm-test-tier-1"
+        )
+        cls.dml1 = DatamapLine.objects.create(
+            datamap=cls.dm1,
+            key="Test Key",
+            data_type="TEXT",
+            required=True,
+            sheet="Test Sheet",
+            cell_ref="A1",
+        )
+        cls.ri1 = ReturnItem.objects.create(
+            parent=cls.return_, datamapline=cls.dml1, value_str="Value String"
+        )
 
-    def test_returns_list(self):
-        # TODO(mlemon) - continue with this test
-        response = self.client.get("/returns/1")
+    def test_returns(self):
+        """List of returns."""
+        response = self.client.get("/api/returns/returns")
         self.assertEqual(response.status_code, 200)
