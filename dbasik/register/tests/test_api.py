@@ -1,11 +1,17 @@
-from dbasik.register.models import Tier
+from dbasik.factories.datamap_factories import (
+    ProjectFactory,
+    ProjectTypeFactory,
+    TierFactory,
+)
 from django.test import TestCase
 
 
 class TestRegisterAPIEndpoints(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.tier1 = Tier.objects.create(name="Tier 1")
+        cls.tier1 = TierFactory.create()
+        cls.project_type1 = ProjectTypeFactory.create()
+        cls.project1 = ProjectFactory.create()
 
     def test_tier_list(self):
         response = self.client.get("/api/register/tiers")
@@ -16,7 +22,6 @@ class TestRegisterAPIEndpoints(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["name"], "Tier 1")
 
-    # TODO(matt) work on this next it's failing
     def test_project_list(self):
-        response = self.client.get("/api/projects/")
+        response = self.client.get("/api/register/projects")
         self.assertEqual(response.status_code, 200)

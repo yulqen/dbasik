@@ -4,9 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from dbasik.returns.models import ReturnItem
 
 from dbasik.register.models import Project
@@ -26,29 +23,6 @@ from .models import (
     StrategicAlignment,
     Tier,
 )
-from .serializers import FinancialQuarterSerializer, ProjectSerializer, TierSerializer
-
-# API viewsets
-
-
-class TierViewSet(viewsets.ModelViewSet):
-    queryset = Tier.objects.all()
-    serializer_class = TierSerializer
-
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    """
-    List projects in the system.
-    """
-
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-
-
-class FinancialQuarterViewSet(viewsets.ModelViewSet):
-    queryset = FinancialQuarter.objects.all()
-    serializer_class = FinancialQuarterSerializer
-
 
 # regular views
 
