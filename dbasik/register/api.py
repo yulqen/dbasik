@@ -1,9 +1,9 @@
 from typing import List
 
 from django.shortcuts import get_object_or_404
-from ninja import ModelSchema, Router
+from ninja import ModelSchema, Router, Schema
 
-from .models import FinancialQuarter, Project, Tier
+from .models import FinancialQuarter, Project, ProjectStage, ProjectType, Tier
 
 router = Router()
 
@@ -14,10 +14,32 @@ class TierSchema(ModelSchema):
         model_fields = ["id", "name", "description", "slug"]
 
 
-class ProjectSchema(ModelSchema):
+class ProjectTypeSchema(ModelSchema):
     class Config:
-        model = Project
+        model = ProjectType
         model_fields = "__all__"
+
+
+class ProjectStageSchema(ModelSchema):
+    class Config:
+        model = ProjectStage
+        model_fields = "__all__"
+
+
+class ProjectSchema(Schema):
+    id: int
+    slug: str
+    name: str
+    project_type: ProjectTypeSchema = None
+    stage: ProjectStageSchema = None
+    abbreviation: str
+    tier: TierSchema = None  # optional, as per docs
+
+
+# class ProjectSchema(ModelSchema):
+#     class Config:
+#         model = Project
+#         model_fields = "__all__"
 
 
 class FQSchema(ModelSchema):
@@ -38,12 +60,14 @@ def tiers(request):
 
 @router.get("/projects", response=List[ProjectSchema])
 def projects(request):
-    return Project.objects.all()
+    queryset = Project.objects.select_related("tier")
+    return list(queryset)
 
 
 @router.get("/projects/{project_id}", response=ProjectSchema)
 def project(request, project_id):
-    return get_object_or_404(Project, id=project_id)
+    project = Project.objects.select_related("tier").get(id=project_id)
+    return project
 
 
 @router.get("/financialquarters", response=List[FQSchema])
