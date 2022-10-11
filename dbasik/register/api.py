@@ -36,12 +36,6 @@ class ProjectSchema(Schema):
     tier: TierSchema = None  # optional, as per docs
 
 
-# class ProjectSchema(ModelSchema):
-#     class Config:
-#         model = Project
-#         model_fields = "__all__"
-
-
 class FQSchema(ModelSchema):
     class Config:
         model = FinancialQuarter

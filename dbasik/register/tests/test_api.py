@@ -44,7 +44,3 @@ class TestRegisterAPIEndpoints(TestCase):
         response = self.client.get("/api/register/financialquarters/1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["year"], 2022)
-
-
-# TODO - test some django-ninja Nested Responses
-# e.g. get the full details of the Tier with Project
