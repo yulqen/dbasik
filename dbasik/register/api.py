@@ -3,7 +3,7 @@ from typing import List
 from django.shortcuts import get_object_or_404
 from ninja import ModelSchema, Router
 
-from .models import Project, Tier
+from .models import FinancialQuarter, Project, Tier
 
 router = Router()
 
@@ -17,6 +17,12 @@ class TierSchema(ModelSchema):
 class ProjectSchema(ModelSchema):
     class Config:
         model = Project
+        model_fields = "__all__"
+
+
+class FQSchema(ModelSchema):
+    class Config:
+        model = FinancialQuarter
         model_fields = "__all__"
 
 
@@ -38,3 +44,13 @@ def projects(request):
 @router.get("/projects/{project_id}", response=ProjectSchema)
 def project(request, project_id):
     return get_object_or_404(Project, id=project_id)
+
+
+@router.get("/financialquarters", response=List[FQSchema])
+def financialquarters(request):
+    return FinancialQuarter.objects.all()
+
+
+@router.get("/financialquarters/{fq_id}", response=FQSchema)
+def financialquarter(request, fq_id):
+    return get_object_or_404(FinancialQuarter, id=fq_id)
