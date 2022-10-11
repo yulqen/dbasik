@@ -33,3 +33,8 @@ def tiers(request):
 @router.get("/projects", response=List[ProjectSchema])
 def projects(request):
     return Project.objects.all()
+
+
+@router.get("/projects/{project_id}", response=ProjectSchema)
+def project(request, project_id):
+    return get_object_or_404(Project, id=project_id)
