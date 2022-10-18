@@ -4,10 +4,10 @@ import os
 from django.test import TestCase
 
 from dbasik.datamap.models import DatamapLine
-from factories.datamap_factories import DatamapFactory, ProjectFactory
+from dbasik.factories.datamap_factories import DatamapFactory, ProjectFactory
 from dbasik.register.models import FinancialQuarter
-from returns.models import Return, ReturnItem
-from returns.helpers import generate_master
+from dbasik.returns.models import Return, ReturnItem
+from dbasik.returns.helpers import generate_master
 
 from openpyxl import load_workbook
 from openpyxl import utils
