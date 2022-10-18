@@ -51,6 +51,7 @@ class TestReturnAPI(TestCase):
         """Grab all the returns for a FQ."""
         response = self.client.get("/api/returns/returns-for-quarter/1")
         self.assertEqual(response.status_code, 200)
+        # TODO: fix types
         self.assertEqual(
             response.json()[0]["parent"]["project"]["name"], self.project1.name
         )
