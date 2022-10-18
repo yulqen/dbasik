@@ -29,6 +29,7 @@ class ReturnItemSchema(Schema):
 
 @router.get("/returns", response=List[ReturnSchema])
 def returns(request):
+    """Top level Return items, without the data."""
     return Return.objects.all()
 
 
