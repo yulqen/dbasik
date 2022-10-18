@@ -2,7 +2,7 @@ from typing import List
 
 from dbasik.datamap.api import DatamapLineSchema
 from dbasik.register.api import FQSchema, ProjectSchema
-from dbasik.returns.models import Return
+from dbasik.returns.models import Return, ReturnItem
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 
@@ -27,7 +27,7 @@ class ReturnItemSchema(Schema):
     value_phone: str = None
 
 
-@router.get("/returns", response=List[ReturnSchema])
+@router.get("/returns", response=List[ReturnItemSchema])
 def returns(request):
     """Top level Return items, without the data."""
     return Return.objects.all()
@@ -36,3 +36,8 @@ def returns(request):
 @router.get("/returns/{return_id}", response=ReturnSchema)
 def return_(request, return_id):
     return get_object_or_404(Return, id=return_id)
+
+
+@router.get("/returns-for-quarter/{quarter_id}", response=List[ReturnItemSchema])
+def returns_for_quarter(request, quarter_id):
+    return ReturnItem.objects.filter(parent__financial_quarter=quarter_id)

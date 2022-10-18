@@ -46,3 +46,11 @@ class TestReturnAPI(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["project"]["name"], "Test Project")
         self.assertEqual(response.json()["financial_quarter"]["year"], 2022)
+
+    def test_returns_for_quarter(self):
+        """Grab all the returns for a FQ."""
+        response = self.client.get("/api/returns/returns-for-quarter/1")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()[0]["parent"]["project"]["name"], self.project1.name
+        )
