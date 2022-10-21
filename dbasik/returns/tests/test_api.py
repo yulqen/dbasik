@@ -31,8 +31,19 @@ class TestReturnAPI(TestCase):
             sheet="Test Sheet",
             cell_ref="A1",
         )
+        cls.dml2 = DatamapLine.objects.create(
+            datamap=cls.dm1,
+            key="Test Key 2",
+            data_type="NUMBER",
+            required=True,
+            sheet="Test Sheet",
+            cell_ref="A2",
+        )
         cls.ri1 = ReturnItem.objects.create(
             parent=cls.return_, datamapline=cls.dml1, value_str="Value String"
+        )
+        cls.ri1 = ReturnItem.objects.create(
+            parent=cls.return_, datamapline=cls.dml2, value_int=1
         )
 
     def test_returns(self):
