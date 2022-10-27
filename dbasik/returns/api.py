@@ -38,6 +38,7 @@ def return_(request, return_id):
     return get_object_or_404(Return, id=return_id)
 
 
-@router.get("/returns-for-quarter/{quarter_id}", response=List[ReturnItemSchema])
+@router.get("/returns-for-quarter/{quarter_id}",
+            response=List[ReturnItemSchema])
 def returns_for_quarter(request, quarter_id):
     return ReturnItem.objects.filter(parent__financial_quarter=quarter_id)
