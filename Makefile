@@ -3,7 +3,7 @@ export DBASIK_SECRET_KEY="toss"
 CMD="docker-compose" # this can be overridden on systems that use 'docker compose' plugin rather than 'docker-compose'
 
 test:
-	pythoqqn manage.py test
+	python manage.py test
 
 clean-rebuild-and-run:
 	$(CMD) -f $(COMPOSEFILE) down && $(CMD) -f $(COMPOSEFILE) up --build && $(CMD) -f $(COMPOSEFILE) run app sh -c "python manage.py creat_financial_quarters"
