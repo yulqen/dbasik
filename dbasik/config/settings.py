@@ -3,8 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = 'fiudhfjkajk1798qwdjdbjnsb'
-# SECRET_KEY = os.environ.get("DBASIK_SECRET_KEY")
+SECRET_KEY = os.environ.get("DBASIK_SECRET_KEY")
 
 DJANGO_SETTINGS_MODULE = os.environ.get("DJANGO_SETTINGS_MODULE")
 
