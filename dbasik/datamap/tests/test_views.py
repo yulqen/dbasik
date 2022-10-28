@@ -47,7 +47,7 @@ class CsvUploadViewTest(TestCase):
         self.client.force_login(self.user)
         with open(self.csv_file) as csv_f:
             response = self.client.post(
-                reverse("datamaps:uploaddatamap", args=["test-datamap-test-tier"]),
+                reverse("datamaps:uploaddatamap", args=["test-datamap"]),
                 {"replace_all_entries": 1, "uploaded_file": csv_f},
             )
         self.assertRedirects(

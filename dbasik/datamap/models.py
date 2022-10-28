@@ -12,7 +12,7 @@ class Datamap(models.Model):
     """A datamap in the system."""
 
     name = models.CharField(max_length=25)
-    tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
+    tier = models.ForeignKey(Tier, blank=True, null=True, on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
@@ -26,7 +26,7 @@ class Datamap(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify("-".join([self.name, self.tier.name]))
+        self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
 

@@ -35,11 +35,11 @@ class TestDatamapAPIEndpoints(TestCase):
         self.assertTrue(response.json()[0]["tier"]["name"], "Test Tier 1")
 
     def test_datamaplines(self):
-        response = self.client.get("/api/datamap/datamap?slug=test-datamap-1-tier-1")
+        response = self.client.get("/api/datamap/datamap?slug=test-datamap-1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()[0]["cell_ref"], "A1")
         self.assertEqual(response.json()[1]["cell_ref"], "A2")
         self.assertEqual(response.json()[0]["data_type"], "Text")  # this is default
         self.assertEqual(
-            response.json()[0]["datamap"]["slug"], "test-datamap-1-tier-1"
+            response.json()[0]["datamap"]["slug"], "test-datamap-1"
         )  # this is default

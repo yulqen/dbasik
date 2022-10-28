@@ -52,9 +52,9 @@ class DatamapCreate(LoginRequiredMixin, CreateView):
 
     def get_success_url(self, **kwargs):
         name_field = self.request.POST["name"]
-        tier_id = self.request.POST["tier"]
-        tier_name = get_object_or_404(Tier, pk=tier_id).name
-        slugged = slugify("-".join([name_field, tier_name]))
+        # tier_id = self.request.POST["tier"]
+        # tier_name = get_object_or_404(Tier, pk=tier_id).name
+        slugged = slugify(name_field)
         return reverse_lazy("datamaps:uploaddatamap", args=[slugged])
 
     def get_context_data(self, **kwargs):
