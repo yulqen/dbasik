@@ -4,6 +4,7 @@
 
 - Get celery running. Like this: `celery -A dbasik.config worker --loglevel=INFO`. Never forget this - again.
 - Check out [Algolia](https://www.algolia.com/doc/).
+- Sort make file. remove all cmds relating to docker etc. 
 
 
 ## Revising the application in 2022
