@@ -37,7 +37,7 @@ class CSVForm(forms.ModelForm):
 class DatamapForm(forms.ModelForm):
     class Meta:
         model = Datamap
-        fields = ["name", "tier", "active"]
+        fields = ["name", "active"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,7 +48,7 @@ class DatamapForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Field("name"),
-            Field("tier", style="width: 100%;"),
+            # Field("tier", style="width: 100%;"),
             ButtonHolder(
                 Submit("submit", "Submit", css_class="button"),
                 Button(

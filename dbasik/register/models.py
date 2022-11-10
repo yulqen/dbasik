@@ -240,7 +240,9 @@ class Project(AppModel):
     dft_group = models.ForeignKey(
         DfTGroup, on_delete=models.CASCADE, null=False, blank=False
     )
+    ## TODO add dft division
     gmpp = models.BooleanField(default=False, null=True, blank=True)
+    ## TODO add live (i.e. is project still live)
 
     def get_absolute_url(self):
         return reverse("register:project_list")

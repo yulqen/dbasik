@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from dbasik.datamap.api import DatamapLineSchema
@@ -22,8 +23,8 @@ class ReturnItemSchema(Schema):
     value_str: str = None
     value_int: int = None
     value_float: float = None
-    value_date: str = None
-    value_datetime: str = None
+    value_date: datetime.date = None
+    value_datetime: datetime.datetime = None
     value_phone: str = None
 
 
@@ -40,5 +41,5 @@ def return_(request, return_id):
 
 @router.get("/returns-for-quarter/{quarter_id}",
             response=List[ReturnItemSchema])
-def returns_for_quarter(request, quarter_id):
+def returns_for_quarter(request, quarter_id: int):
     return ReturnItem.objects.filter(parent__financial_quarter=quarter_id)
