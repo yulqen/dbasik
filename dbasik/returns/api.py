@@ -12,14 +12,14 @@ router = Router()
 
 class ReturnSchema(Schema):
     id: int
-    project: ProjectSchema = None
-    financial_quarter: FQSchema = None
+    project: ProjectSchema
+    financial_quarter: FQSchema
 
 
 class ReturnItemSchema(Schema):
     id: int
-    parent: ReturnSchema = None
-    datamapline: DatamapLineSchema = None
+    parent: ReturnSchema
+    datamapline: DatamapLineSchema
     value_str: str = None
     value_int: int = None
     value_float: float = None

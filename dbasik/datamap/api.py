@@ -17,14 +17,14 @@ router = Router()
 class DatamapSchema(Schema):
     id: int
     name: str
-    tier: TierSchema = None  # optional, as per ninja docs
+    tier: TierSchema
     active: bool
     slug: str
 
 
 class DatamapLineSchema(Schema):
     id: int
-    datamap: DatamapSchema = None
+    datamap: DatamapSchema
     key: str
     data_type: str
     sheet: str

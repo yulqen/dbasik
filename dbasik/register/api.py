@@ -30,10 +30,10 @@ class ProjectSchema(Schema):
     id: int
     slug: str
     name: str
-    project_type: ProjectTypeSchema = None
-    stage: ProjectStageSchema = None
+    project_type: ProjectTypeSchema
+    stage: ProjectStageSchema
     abbreviation: str
-    tier: TierSchema = None  # optional, as per docs
+    tier: TierSchema
 
 
 class FQSchema(ModelSchema):
