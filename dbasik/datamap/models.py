@@ -11,13 +11,13 @@ import uuid
 class Datamap(models.Model):
     """A datamap in the system."""
 
-    name = models.CharField(max_length=25)
-    tier = models.ForeignKey(Tier, blank=True, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=25, unique=True)
+    # tier = models.ForeignKey(Tier, blank=True, null=True, on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     slug = models.SlugField(max_length=50, blank=True, default=uuid.uuid1)
 
-    class Meta:
-        unique_together = ("name", "tier")
+    # class Meta:
+    #     unique_together = ("name", "tier")
 
     def get_absolute_url(self):
         return reverse("datamaps:datamap_detail", args=[str(self.slug)])
