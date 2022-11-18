@@ -28,7 +28,7 @@ from dbasik.users.models import DfTGroup
 
 
 class FinancialQuarterAdmin(ModelAdmin):
-    list_display = ("label", "start_date", "end_date")
+    list_display = ("pk", "label", "start_date", "end_date")
 
 
 admin.site.register(FinancialQuarter, FinancialQuarterAdmin)

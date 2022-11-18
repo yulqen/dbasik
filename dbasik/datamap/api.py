@@ -17,7 +17,7 @@ router = Router()
 class DatamapSchema(Schema):
     id: int
     name: str
-    tier: TierSchema
+    # tier: TierSchema
     active: bool
     slug: str
 

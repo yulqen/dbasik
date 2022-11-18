@@ -33,6 +33,3 @@ for x in data:
     d = dict(project=project, key=key, value=value)
     print(d)
 
-
-
-# pprint.pprint(data[0])
