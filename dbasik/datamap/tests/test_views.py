@@ -21,7 +21,6 @@ class CsvUploadViewTest(TestCase):
         cls.datamap = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap-test-tier",
-            tier=Tier.objects.create(name="Test Tier"),
         )
         cls.upload_url = f"/datamaps/uploaddatamap/test-datamap-test-tier/"
 

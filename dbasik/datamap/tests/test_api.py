@@ -11,8 +11,7 @@ class TestDatamapAPIEndpoints(TestCase):
     def setUp(self):
         self.client = Client()
         self.datamap = Datamap.objects.create(
-            name="Test Datamap 1", tier=Tier.objects.create(name="Tier 1")
-        )
+            name="Test Datamap 1")
         self.dml1 = DatamapLine.objects.create(
             datamap=self.datamap,
             key="Test 1",
@@ -32,7 +31,6 @@ class TestDatamapAPIEndpoints(TestCase):
         response = self.client.get("/api/datamap/datamaps")
         self.assertTrue(response.status_code, 200)
         self.assertTrue(response.json()[0]["name"], "Test Datamap 1")
-        self.assertTrue(response.json()[0]["tier"]["name"], "Test Tier 1")
 
     def test_datamaplines(self):
         response = self.client.get("/api/datamap/datamap?slug=test-datamap-1")

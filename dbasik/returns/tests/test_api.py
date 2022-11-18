@@ -21,7 +21,7 @@ class TestReturnAPI(TestCase):
             project=cls.project1, financial_quarter=cls.fq1
         )
         cls.dm1 = Datamap.objects.create(
-            name="Test DM", tier=cls.tier1, active=True, slug="test-dm-test-tier-1"
+            name="Test DM", active=True, slug="test-dm-test-tier-1"
         )
         cls.dml1 = DatamapLine.objects.create(
             datamap=cls.dm1,

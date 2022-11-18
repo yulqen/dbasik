@@ -18,8 +18,8 @@ class ReturnSchema(Schema):
 
 class ReturnItemSchema(Schema):
     id: int
-    parent: ReturnSchema
-    datamapline: DatamapLineSchema
+    parent: ReturnSchema = None
+    datamapline: DatamapLineSchema = None
     value_str: str = None
     value_int: int = None
     value_float: float = None

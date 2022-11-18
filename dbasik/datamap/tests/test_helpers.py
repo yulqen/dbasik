@@ -23,7 +23,6 @@ class TestDatamapViewHelpers(TestCase):
         cls.datamap = Datamap.objects.create(
             name="Test Datamap",
             slug="test-datamap",
-            tier=Tier.objects.create(name="Test Tier"),
         )
         cls.expected_message = (
             "Database Error: key: Key 1 sheet: Sheet cell_ref: "

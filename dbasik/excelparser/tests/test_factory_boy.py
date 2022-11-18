@@ -13,7 +13,6 @@ class EnsureFactoryBoyObjects(TestCase):
 
     def test_can_create_datamap_factory(self):
         self.assertTrue(self.dmf.name, "Test Datamap from Factory")
-        self.assertTrue(self.dmf.tier.name, "Test Tier from Factory")
 
     def test_datamapline_for_datamap_factory(self):
         self.assertTrue(self.dml.key, "Test Key")

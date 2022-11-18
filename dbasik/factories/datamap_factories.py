@@ -21,10 +21,9 @@ class TierFactory(factory.django.DjangoModelFactory):
 class DatamapFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Datamap
-        django_get_or_create = ("name", "tier")
+        django_get_or_create = ("name",)
 
     name = "Test Datamap from Factory"
-    tier = factory.SubFactory(TierFactory)
 
 
 class DatamapLineFactory(factory.django.DjangoModelFactory):
