@@ -1,7 +1,10 @@
-{ pkgs ? import <nixpkgs> {} }:
+with import <nixpkgs> {} ;
 
 let
-  my-python = pkgs.python3;
+  my-django-ninja = callPackage /home/lemon/src/nix-pkgs/django-ninja/default.nix {
+      buildPythonPackage = python3Packages.buildPythonPackage;
+  };
+  my-python = python3;
   python-with-my-packages = my-python.withPackages (p: with p; [
     django
     celery[redis]
@@ -10,7 +13,7 @@ let
     factory_boy
     openpyxl
     djangorestframework
-    django-ninja
+    my-django-ninja
   ]);
 in
   pkgs.mkShell {
