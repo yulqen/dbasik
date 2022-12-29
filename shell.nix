@@ -4,8 +4,7 @@ let
   my-django-ninja = callPackage /home/lemon/src/my-nix-pkgs/python/django-ninja/default.nix {
       buildPythonPackage = python3Packages.buildPythonPackage;
   };
-   my-python = python3;
-  python-with-my-packages = my-python.withPackages (p: with p; [
+  python-with-my-packages = python3.withPackages (p: with p; [
     django
     celery[redis]
     django-crispy-forms
