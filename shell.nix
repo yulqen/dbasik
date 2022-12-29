@@ -1,10 +1,10 @@
 with import <nixpkgs> {} ;
 
 let
-  my-django-ninja = callPackage /home/lemon/src/nix-pkgs/django-ninja/default.nix {
+  my-django-ninja = callPackage /home/lemon/src/my-nix-pkgs/python/django-ninja/default.nix {
       buildPythonPackage = python3Packages.buildPythonPackage;
   };
-  my-python = python3;
+   my-python = python3;
   python-with-my-packages = my-python.withPackages (p: with p; [
     django
     celery[redis]
