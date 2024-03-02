@@ -71,10 +71,25 @@ TEMPLATES = [
 WSGI_APPLICATION = "dbasik.config.wsgi.application"
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        # See https://docs.djangoproject.com/en/5.0/ref/databases/#postgresql-notes for how to use this - we're opting not to use this at this point.
+        # "OPTIONS": {
+        #     "service": "dbasik_service",
+        #     "passfile": ".my_pgpass",
+        # },
+        "NAME": "dbasik",
+        "HOST": "db",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
     }
 }
 

@@ -14,7 +14,6 @@ from . import models
 
 
 class ReturnBatchCreateForm(forms.Form):
-
     financial_quarter = forms.ModelChoiceField(
         queryset=FinancialQuarter.objects.all(), help_text="Choose a Financial Quarter"
     )
@@ -23,7 +22,7 @@ class ReturnBatchCreateForm(forms.Form):
     )
     source_files = forms.FileField(
         help_text="Please ensure the name of each file matches exactly the title of the project, and only .xlsm files will work.",
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
+        widget=forms.ClearableFileInput(attrs={"allow_multiple_selected": True}),
     )
 
     def clean_source_files(self):
@@ -66,7 +65,6 @@ class ReturnBatchCreateForm(forms.Form):
 
 
 class ReturnCreateForm(forms.ModelForm):
-
     project = ModelChoiceField(
         queryset=Project.objects.all(),
         help_text="Please select an existing Project. <a href='/register/project/create' target='_blank'>Create a new "
