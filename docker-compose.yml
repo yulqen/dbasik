@@ -1,0 +1,63 @@
+version: "3.7"
+
+x-app: &default-app
+  build:
+    context: "."
+  volumes:
+    - .:/app
+  restart: "unless-stopped"
+
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=dbasik
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  web:
+    <<: *default-app
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=lemon
+      - DJANGO_SUPERUSER_EMAIL=lemon@lemon.com
+      - DJANGO_SUPERUSER_PASSWORD=lemonlemon
+    command: >
+      bash -c "python manage.py migrate --noinput && \
+      python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+#      - cache
+  # tailwind:
+  #   <<: *default-app
+  #   command: "python manage.py tailwind start"
+  #   # Without tty, no stdin, and tailwind watcher aborts
+  #   # https://github.com/tailwindlabs/tailwindcss/issues/5324
+  #   tty: true
+#  cache:
+#    image: memcached
+#    ports:
+#      - "11211:11211"
+#    entrypoint:
+#      - memcached
+#      - -m64
+#  dev:
+#    build:
+#      context: .
+#      dockerfile: ./dev/Dockerfile
+#    ports:
+#      - "8001:8000"
+#    stdin_open: true
+#    tty: true
+#    volumes:
+#      - .:/app
+#      - ~/dotfiles/vim:/home/lemon/.vim
+
+volumes:
+  db_data:
