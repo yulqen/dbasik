@@ -7,19 +7,19 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-7">
+<div class="wrapper">
+    <div>
+        <div>
             {% crispy form %}
         </div>
 
-        <div class="col-sm-5">
-            <div class="card border-light mb-5">
-                <div class="card-header">Current Projects in system</div>
-                <div class="card-body">
+        <div>
+            <div>
+                <div >Current Projects in system</div>
+                <div >
                     {% for item in existing_objects %}
-                    <ul id="current-datamap-list" class="list-group">
-                        <li class="list-group-item card-text"><a href="{%  url 'register:project_detail' item.slug %}">{{ item }}</a></li>
+                    <ul id="current-datamap-list" >
+                        <li>{{ item }}</a></li>
                     </ul>
                     {% endfor %}
                 </div> 

@@ -3,11 +3,11 @@
 {% block title %}{{ object }}{% endblock %}
 
 {% block content %}
-<div class="w3-container">
+<div >
     {% if messages %}
     <ul>
         {% for message in messages %}
-        <div id="message-test" class="alert alert-dismissible alert-danger">
+        <div id="message-test" >
             {{ message }}
         </div>
         {% endfor %}
@@ -15,7 +15,7 @@
     {% endif %}
 
     <h3>Return Item: {{ object }} </h3>
-    <table class="w3-table-all">
+    <table >
         <thead>
             <tr>
                 <th>Key</th>

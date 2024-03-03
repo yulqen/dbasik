@@ -3,14 +3,14 @@
 {% block title %}List of Projects{% endblock %}
 
 {% block content %}
-<div class="w3-container">
+<div >
   <h2>Projects</h2>
 
-  <div class="w3-panel w3-border"><p>{% lorem %}</p></div>
+  <div ><p>{% lorem %}</p></div>
 
   {% for tier, projects in p_per_tier %}
-  <ul class="w3-ul">
-    <li class="w3-padding-small w3-border-teal"><h4>{{ tier.name }}</h4></li>
+  <ul>
+    <li><h4>{{ tier.name }}</h4></li>
     {% for p in projects %}
     <li>
       <a href="{% url "register:project_detail" p.slug %}">{{ p.name}}</a>
@@ -20,7 +20,7 @@
   {% endfor %}
 
   <div style="margin-top: 10px;">
-    <a class="w3-button w3-green" href="{% url 'register:project_create' %}">Create New Project</a>
+    <a href="{% url 'register:project_create' %}">Create New Project</a>
   </div>
 </div>
 {% endblock %}

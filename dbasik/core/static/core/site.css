@@ -1,9 +1,8 @@
 * {
     /* box-sizing: border-box; */
-    font-family: "Roboto Slab";
+    font-family: "sans-serif";
 }
 
-body,h1,h2,h3,h4,h5,h6{font-family: "Roboto Slab"}
 
 .container h1 {
   font-size: 2em;

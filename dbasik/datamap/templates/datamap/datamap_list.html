@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<div class="w3-container">
+<div >
 
     <h2>Datamaps</h2>
-    <div class="w3-panel w3-border"><p>{% lorem %}</p></div>
-    <table class="w3-table-all">
+    <div ><p>{% lorem %}</p></div>
+    <table >
         <thead>
             <tr>
                 <th scope="col">Datamap name</th>
@@ -23,7 +23,7 @@
             <td id="datamap-title"><a href="{% url 'datamaps:datamap_detail' datamap.slug %}">{{ datamap.name }}</a></td>
             <td> {{ datamap.tier }} </td>
             <td> {{ datamap.active }} </td>
-            <td> <a class="w3-text-red" href="{% url 'datamaps:datamap_delete' datamap.slug %}">DELETE</a></td>
+            <td> <a >DELETE</a></td>
         </tr>
         {% endfor %}
         {% else %}
@@ -31,7 +31,7 @@
         {% endif %}
     </table>
     <div style="margin-top: 10px;">
-        <a class="w3-button w3-green" href="{% url 'datamaps:datamap-create' %}">Create a datamap</a>
+        <a >Create a datamap</a>
     </div>
 </div>
 

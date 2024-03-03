@@ -3,9 +3,9 @@
 {% block title %}Return Items{% endblock %}
 
 {% block content %}
-    <div class="w3-container">
+    <div>
         <h3>{{ return }}</h3>
-        <table class="w3-table-all">
+        <table >
             <thead>
                 <tr>
                     <th>Return Item</th>
@@ -31,8 +31,8 @@
                 <td>There are no Return Items.</td>
             {% endif %}
         </table>
-        <div class="container">
-            <a class="btn btn-primary" href="{% url 'excelparser:process_populated' return.id %}">Upload a populated template</a>
+        <div>
+            <a>Upload a populated template</a>
         </div>
     </div>
 

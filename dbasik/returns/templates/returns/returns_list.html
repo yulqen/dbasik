@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="w3-container">
+<div >
     {% if messages %}
     <ul>
         {% for message in messages %}
@@ -13,11 +13,11 @@
     </ul>
     {% endif %}
 
-    <div class="w3-panel w3-border">
+    <div >
         <p><strong>NOTE:</strong> Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
             the file name must match exactly the name of the project it corresponds with.</p>
 
-        e.g. the file for East Coast Mainline Programme must be called <code class="text-white">East Coast Mainline Programme.xlsm</code>.
+        e.g. the file for East Coast Mainline Programme must be called <code >East Coast Mainline Programme.xlsm</code>.
         Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
         reported when uploading individually.
     </div>
@@ -26,9 +26,9 @@
     <h3>Current returns in system:</h3>
 
     {% for fq in valid_fqs %}
-    <div class="w3-panel w3-border">
+    <div >
         <h4>{{ fq }}</h4>
-        <ul class="w3-ul">
+        <ul >
             {% for r in object_list %}
                 {% if r.financial_quarter == fq %}
                 <li>
@@ -45,20 +45,20 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <a href="{% url "returns:download_master" fq.id %}" class="button">Download Master for {{ fq }}</a>
+        <a href="{% url "returns:download_master" fq.id %}" >Download Master for {{ fq }}</a>
     </div>
 
 
     {% endfor %}
     {% else %}
     <div>
-        <p class="text-muted">There are no Return Items.</p>
+        <p >There are no Return Items.</p>
     </div>
     {% endif %}
 
     <div>
         <a href="{% url 'returns:return_create' %}">Create a new Return</a> <br>
-        <a class="btn btn-primary" href="{% url 'returns:return_batch_create' %}">Create new Returns (batch upload)</a>
+        <a>Create new Returns (batch upload)</a>
     </div>
 </div>
 
