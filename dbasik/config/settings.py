@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "dbasik.excelparser.apps.ExcelparserConfig",
     "dbasik.returns.apps.ReturnsConfig",
     "crispy_forms",
+    "crispy_bootstrap4",
     "rest_framework",
 ]
 
@@ -39,6 +40,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
 }
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
