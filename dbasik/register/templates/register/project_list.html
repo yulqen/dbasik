@@ -3,11 +3,13 @@
 {% block title %}List of Projects{% endblock %}
 
 {% block content %}
-<div >
+
+<div class="left-panel">
   <h2>Projects</h2>
 
   <div ><p>{% lorem %}</p></div>
-
+</div>
+<div class="right-panel">
   {% for tier, projects in p_per_tier %}
   <ul>
     <li><h4>{{ tier.name }}</h4></li>

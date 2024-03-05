@@ -4,22 +4,21 @@
 
 {% block content %}
 
-<div>
-    <div>
-        <p><strong>WARNING:</strong> The <strong>Data Type</strong>, <strong>Max Length</strong> and <strong>Required</strong> fields are not currently 
-            implemented. They will be in a future verison.</p>
-    </div>
-    <div>
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <div id="message-test">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
+<div class="left-panel">
+    <p><strong>WARNING:</strong> The <strong>Data Type</strong>, <strong>Max Length</strong> and <strong>Required</strong> fields are not currently 
+    implemented. They will be in a future verison.</p>
+</div>
+
+<div class="right-panel">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <div id="message-test">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 
     <h3>{{ dm_name }} </h3>

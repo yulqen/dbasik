@@ -4,81 +4,56 @@
 
 {% block content %}
 
-<div >
+<div class="left-panel">
     <h2>{{ object.name }} ({{ object.tier }} - {{ object.project_type }})</h2>
     <h3>Project Summary</h3>
-            <table >
-                <tr>
-                    <td><strong>Stage:</strong></td>
-                    <td>{{ object.stage }}</td>
-                </tr>
-{#                <tr>#}
-{#                    <td><strong>Start Date:</strong></td>#}
-{#                    <td>{{ object.start_date|date:"j M Y" }}</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <td><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>#}
-{#                </tr>#}
-            </table>
+    <table >
+        <tr>
+            <td><strong>Stage:</strong></td>
+            <td>{{ object.stage }}</td>
+        </tr>
+        {#                <tr>#}
+            {#                    <td><strong>Start Date:</strong></td>#}
+            {#                    <td>{{ object.start_date|date:"j M Y" }}</td>#}
+            {#                </tr>#}
+        {#                <tr>#}
+            {#                    <td><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>#}
+            {#                </tr>#}
+    </table>
     <h3>Description</h3>
-    <div >
-        <div>
-            {{ dft_group|default:"[- No DfT Group Given -]" }} |
-            {{ dft_division|default:"[- No DfT Division Given -]"  }}
-        </div>
-        <p>{% lorem %} </p> 
+    <div>
+        {{ dft_group|default:"[- No DfT Group Given -]" }} |
+        {{ dft_division|default:"[- No DfT Division Given -]"  }}
     </div>
-    <div >
+    <p>{% lorem %} </p> 
+</div>
 
-{#        <div >#}
-{#            <div >#}
-{#                <h3>Key Contacts</h3>#}
-{#                    <div >#}
-{#                        <header >#}
-{#                            <h4>SRO:</h4>#}
-{#                            <p> {{ sro_full_name|default:"[ - No SRO Given -]" }}</p>#}
-{#                        </header>#}
-{#                    </div>#}
-{#                    <div >#}
-{#                        <header >#}
-{#                            <h4>Working Contact:</h4>#}
-{#                            <p>{{ working_contact|default:"[ - No Working Contact Given -]"  }} (Tel: {{ working_contact_phone|default:"[ - No Working Contact Phone Given -]"  }})</p>#}
-{#                        </header>#}
-{#                    </div>#}
-{#            </div>  #}
+<div class="right-panel">
+    <h3>Returns</h3>
 
-            <div >
-            <h3>Returns</h3>
+    {% if returns %}
+    {% for r in returns  %}
+    <div>
+        <a href="{% url 'returns:return_data' r.pk %}">{{ r }}</a>
+        <table>
+            <tr>
+                <td><strong>Current RAG:</strong></td>
+                <td style="background: #{{ r.rag_c }}"><span style="color: white">{{ r.rag }}</span></td>
+            </tr> 
+            <tr>
+                <td><strong>DCA Narrative:</strong></td>
+                <td> {{ r.dca_narrative }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div>Key Data - no current return</div>
+    {% endif %}
+    <div>
+        <a>Edit</a>
+        <a>Delete</a>
+    </div>
+</div>
 
-            {% if returns %}
-                {% for r in returns  %}
-                <div >
-                <a href="{% url 'returns:return_data' r.pk %}">{{ r }}</a>
-                    <table>
-                        <tr>
-                            <td><strong>Current RAG:</strong></td>
-                            <td style="background: #{{ r.rag_c }}"><span style="color: white">{{ r.rag }}</span></td>
-                        </tr> 
-                        <tr>
-                            <td><strong>DCA Narrative:</strong></td>
-                            <td> {{ r.dca_narrative }}</td>
-                        </tr>
-                    </table>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div>Key Data - no current return</div>
-            {% endif %}
-            </div>
-        </div>
-
-
-
-
-            <div>
-
-                <a>Edit</a>
-                <a>Delete</a>
-            </div>
-        </div>
-        {% endblock %}
+{% endblock %}

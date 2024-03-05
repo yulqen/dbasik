@@ -6,8 +6,10 @@
 
 <div class="left-panel">
     <h2>Datamaps</h2>
-    <div ><p>Current datamaps are listed here:</p></div>
-    <table >
+    <p>{% lorem %}</p>
+</div>
+<div class="right-panel">
+    <table>
         <thead>
             <tr>
                 <th scope="col">Datamap name</th>
@@ -29,10 +31,10 @@
         <td>There are no datamaps.</td>
         {% endif %}
     </table>
+    <div>
+        <a>Create a datamap</a>
+    </div>
 </div>
 
-<div class="right-panel">
-    <a>Create a datamap</a>
-</div>
 
 {% endblock %}
