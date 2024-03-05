@@ -30,12 +30,14 @@ nav {
     background: lightgray;
     padding-left: 8px;
     padding-top: 4px;
+    border: 1px solid darkgray;
 }
 
 .right-panel {
     background: lightcyan;
     padding-left: 8px;
     padding-top: 4px;
+    border: 1px solid lightgray;
 }
 
 .basicfield {
