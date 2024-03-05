@@ -4,17 +4,17 @@
 
 {% block content %}
 
-<div class="container">
+<div>
 
-    <div class="container py-5">
-        <div class="card text-white bg-primary p-6">
-            <div class="card-body">
-                <h3 class="card-title">
+    <div>
+        <div>
+            <div>
+                <h3>
                     <strong>Template Name:</strong> {{ object.name }} 
                 </h3>
-                <table class="table table-hover">
+                <table>
                     <tr>
-                        <td class="col-2"><strong>File Name:</strong></td> <td>FILENAME HERE</td>
+                        <td><strong>File Name:</strong></td> <td>FILENAME HERE</td>
                     </tr>
                     <tr>
                         <td><strong>Source File:</strong></td> <td>{{ object.source_file }}</td>
@@ -33,22 +33,22 @@
         </div>
     </div>
 
-    <div class="container py-3">
+    <div>
     <h4>Sheets</h4>
 
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" href="#sheet-1" data-toggle="tab">Sheet 1</a>
+        <ul>
+            <li>
+                <a>Sheet 1</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#sheet-2" data-toggle="tab">Sheet 2</a>
+            <li>
+                <a>Sheet 2</a>
             </li>
         </ul>
 
-        <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active show" id="sheet-1">
-                <div class="container">
-                    <table class="table table-hover">
+        <div id="myTabContent">
+            <div>
+                <div>
+                    <table>
                         <thead>
                             <tr>
                                 <th scope="col">Cell</th>
@@ -59,7 +59,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-active">
+                            <tr>
                                 <td>A1</td>
                                 <td>Nothing in here</td>
                                 <td>Nothing in here</td>
@@ -71,16 +71,16 @@
                     </table> 
                 </div>
             </div>
-            <div class="tab-pane fade" id="sheet-2">
+            <div>
                 <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
             </div>
         </div>
     </div>
 
 
-<div class="buttonHolder">
-    <a class="btn btn-primary" href="{% url 'templates:update' object.slug %}">Edit</a>
-    <a class="btn btn-danger" href="{% url 'templates:delete' object.slug %}">Delete</a>
+<div>
+    <a>Edit</a>
+    <a>Delete</a>
 </div>
 
 </div>

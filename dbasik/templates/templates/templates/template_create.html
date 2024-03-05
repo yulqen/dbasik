@@ -5,18 +5,18 @@
 {% block title %}Create template{% endblock %}
 
 {% block content %}
-<div class="container">
+<div>
     {% if messages %}
     <ul>
         {% for message in messages %}
-        <div id="bad-file-upload-id" class="alert alert-dismissible alert-danger">
+        <div id="bad-file-upload-id">
             {{ message }}
         </div>
         {% endfor %}
     </ul>
     {% endif %}
-    <div class="row">
-        <div class="col-sm-6">
+    <div>
+        <div>
             {% crispy form %}
         </div>
     </div>

@@ -3,14 +3,14 @@
 {% block title %}Templates{% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div>
 
         <h3 id="show-datamap-table">Templates</h3>
-        <div class="container">
+        <div>
             <p>These are blank templates that are intended to be populated using a datamap and existing data in the system. To do that
                 you need to create a <a href="#">pipeline.</a></p> 
         </div>
-        <table class="table table-hover">
+        <table>
             <thead>
                 <th scope="col">Template name</th>
                 <th scope="col">Description</th>
@@ -21,15 +21,15 @@
                     <tr>
                         <td id="template-title"><a href="{{ MEDIA_URL }}{{template.source_file }}">{{ template.name }}</a></td>
                         <td> {{ template.description }}</td>
-                        <td> <a class="btn btn-danger" href="{% url 'templates:delete' template.slug %}">DELETE</a></td>
+                        <td> <a>DELETE</a></td>
                     </tr>
                 {% endfor %}
             {% else %}
                 <td>There are no templates.</td>
             {% endif %}
         </table>
-        <div class="container">
-            <a class="btn btn-primary" href="{% url 'templates:create' %}">Create a template</a>
+        <div>
+            <a>Create a template</a>
         </div>
     </div>
 
