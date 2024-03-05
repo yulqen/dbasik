@@ -22,21 +22,8 @@
           <a href="{% url 'login' %}">Log In</a>
       {% endif %}
 </nav>
-
-
-
-{% block navbar %}
-<!-- The sidebar -->
-<div class="sidebar">
-  <ul>
-    <li><a href="{% url 'datamaps:datamap_list'  %}">Datamaps</a></li>
-    <li><a href="{% url 'register:project_list'  %}">Projects</a></li>
-    <li><a href="{% url 'returns:returns_list'  %}">Returns</a></li>
-    <li><a href="{% url 'dashboard' %}">Dashboard</a>
-  </ul>
-</div>
-{% endblock %}
-  <div style="margin-left:20%;">
+  
+<div class="content-wrapper">
       {% block content %}
       {% endblock %}
   </div>

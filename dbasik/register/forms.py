@@ -1,10 +1,17 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Button, ButtonHolder, Fieldset, Layout, Submit
+from crispy_forms.layout import (
+    Button,
+    ButtonHolder,
+    Div,
+    Field,
+    Fieldset,
+    Layout,
+    Submit,
+)
+from dbasik.register.models import ProjectStage, ProjectType, Tier
 from django import forms
 from django.forms import BooleanField, CharField, ModelChoiceField
 from django.urls import reverse
-
-from dbasik.register.models import ProjectStage, ProjectType, Tier
 
 from . import models
 
@@ -163,12 +170,12 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Fieldset(
-                "Create/Edit Project",
-                "name",
+                "Create/Edit a Project",
+                Field("name", css_class="basicfield"),
                 "tier",
                 "project_type",
                 "stage",
-                "abbreviation",
+                Field("abbreviation", css_class="basicfield"),
                 "dft_group",
                 "gmpp",
             ),

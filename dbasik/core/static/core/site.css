@@ -8,6 +8,28 @@
   font-size: 2em;
 }
 
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+}
+
+.left-panel {
+    background: lightgreen;
+    padding-left: 8px;
+    padding-top: 4px;
+}
+
+.right-panel {
+    background: lightcyan;
+    padding-left: 8px;
+    padding-top: 4px;
+}
+
+.basicfield {
+    width: 90%;
+}
+
 .title {
   font-size: 2.4em;  
 }
@@ -30,7 +52,7 @@ input {
 }
 
 body {
-    background: #ebf9f6;
+    /* background: #ebf9f6; */
 }
 
 

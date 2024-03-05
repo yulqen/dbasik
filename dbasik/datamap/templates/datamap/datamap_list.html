@@ -4,10 +4,9 @@
 
 {% block content %}
 
-<div >
-
+<div class="left-panel">
     <h2>Datamaps</h2>
-    <div ><p>{% lorem %}</p></div>
+    <div ><p>Current datamaps are listed here:</p></div>
     <table >
         <thead>
             <tr>
@@ -30,9 +29,10 @@
         <td>There are no datamaps.</td>
         {% endif %}
     </table>
-    <div style="margin-top: 10px;">
-        <a >Create a datamap</a>
-    </div>
+</div>
+
+<div class="right-panel">
+    <a>Create a datamap</a>
 </div>
 
 {% endblock %}
