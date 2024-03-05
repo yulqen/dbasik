@@ -206,6 +206,7 @@ class ProjectList(LoginRequiredMixin, ListView):
                 if p.tier == t:
                     p_per_tier[t].append(p)
         context["p_per_tier"] = p_per_tier.items()
+        context["projects"] = projects
         return context
 
     def get_queryset(self):

@@ -1,21 +1,33 @@
 * {
     /* box-sizing: border-box; */
     font-family: "sans-serif";
+    font-size: 9pt;
+}
+
+nav {
+    padding: 5px 2px 10px 2px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.top-links {
+    margin-bottom: 2px;
+    margin-left: 20px;
 }
 
 
 .container h1 {
-  font-size: 2em;
+  font-size: 1em;
 }
 
 .content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
     gap: 10px;
 }
 
 .left-panel {
-    background: lightgreen;
+    background: lightgray;
     padding-left: 8px;
     padding-top: 4px;
 }
@@ -160,11 +172,15 @@ body {
 /* } */
 
 table.info {
-  width: 80%;
+  width: 95%;
   border: 1px solid black;
   border-collapse: collapse;
   border-spacing: 2px;
   margin-top: 10px;
+}
+
+table.info td {
+    border: 1px solid black;
 }
 
 /* On screens that are less than 700px wide, make the sidebar into a topbar */

@@ -79,7 +79,6 @@ class DatamapList(LoginRequiredMixin, ListView):
 
 
 class DatamapLineCreate(LoginRequiredMixin, CreateView):
-
     model = DatamapLine
     form_class = DatamapLineForm
 
@@ -164,6 +163,9 @@ class UploadDatamapView(LoginRequiredMixin, FormView):
         :rtype: django.http.response.HttpResponseRedirect
         """
         uploaded_file_data = request.FILES["uploaded_file"].readlines()
+
+        # TODO: catch the UnicodeDecodeError here. We can't wrap a try Except
+        # around this in its current form due to the generator exp.
         reader = csv.DictReader(x.decode("utf-8") for x in uploaded_file_data)
         _timeround = 0
         for line in reader:

@@ -15,7 +15,6 @@
     </ul>
     {% endfor %}
 </div>
-{% endblock %}
 
 <div class="right-panel">
     <h3>Instructions</h3>
@@ -24,8 +23,9 @@
 
     <p>Use the <strong>Create a new Datamap</strong> form below to upload a CSV file 
     into the system.</p>
+    <div class="form-container">
+        {% crispy form %}
+    </div>
 </div>
 
-<div>
-    {% crispy form %}
-</div>
+{% endblock %}

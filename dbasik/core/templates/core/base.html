@@ -2,29 +2,33 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700' rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet" href="{% static 'core/site.css' %}"/>
-    <link rel="stylesheet" href="{% static 'core/nav.css' %}"/>
-    <title>{% block title %}{% endblock %}</title>
-    {% block extra_head_tags %}{% endblock %}
-</head>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700' rel='stylesheet' type='text/css'/>
+        <link rel="stylesheet" href="{% static 'core/site.css' %}"/>
+        <link rel="stylesheet" href="{% static 'core/nav.css' %}"/>
+        <title>{% block title %}{% endblock %}</title>
+        {% block extra_head_tags %}{% endblock %}
+    </head>
 
-<nav>
-  <a href="{% url 'index' %}">dbasik</a>
-      {% if request.user.is_authenticated %}
-          <a href="#">{{ user }}</a>
-          <a href="{% url 'logout' %}">Log Out</a>
-      {% else %}
-          <a href="{% url 'login' %}">Log In</a>
-      {% endif %}
-</nav>
-  
-<div class="content-wrapper">
-      {% block content %}
-      {% endblock %}
-  </div>
+    <nav>
+        <div>
+            <a href="{% url 'index' %}" class="title">dbasik</a>
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="top-links">
+            <a href="#">{{ user }}</a>
+            <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+        </div>
+        {% endif %}
+    </nav>
+
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
 </html>

@@ -5,24 +5,38 @@
 {% block content %}
 
 <div class="left-panel">
-  <h2>Projects</h2>
+    <h2>Projects</h2>
 
-  <div ><p>{% lorem %}</p></div>
+    <div ><p>{% lorem %}</p></div>
 </div>
 <div class="right-panel">
-  {% for tier, projects in p_per_tier %}
-  <ul>
-    <li><h4>{{ tier.name }}</h4></li>
-    {% for p in projects %}
-    <li>
-      <a href="{% url "register:project_detail" p.slug %}">{{ p.name}}</a>
-    </li> 
-    {% endfor %}
-  </ul>
-  {% endfor %}
+    <table class="info">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Tier</th>
+                <th>Type</th>
+                <th>Stage</th>
+                <th>Abbreviation</th>
+                <th>Group</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in projects %}
+            <tr>
+                <td><a href="{% url "register:project_detail" p.slug %}">{{ p.name}}</a></td>
+                <td>{{p.tier}}</td>
+                <td>{{p.project_type}}</td>
+                <td>{{p.stage}}</td>
+                <td>{{p.abbreviation}}</td>
+                <td>{{p.dft_group}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-  <div style="margin-top: 10px;">
-    <a href="{% url 'register:project_create' %}">Create New Project</a>
-  </div>
+    <div style="margin-top: 10px;">
+        <a href="{% url 'register:project_create' %}">Create New Project</a>
+    </div>
 </div>
 {% endblock %}
