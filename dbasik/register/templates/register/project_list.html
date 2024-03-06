@@ -5,12 +5,29 @@
 {% block content %}
 
 <div class="left-panel">
-    <h2>Projects</h2>
+    <div class="data-table-heading">
+        <div id="data-table-heading-title">Projects</div>
+    </div>
 
-    <div ><p>{% lorem %}</p></div>
+    <div><p>{% lorem %}</p></div>
 </div>
+
 <div class="right-panel">
-    <table class="info">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <div id="message-test">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <div class="data-table-heading">
+        <div id="data-table-heading-title">Current projects</div>
+    </div>
+
+    <table class="projects-table">
         <thead>
             <tr>
                 <th>Project Name</th>

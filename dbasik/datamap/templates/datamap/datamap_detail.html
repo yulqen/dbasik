@@ -21,10 +21,10 @@
     {% endif %}
 
 
-    <div style="border-bottom: 1px solid darkgray; margin-right: 10px">
-        <h3>{{ dm_name }} </h3>
+    <div class="data-table-heading">
+        <div id="data-table-heading-title">{{ dm_name }}</div>
     </div>
-    <table style="margin-right: 10px;">
+    <table class="data-table">
         <thead>
             <tr>
                 <th>Key</th>
@@ -33,7 +33,6 @@
                 <th>Required</th>
                 <th>Sheet</th>
                 <th>Cell Reference</th>
-                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -46,11 +45,8 @@
                 <td>{{ line.required }}</td>
                 <td>{{ line.sheet }}</td>
                 <td>{{ line.cell_ref }}</td>
-                <td>
-                    <a href="{% url 'datamaps:datamapline_update' line.id %}">Edit</a>
-                </td>
-                <td>
-                    <a href="{% url 'datamaps:datamapline_delete' line.id %}">DELETE</a>
+                <td id="delete">
+                    <a href="{% url 'datamaps:datamapline_delete' line.id %}">Delete</a>
                 </td>
             </tr>
             {% endfor %}

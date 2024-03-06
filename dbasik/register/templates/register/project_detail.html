@@ -5,7 +5,11 @@
 {% block content %}
 
 <div class="left-panel">
-    <h2>{{ object.name }} ({{ object.tier }} - {{ object.project_type }})</h2>
+    <div class="data-table-heading">
+        <div id="data-table-heading-title">
+            {{ object.name }} ({{ object.tier }} - {{ object.project_type }})
+        </div>
+    </div>
     <h3>Project Summary</h3>
     <table >
         <tr>
@@ -29,7 +33,9 @@
 </div>
 
 <div class="right-panel">
-    <h3>Returns</h3>
+    <div class="data-table-heading">
+        <div id="data-table-heading-title">Returns</div>
+    </div>
 
     {% if returns %}
     {% for r in returns  %}

@@ -27,7 +27,7 @@ nav {
 }
 
 .left-panel {
-    background: lightgray;
+    background: #e5e5e5;
     padding-left: 8px;
     padding-top: 4px;
     border: 1px solid darkgray;
@@ -74,12 +74,51 @@ body {
     padding: 1px;
 }
 
-.table-light {
-  table-layout: fixed;
-}
 
 .row-light {
   border: 0;
+}
+
+.projects-table {
+    margin-right: 10px;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: left;
+}
+.projects-table > tbody > tr > td {
+    background: white;
+    border: 1px solid gray;
+    padding: 1px;
+}
+
+.data-table {
+    margin-right: 10px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table-heading {
+    border-bottom: 1px solid darkgray;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.data-table-heading > #data-table-heading-title {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.data-table > tbody > tr > td {
+    background: white;
+    border: 1px solid gray;
+    padding: 1px;
+}
+
+.data-table > tbody > tr > td#delete > a {
+    color: red;
 }
 
 /* table, th, td { */
