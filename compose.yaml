@@ -33,11 +33,13 @@ services:
     stdin_open: true
     tty: true
     depends_on:
+      - db
+      - redis
   celery_worker: # we just use the Django container for this
-    restart: unless-stopped
-    build:
-      context: .
+    # build:
+    #   context: .
     image: python:3-slim
+    restart: unless-stopped
     command: celery -A config worker -l INFO
     volumes:
       - .:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
