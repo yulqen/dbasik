@@ -1,17 +1,8 @@
 version: "3.7"
 
-x-app: &default-app
-  build:
-    context: "."
-  volumes:
-    - .:/app
-  restart: "unless-stopped"
-
 services:
   redis:
-    image: redis:latest
-    ports: 
-      - "6379:6379"
+    image: redis:7.0-alpine
   db:
     image: postgres:16-alpine
     ports:
@@ -23,11 +14,17 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
   web:
-    <<: *default-app
+    build:
+      context: .
+    volumes:
+      - .:/app
+    restart: "unless-stopped"
     environment:
       - DJANGO_SUPERUSER_USERNAME=lemon
       - DJANGO_SUPERUSER_EMAIL=lemon@lemon.com
       - DJANGO_SUPERUSER_PASSWORD=lemonlemon
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKED=redis://redis:6379/0
     command: >
       bash -c "python manage.py migrate --noinput && \
       python manage.py runserver 0.0.0.0:8000"
@@ -36,32 +33,26 @@ services:
     stdin_open: true
     tty: true
     depends_on:
+  celery_worker: # we just use the Django container for this
+    restart: unless-stopped
+    build:
+      context: .
+    image: python:3-slim
+    command: celery -A config worker -l INFO
+    volumes:
+      - .:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
+      - ./data/web:/vol/web
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKED=redis://redis:6379/0
+    depends_on:
+      - redis
       - db
+      - web
 #      - cache
-  # tailwind:
-  #   <<: *default-app
-  #   command: "python manage.py tailwind start"
-  #   # Without tty, no stdin, and tailwind watcher aborts
-  #   # https://github.com/tailwindlabs/tailwindcss/issues/5324
-  #   tty: true
-#  cache:
-#    image: memcached
-#    ports:
-#      - "11211:11211"
-#    entrypoint:
-#      - memcached
-#      - -m64
-#  dev:
-#    build:
-#      context: .
-#      dockerfile: ./dev/Dockerfile
-#    ports:
-#      - "8001:8000"
-#    stdin_open: true
-#    tty: true
-#    volumes:
-#      - .:/app
-#      - ~/dotfiles/vim:/home/lemon/.vim
-
 volumes:
   db_data:
