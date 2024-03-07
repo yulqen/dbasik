@@ -10,12 +10,13 @@
 <div class="left-panel">
     <p>Current projects:</p>
     <ul>
-        <li>Bobbins</li>
-        <li>Nope</li>
+        {% for p in existing_objects %}
+            <li>{{p.name}}</li>
+        {% endfor %}
     </ul>
 </div>
 <div class="right-panel">
-    <div>
+    <div class="form-container">
         {% crispy form %}
     </div>
 

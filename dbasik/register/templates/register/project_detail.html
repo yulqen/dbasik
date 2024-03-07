@@ -11,23 +11,11 @@
         </div>
     </div>
     <h3>Project Summary</h3>
-    <table >
-        <tr>
-            <td><strong>Stage:</strong></td>
-            <td>{{ object.stage }}</td>
-        </tr>
-        {#                <tr>#}
-            {#                    <td><strong>Start Date:</strong></td>#}
-            {#                    <td>{{ object.start_date|date:"j M Y" }}</td>#}
-            {#                </tr>#}
-        {#                <tr>#}
-            {#                    <td><strong>Planned End Date:</strong>{{ object.planned_end_date|date:"j M Y" }}</td>#}
-            {#                </tr>#}
-    </table>
+        <p><strong>Stage: </strong>{{ object.stage }}</p>
     <h3>Description</h3>
     <div>
-        {{ dft_group|default:"[- No DfT Group Given -]" }} |
-        {{ dft_division|default:"[- No DfT Division Given -]"  }}
+        {{ object.dft_group|default:"No DfT Group Given" }} |
+        {{ dft_division|default:"No DfT Division Given"  }}
     </div>
     <p>{% lorem %} </p> 
 </div>

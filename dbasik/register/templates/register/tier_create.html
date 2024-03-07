@@ -7,29 +7,28 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            {% crispy form %}
-        </div>
-
-        <div class="col-sm-4">
-            <div class="card border-light mb-3" style="width: 18rem;">
-                <div class="card-header">Current Tiers in system</div>
-                <div class="card-body">
-                    {% if existing_objects %}
-                        {% for item in existing_objects %}
-                        <ul id="current-tier-list" class="list-group">
-                            <li class="list-group-item card-text"><a href="{%  url 'register:tier_detail' item.slug %}">{{ item }}</a></li>
-                        </ul>
-                        {% endfor %}
-                    {% else %}
-                       <p>No Datamaps in system.</p>
-                    {% endif %}
-                </div> 
-            </div>
-        </div>
-    </div>
-
+<div class="left-panel">
+    <p>Bobbins</p>
 </div>
+
+<div class="right-panel">
+    <div class="form-container">
+        {% crispy form %}
+    </div>
+    <div>
+        <div>Current Tiers in system</div>
+        <div>
+            {% if existing_objects %}
+            {% for item in existing_objects %}
+            <ul id="current-tier-list">
+                <li>{{ item }}</a></li>
+            </ul>
+            {% endfor %}
+            {% else %}
+            <p>No Datamaps in system.</p>
+            {% endif %}
+        </div> 
+    </div>
+</div>
+
 {% endblock %}
