@@ -26,35 +26,16 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKED=redis://redis:6379/0
     command: >
-      bash -c "python manage.py migrate --noinput && \
-      python manage.py runserver 0.0.0.0:8000"
+      bash -c "celery -A dbasik.config worker --loglevel=INFO && \
+               python manage.py migrate --noinput && \
+               python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
+      - "6379:6379"
     stdin_open: true
     tty: true
     depends_on:
       - db
       - redis
-  celery_worker: # we just use the Django container for this
-    # build:
-    #   context: .
-    image: python:3-slim
-    restart: unless-stopped
-    command: celery -A config worker -l INFO
-    volumes:
-      - .:/app # creates a volume which maps the . directory in our project to /app in the container - allowing us to sync our changes
-      - ./data/web:/vol/web
-    environment:
-      - DB_HOST=db
-      - DB_NAME=devdb
-      - DB_USER=devuser
-      - DB_PASS=changeme
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKED=redis://redis:6379/0
-    depends_on:
-      - redis
-      - db
-      - web
-#      - cache
 volumes:
   db_data:

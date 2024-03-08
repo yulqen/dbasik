@@ -3,37 +3,41 @@
 {% block title %}Return Items{% endblock %}
 
 {% block content %}
-    <div>
-        <h3>{{ return }}</h3>
-        <table >
-            <thead>
-                <tr>
-                    <th>Return Item</th>
-                    <th>Sheet</th>
-                    <th>Text Value</th>
-                    <th>Integer Value</th>
-                    <th>Float Value</th>
-                    <th>Date Value</th>
-                </tr>
-            </thead>
-            {% if object_list %}
-                {% for obj in object_list %}
-                <tr>
-                    <td>{{ obj.datamapline.key }}</td>
-                    <td>{{ obj.datamapline.sheet }}</td>
-                    <td>{{ obj.value_str|default:"-" }}</td>
-                    <td>{{ obj.value_int|default:"-"  }}</td>
-                    <td>{{ obj.value_float|default:"-"  }}</td>
-                    <td>{{ obj.value_date|date:"j M Y"|default:"-"  }}</td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <td>There are no Return Items.</td>
-            {% endif %}
-        </table>
-        <div>
-            <a href={% url 'returns:return_batch_create' %}>Upload a populated template</a>
-        </div>
-    </div>
+<div class="left-panel">
+    <h3>{{ return }}</h3>
+</div>
 
+<div class="right-panel">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Return Item</th>
+                <th>Sheet</th>
+                <th>Text Value</th>
+                <th>Integer Value</th>
+                <th>Float Value</th>
+                <th>Date Value</th>
+            </tr>
+        </thead>
+        {% if object_list %}
+        {% for obj in object_list %}
+        <tr>
+            <td>{{ obj.datamapline.key }}</td>
+            <td>{{ obj.datamapline.sheet }}</td>
+            <td>{{ obj.value_str|default:"-" }}</td>
+            <td>{{ obj.value_int|default:"-"  }}</td>
+            <td>{{ obj.value_float|default:"-"  }}</td>
+            <td>{{ obj.value_date|date:"j M Y"|default:"-"  }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <td>There are no Return Items.</td>
+        {% endif %}
+    </table>
+    <div>
+        <a href={% url 'returns:return_batch_create' %}>Upload a populated template</a>
+    </div>
 {% endblock %}
+
+</div>
+

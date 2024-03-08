@@ -12,8 +12,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["100.64.1.3", "localhost", "127.0.0.1", "10.0.0.10"]
 ALLOWED_HOSTS.extend(filter(None, os.environ.get("ALLOWED_HOSTS", "").split(",")))
 
-CELERY_BROKER_URL = "redis://127.0.0.1:6379"
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379"
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
