@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div >
+<div class="left-panel">
     {% if messages %}
     <ul>
         {% for message in messages %}
@@ -13,7 +13,7 @@
     </ul>
     {% endif %}
 
-    <div >
+    <div>
         <p><strong>NOTE:</strong> Return templates may be uploaded <strong>individually</strong> or as a <strong>batch</strong> (batch upload).  If using batch upload,
             the file name must match exactly the name of the project it corresponds with.</p>
 
@@ -21,7 +21,9 @@
         Any files that are included in the batch which do not match a current project name in the system will be ignored. Errors will be 
         reported when uploading individually.
     </div>
+</div>
 
+<div class="right-panel">
     {% if valid_fqs %}
     <h3>Current returns in system:</h3>
 
@@ -61,5 +63,4 @@
         <a>Create new Returns (batch upload)</a>
     </div>
 </div>
-
 {% endblock %}
